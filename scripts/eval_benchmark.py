@@ -18,7 +18,7 @@ from umud import validation as V, segment as S, geometry as Gm
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
-def run(thr_apo: float = 0.35, thr_fasc: float = 0.10, deg: int = 2,
+def run(thr_apo: float = 0.35, thr_fasc: float = 0.10,
         verbose: bool = True) -> tuple[pd.DataFrame, float | None]:
     t = V.load()
     grays = []

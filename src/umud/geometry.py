@@ -79,34 +79,6 @@ def _domain(p: np.polynomial.Polynomial) -> tuple[float, float]:
     return float(d[0]), float(d[1])
 
 
-def merge_fragments(frags: list[np.ndarray], theta: float,
-                    tol_px: float = 12.0) -> list[np.ndarray]:
-    """Group fragments that lie along the same fascicle, and pool their pixels.
-
-    A single fascicle is broken by the network into several short pieces wherever
-    its echo fades. Fitting each piece alone gives a badly conditioned slope --
-    the piece is short, so a couple of pixels of segmentation noise swing it by
-    degrees, and extrapolating that across the whole muscle multiplies the error
-    (dFL/dPA is ~2.8 mm per degree here).
-
-    Pieces of one fascicle share a perpendicular offset when projected across the
-    dominant orientation, so grouping on that offset and refitting over the pooled
-    pixels recovers a long, well-conditioned line.
-    """
-    if not frags:
-        return []
-    nx, ny = -np.sin(theta), np.cos(theta)       # unit normal to the fascicle direction
-    offs = np.array([float(np.mean(f[:, 0]) * nx + np.mean(f[:, 1]) * ny) for f in frags])
-    order = np.argsort(offs)
-    groups, cur = [], [order[0]]
-    for a, b in zip(order, order[1:]):
-        if abs(offs[b] - offs[a]) <= tol_px:
-            cur.append(b)
-        else:
-            groups.append(cur)
-            cur = [b]
-    groups.append(cur)
-    return [np.vstack([frags[i] for i in g]) for g in groups]
 
 
 def _contour_edge(contour: np.ndarray, side: str = "B") -> np.ndarray | None:
@@ -132,7 +104,8 @@ def _contour_edge(contour: np.ndarray, side: str = "B") -> np.ndarray | None:
 
 def fascicle_lengths_dltrack(fasc_mask: np.ndarray, sup_c, deep_c, lo: float, hi: float,
                              px_per_mm: float, min_pa: float = 10.0, max_pa: float = 40.0,
-                             min_pts: int = 40) -> tuple[list[float], list[float]]:
+                             min_pts: int = 40, drop_cross: bool = True
+                             ) -> tuple[list[float], list[float]]:
     """Fascicle lengths and angles following DL_Track's procedure.
 
     Restricts the fascicle mask to the band between the two aponeuroses, fits a
@@ -148,7 +121,7 @@ def fascicle_lengths_dltrack(fasc_mask: np.ndarray, sup_c, deep_c, lo: float, hi
         band[max(int(y0), 0):min(int(y1) + 1, h), xi] = 1
     m = (fasc_mask > 0).astype(np.uint8) & band
     cnts, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-    lengths, angles = [], []
+    lengths, angles, spans = [], [], []
     grid = np.linspace(lo - 2 * (hi - lo), hi + 2 * (hi - lo), 5000)
     y_sup, y_deep = sup_c(grid), deep_c(grid)
     for c in cnts:
@@ -173,13 +146,44 @@ def fascicle_lengths_dltrack(fasc_mask: np.ndarray, sup_c, deep_c, lo: float, hi
             continue
         lengths.append(length / px_per_mm)
         angles.append(ang)
+        spans.append((min(xa, xb), max(xa, xb)))
+    if drop_cross and len(spans) > 2:
+        keep = drop_crossing(spans)
+        if keep:
+            lengths = [lengths[i] for i in keep]
+            angles = [angles[i] for i in keep]
     return lengths, angles
+
+
+def drop_crossing(spans: list[tuple[float, float]]) -> list[int]:
+    """Indices of fascicles that do not have another fascicle spanning them.
+
+    From Ritsche et al. 2024: segments "whose extrapolated path crosses the
+    extrapolated path of another fascicle segment between the two detected
+    aponeuroses" are removed, which "reduces the number of outliers used for
+    calculation of median fascicle length and pennation angle". Real fascicles in
+    one image are near-parallel, so a pair that crosses means at least one slope
+    is wrong -- and a wrong slope is exactly what produces a wild extrapolation.
+    """
+    order = sorted(range(len(spans)), key=lambda i: spans[i][0])
+    keep = {i: True for i in range(len(spans))}
+    for a in range(len(order)):
+        for b in range(a + 1, min(a + 3, len(order))):
+            i, j = order[a], order[b]
+            xi, Xi = spans[i]
+            xj, Xj = spans[j]
+            if xi <= xj and Xi >= Xj:
+                keep[i] = False
+            elif xj <= xi and Xj >= Xi:
+                keep[j] = False
+    return [i for i in range(len(spans)) if keep[i]]
+
+
 
 
 def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
             n_sites: int = 3, min_pa: float = 3.0, max_pa: float = 50.0,
-            fl_mode: str = "blend", fl_gain: float = 1.0,
-            merge_tol: float = 12.0, pa_mode: str = "ours") -> Architecture:
+            fl_mode: str = "blend", drop_cross: bool = True) -> Architecture:
     """Measure PA, FL and MT from two binary masks in original-image pixels."""
     if not px_per_cm or px_per_cm <= 0:
         return Architecture(None, None, None, 0, False, "no scale")
@@ -237,6 +241,10 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
     hi = min(_domain(sup)[1], _domain(deep)[1])
     if hi - lo < 20:
         return Architecture(None, None, None, 0, False, "aponeuroses do not overlap")
+    # Mean vertical separation at n evenly spread sites, matching the raters'
+    # "three straight lines at a left, middle and right location". Ritsche et al.
+    # instead take the single shortest distance over the central third; measured
+    # here that is worse (MT MAE 1.55 vs 1.17 mm), so we keep the rater protocol.
     sites = np.linspace(lo + 0.1 * (hi - lo), hi - 0.1 * (hi - lo), n_sites)
     seps = np.array([abs(float(deep(s)) - float(sup(s))) for s in sites])
     mt_mm = float(np.mean(seps) / px_per_mm)
@@ -244,7 +252,7 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
     # ---- fascicle orientation from skeleton fragments ----
     fasc = (fasc_mask > 0).astype(np.uint8)
     n, lbl, stats, _c = cv2.connectedComponentsWithStats(fasc, 8)
-    angles, lengths, frags = [], [], []
+    angles = []
     deep_slope_at = lambda x: float(deep.deriv()(x))
     for i in range(1, n):
         if stats[i, cv2.CC_STAT_AREA] < 25:
@@ -265,76 +273,19 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
         if not (min_pa <= ang <= max_pa):
             continue
         angles.append(ang)
-        frags.append(np.column_stack([xs, ys]))
     if not angles:
         return Architecture(None, None, mt_mm, 0, False, "no usable fascicle fragments")
 
     pa_deg = float(np.median(angles))
 
-    # Pool fragments belonging to the same fascicle, then extrapolate the merged
-    # lines. See merge_fragments for why per-fragment fitting is ill-conditioned.
-    theta = np.arctan(np.median([np.tan(np.radians(a)) for a in angles]))
-    for grp in merge_fragments(frags, theta, tol_px=merge_tol):
-        if np.ptp(grp[:, 0]) < 15:
-            continue
-        vx, vy, x0, y0 = cv2.fitLine(grp.astype(np.float32), cv2.DIST_L2, 0, 0.01, 0.01).ravel()
-        if abs(vx) < 1e-6:
-            continue
-        m = float(vy / vx)
-        f_line = lambda x, m=m, x0=x0, y0=y0: y0 + m * (x - x0)
-        xs_grid = np.linspace(lo, hi, 400)
-        d_sup = f_line(xs_grid) - sup_c(xs_grid)
-        d_deep = f_line(xs_grid) - deep_c(xs_grid)
-        cs = np.where(np.sign(d_sup[:-1]) != np.sign(d_sup[1:]))[0]
-        cd = np.where(np.sign(d_deep[:-1]) != np.sign(d_deep[1:]))[0]
-        if len(cs) and len(cd):
-            xa, xb = xs_grid[cs[0]], xs_grid[cd[0]]
-            lengths.append(float(np.hypot(xb - xa, f_line(xb) - f_line(xa))))
-
-    # Fascicle length from ONE representative fascicle built on the median
-    # orientation, rather than extrapolating each fragment separately. Fragments are
-    # short and their individual slopes noisy; because dFL/dPA is about 2.8 mm per
-    # degree at these geometries, per-fragment extrapolation amplifies that noise
-    # into the metres-long tail that dominated RMSE. The median angle is already the
-    # robust quantity, so extrapolate that once instead.
-    xmid = 0.5 * (lo + hi)
-    md_mid = float(deep.deriv()(np.clip(xmid, lo, hi)))
-    theta = np.arctan(md_mid) + np.radians(pa_deg)
-    m_rep = float(np.tan(theta))
-    y_mid = 0.5 * (float(sup_c(xmid)) + float(deep_c(xmid)))
-    xs_grid = np.linspace(lo - 2 * (hi - lo), hi + 2 * (hi - lo), 2000)
-    rep = y_mid + m_rep * (xs_grid - xmid)
-    ds = rep - sup_c(np.clip(xs_grid, *_domain(sup_c)))
-    dd = rep - deep_c(np.clip(xs_grid, *_domain(deep_c)))
-    cs = np.where(np.sign(ds[:-1]) != np.sign(ds[1:]))[0]
-    cd = np.where(np.sign(dd[:-1]) != np.sign(dd[1:]))[0]
-    fl_rep = None
-    if len(cs) and len(cd):
-        xa, xb = xs_grid[cs[0]], xs_grid[cd[0]]
-        fl_rep = float(np.hypot(xb - xa, m_rep * (xb - xa)) / px_per_mm)
-    # Measured: the per-fragment median beats the single representative line
-    # (0.4477 vs 0.4814 on the benchmark). Averaging many noisy short extrapolations
-    # evidently cancels more error than it amplifies, so the representative line is
-    # kept only for images where no fragment spans both aponeuroses.
-    # Take the median over every fragment's extrapolation, unfiltered: pre-filtering
-    # individual fragments to a plausible range before the median made things worse
-    # (0.4926 vs 0.4477), because it biases which fragments survive. Guard the
-    # aggregate instead.
-    # ---- fascicle length: choose the estimator explicitly ----
-    # Measured on the expert benchmark, per-image MAE:
-    #   trig (MT/sin PA)      6.70 mm     <- best
-    #   representative line   9.06 mm
-    #   per-fragment median  12.52 mm
-    # Extrapolating a short, noisy fragment across the whole muscle amplifies its
-    # slope error, whereas MT and PA are both measured well and the trigonometric
-    # identity converts them without any further extrapolation. Counterintuitive,
-    # but this is exactly what the harness is for.
+    # ---- fascicle length ----
+    # Two independent estimators. `trig` converts MT and PA through
+    # FL = MT / sin(PA) and never extrapolates; `dltrack` extrapolates traced
+    # fascicle contours and never looks at MT.
     fl_trig = float(mt_mm / max(np.sin(np.radians(pa_deg)), 1e-3))
-    fl_frag = float(np.median(lengths) / px_per_mm) if lengths else None
-    dl_len, dl_ang = fascicle_lengths_dltrack(fasc_mask, sup_c, deep_c, lo, hi, px_per_mm)
+    dl_len, dl_ang = fascicle_lengths_dltrack(fasc_mask, sup_c, deep_c, lo, hi, px_per_mm,
+                                              drop_cross=drop_cross)
     fl_dl = float(np.median(dl_len)) if dl_len else None
-    if dl_ang:
-        pa_deg = float(np.median(dl_ang)) if pa_mode == "dltrack" else pa_deg
     # Average the trigonometric and DL_Track-style estimates. They are genuinely
     # independent -- one converts MT and PA without extrapolating at all, the other
     # extrapolates traced fascicles and never looks at MT -- and their biases came
@@ -343,12 +294,10 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
     # than the fitted optimum of 0.6 (which scores 0.3620 vs 0.3637) so that nothing
     # here is tuned to the 35 benchmark images.
     fl_blend = (0.5 * fl_trig + 0.5 * fl_dl) if fl_dl is not None else fl_trig
-    options = {"trig": fl_trig, "fragments": fl_frag, "representative": fl_rep,
-               "dltrack": fl_dl, "blend": fl_blend}
+    options = {"blend": fl_blend, "trig": fl_trig, "dltrack": fl_dl}
     fl_mm = options.get(fl_mode)
     if fl_mm is None or not (20.0 <= fl_mm <= 250.0):
         fl_mm, fl_src = fl_trig, "trig"
     else:
         fl_src = fl_mode
-    fl_mm *= fl_gain
     return Architecture(pa_deg, fl_mm, mt_mm, len(angles), True, fl_src)

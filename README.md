@@ -26,7 +26,13 @@ competition rules on the website before the data endpoints unlock.
 | `scripts/inventory.py` | shapes, dtypes, image/mask pairing → `reports/inventory.json` |
 | `scripts/probe.py` | leaderboard coordinate probing (see below) |
 | `src/umud/submit.py` | submission formatting + upload, with the format traps encoded |
-| `src/umud/scale.py` | ruler-tick detection → pixels per centimetre |
+| `src/umud/depth.py` | sector height + OCR'd depth → pixels per centimetre |
+| `src/umud/ruler.py` | ruler-tick comb, as an independent scale cross-check |
+| `src/umud/metric.py` | the official UMUD score, for local use |
+| `src/umud/validation.py` | expert-benchmark harness |
+| `src/umud/geometry.py` | masks → pennation angle, fascicle length, thickness |
+| `src/umud/segment.py` | DL_Track pretrained-network inference |
+| `src/umud/grouping.py` | acquisition/video-run grouping |
 
 ## Findings so far
 
