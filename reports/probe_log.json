@@ -1,0 +1,58 @@
+[
+  {
+    "pa": 25.0,
+    "fl": 60.0,
+    "mt": 30.0,
+    "tag": "fl-sweep",
+    "score": null
+  },
+  {
+    "pa": 25.0,
+    "fl": 80.0,
+    "mt": 30.0,
+    "tag": "fl-sweep",
+    "score": null
+  },
+  {
+    "pa": 25.0,
+    "fl": 100.0,
+    "mt": 30.0,
+    "tag": "fl-sweep",
+    "score": null
+  },
+  {
+    "pa": 25.0,
+    "fl": 80.0,
+    "mt": 20.0,
+    "tag": "mt-sweep",
+    "score": null
+  },
+  {
+    "pa": 25.0,
+    "fl": 80.0,
+    "mt": 15.0,
+    "tag": "mt-sweep",
+    "score": null
+  },
+  {
+    "pa": 25.0,
+    "fl": 80.0,
+    "mt": 25.0,
+    "tag": "mt-sweep",
+    "score": null
+  },
+  {
+    "pa": 20.0,
+    "fl": 80.0,
+    "mt": 30.0,
+    "tag": "pa-sweep",
+    "score": null
+  },
+  {
+    "pa": 15.0,
+    "fl": 80.0,
+    "mt": 30.0,
+    "tag": "pa-sweep",
+    "score": null
+  }
+]

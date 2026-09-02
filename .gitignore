@@ -1,0 +1,14 @@
+# competition + external data: redistributing it is not ours to do
+data/
+# pretrained weights: 310 MB each, over GitHub's file limit; fetched by script
+models/
+*.h5
+.venv/
+__pycache__/
+*.pyc
+outputs/
+checkpoints/
+*.zip
+reports/peek/
+reports/host_kernel/
+.DS_Store

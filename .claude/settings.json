@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/python scripts/probe.py:*)",
+      "Bash(.venv/bin/python scripts/inventory.py:*)",
+      "Bash(.venv/bin/python scripts/download_data.py:*)",
+      "Bash(.venv/bin/kaggle competitions submissions:*)",
+      "Bash(.venv/bin/kaggle competitions leaderboard:*)"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "UMUD muscle architecture pipeline"
+abstract: >-
+  Automated estimation of pennation angle, fascicle length and muscle thickness
+  from B-mode ultrasound images, for the UMUD Challenge.
+authors:
+  - alias: thwaitsusa0316
+license: GPL-3.0-or-later
+repository-code: "https://github.com/thwaitsusa0316/umud-muscle-architecture"
+keywords:
+  - ultrasound
+  - muscle architecture
+  - pennation angle
+  - fascicle length
+  - image segmentation
