@@ -1,0 +1,20 @@
+{
+  "metric": "UMUD score on the 35-image expert benchmark",
+  "direction": "lower is better",
+  "anchors": {
+    "leader_public_lb": 0.29358,
+    "expert_mean_ceiling": 0.3032,
+    "dltrack_reference": 0.3306,
+    "best_constant_floor": 0.7032
+  },
+  "history": [
+    {"score": 0.6064, "change": "v1 centreline geometry"},
+    {"score": 0.4609, "change": "thickness measured inner-edge to inner-edge"},
+    {"score": 0.4477, "change": "fascicle length traced to aponeurosis centrelines"},
+    {"score": 0.4319, "change": "FL from the trigonometric identity"},
+    {"score": 0.4142, "change": "DL_Track's own segmentation thresholds"},
+    {"score": 0.3637, "change": "FL blended with a DL_Track-style estimate"},
+    {"score": 0.3473, "change": "crossing-fascicle outlier filter"},
+    {"score": 0.3349, "change": "pennation angle restricted to fascicles inside the muscle"}
+  ]
+}

@@ -26,6 +26,8 @@ IMG = ROOT / "data" / "raw" / "fasc_imgs_v1" / "fasc_images_new_model_v1"
 MSK = ROOT / "data" / "raw" / "fasc_masks_v1" / "fasc_masks_new_model_v1"
 CKPT = ROOT / "checkpoints"
 SIZE = 512
+DILATE = 2
+POS_WEIGHT = 40.0
 EXT = {".tif", ".tiff", ".png"}
 
 
@@ -57,8 +59,15 @@ class FascicleSet(Dataset):
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         if msk is not None and msk.ndim == 3:
             msk = cv2.cvtColor(msk, cv2.COLOR_BGR2GRAY)
+        # Fascicle labels are 1-2 px lines: ~262 positive pixels in a 512x512 frame,
+        # about 0.1 %. Trained on that directly the network collapses to predicting
+        # all-background (measured: val Dice 0.0047, loss stuck at 1.006). Dilating
+        # before the resize raises the positive fraction to ~0.8 % and, more
+        # importantly, stops thin lines being erased by the downsample. The host's own
+        # training notebook carries the same dilate call, commented out.
+        msk = cv2.dilate(msk, np.ones((3, 3), np.uint8), iterations=DILATE)
         img = cv2.resize(img, (SIZE, SIZE), interpolation=cv2.INTER_LINEAR)
-        msk = cv2.resize(msk, (SIZE, SIZE), interpolation=cv2.INTER_NEAREST)
+        msk = cv2.resize(msk, (SIZE, SIZE), interpolation=cv2.INTER_LINEAR)
         if self.train:
             if random.random() < 0.5:
                 img, msk = img[:, ::-1].copy(), msk[:, ::-1].copy()
@@ -67,7 +76,7 @@ class FascicleSet(Dataset):
                 b = random.uniform(-18, 18)                 # vary across devices
                 img = np.clip(img.astype(np.float32) * a + b, 0, 255).astype(np.uint8)
         x = np.repeat((img.astype(np.float32) / 255.0)[None], 3, 0)
-        y = (msk.astype(np.float32) > 127)[None].astype(np.float32)
+        y = (msk.astype(np.float32) > 0)[None].astype(np.float32)
         return torch.from_numpy(x), torch.from_numpy(y)
 
 
@@ -105,7 +114,9 @@ def main() -> None:
     model = build(a.arch).to(dev)
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
-    bce = nn.BCEWithLogitsLoss()
+    # pos_weight counteracts the residual imbalance that dilation does not remove;
+    # without it BCE is minimised by predicting background everywhere.
+    bce = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([POS_WEIGHT], device=dev))
     dl_tr = DataLoader(FascicleSet(tr, True), batch_size=a.batch, shuffle=True, num_workers=0)
     dl_va = DataLoader(FascicleSet(val, False), batch_size=a.batch, shuffle=False, num_workers=0)
 
