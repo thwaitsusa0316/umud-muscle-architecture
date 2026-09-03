@@ -119,13 +119,79 @@ the statistic that exposed this failure in the first place.
 is identical and the targets barely move, so pool the per-frame estimates. Free
 variance reduction, and it repairs frames where an earlier stage failed.
 
+## Reproducibility: the VLM decisions are cached, not re-run
+
+Winning entries are re-run by the organizers from the public repository. A vision
+model on the inference path is a liability there: the tag `qwen3-vl:30b` moves, the
+weights are a 19 GB download, ~20 GB of RAM is needed, and even at temperature 0 a
+different quantisation or accelerator can change the answer. If the re-run does not
+reproduce our numbers we lose the placing, not the argument.
+
+So **stage 3 emits a committed artifact**: one row per image recording which band was
+chosen as superficial and which as deep, plus the model digest and prompt that
+produced it. The pipeline reads that file. `scripts/regenerate_band_choices.py`
+rebuilds it from the images for anyone who wants to verify, but nothing on the
+critical path needs a GPU or a model download, and the re-run is deterministic.
+
+This is the general rule for any model we add: **non-deterministic components produce
+artifacts, artifacts go in the repository, and the pipeline consumes artifacts.**
+
+## Model inventory — measured, not assumed
+
+| model | vision | on our ultrasound images | role |
+|---|---|---|---|
+| `qwen3-vl:30b` (19 GB) | yes | reads console text correctly, ~9-16 s/image | stage 3, primary |
+| `gemma4:31b` (19 GB) | yes | to be gated | stage 3, second voice |
+| `gemma4:latest` (8B) | declares vision | returns **empty** — unusable | — |
+| `deepseek-r1:32b` | **no** — HTTP 400 on any image | rejects images | none |
+| `llama4` (67 GB) | yes | will not co-reside with training in 64 GB | none |
+| Gemini 3.1 Pro (via MAIBO) | yes | 1.42 on the benchmark measuring directly; located aponeuroses to 7 px | advisor / diagnosis only |
+
+Two voices at stage 3 are worth having because the choice is discrete: agreement
+raises confidence, disagreement falls back to geometry. Qwen and Gemma are different
+vendors, which is the point -- two models from one family are one blind spot with
+temperature. But a second voice must clear the benchmark gate **alone** before it is
+allowed to vote; otherwise one good model becomes two mediocre ones.
+
+Qwen3-VL misread "vl rechts" (vastus lateralis, right) as "likely a vein". Domain
+knowledge is weak, which is tolerable only because stage 3 asks it to pick between
+outlined candidates rather than to name anatomy.
+
+## Candidates worth adding
+
+**SAM2 (Meta, Apache-2.0) — the strongest single addition, and not a chat model.**
+Two properties matter here:
+
+* It segments from a *prompt* (a point or box), so the aponeurosis pair problem
+  becomes "put a point on the muscle belly and take the boundary", rather than
+  "classify three bands after the fact".
+* It propagates masks through **video**. The test set contains 27 runs of exactly five
+  consecutive frames. SAM2 can segment frame one and track the aponeuroses through the
+  rest, which is both more stable than per-frame segmentation and exactly the
+  structure the host pointed at in the overview.
+
+Published comparisons find SAM2 generalises to unseen modalities better than MedSAM,
+which was fine-tuned on a medical corpus that does not include this task; SAMUSA
+adapts SAM2 to ultrasound specifically with boundary prompts. Apache-2.0 is one-way
+compatible with our GPL-3.0.
+
+**nnU-Net** remains the right trainable baseline for stage 4 alongside the
+architectures already planned -- it is the standard against which medical segmentation
+methods are judged, and it self-configures, which removes a tuning axis we would
+otherwise have to search by hand.
+
+**Not worth adding:** more general-purpose chat VLMs. The bottleneck is segmentation
+quality and structure identification, not language. A second VLM only earns a place at
+stage 3 as an independent vote.
+
 ## What must be true for this to be worth building
 
 Each stage has a gate, checked on the benchmark or label-free on the test set:
 
 | stage | gate |
 |---|---|
-| 3 band identification | beats the geometric rule at picking the pair on the 35 benchmark images |
+| 3 band identification | beats the geometric rule at picking the pair on the 35 benchmark images; each voice must pass alone before it may vote |
+| SAM2 (if adopted) | prompted aponeurosis masks beat the current CNN on benchmark UMUD, and its video propagation beats per-frame within the 27 five-frame runs |
 | 4 fascicle model | raises in-muscle coverage on test images above DL_Track's, and does not regress benchmark UMUD |
 | whole pipeline | predicted medians approach the leaderboard-probed PA 16.4°, FL 81.5 mm, MT 20.7 mm |
 
