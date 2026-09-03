@@ -54,5 +54,12 @@
     "mt": 30.0,
     "tag": "pa-sweep",
     "score": null
+  },
+  {
+    "pa": 10.0,
+    "fl": 80.0,
+    "mt": 20.0,
+    "tag": "pa-sweep",
+    "score": null
   }
 ]

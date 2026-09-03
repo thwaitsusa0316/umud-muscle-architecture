@@ -104,8 +104,8 @@ def _contour_edge(contour: np.ndarray, side: str = "B") -> np.ndarray | None:
 
 def fascicle_lengths_dltrack(fasc_mask: np.ndarray, sup_c, deep_c, lo: float, hi: float,
                              px_per_mm: float, min_pa: float = 10.0, max_pa: float = 40.0,
-                             min_pts: int = 40, drop_cross: bool = True
-                             ) -> tuple[list[float], list[float]]:
+                             min_pts: int = 40, drop_cross: bool = True,
+                             aspect: float = 1.0) -> tuple[list[float], list[float]]:
     """Fascicle lengths and angles following DL_Track's procedure.
 
     Restricts the fascicle mask to the band between the two aponeuroses, fits a
@@ -138,10 +138,11 @@ def fascicle_lengths_dltrack(fasc_mask: np.ndarray, sup_c, deep_c, lo: float, hi
         if iu == il:
             continue
         xa, xb = grid[iu], grid[il]
-        length = float(np.hypot(xb - xa, y_deep[il] - y_sup[iu]))
+        length = float(np.hypot((xb - xa) / aspect, y_deep[il] - y_sup[iu]))
         apo_slope = float((y_deep[min(il + 50, len(grid) - 1)] - y_deep[il])
                           / (grid[min(il + 50, len(grid) - 1)] - grid[il] + 1e-9))
-        ang = abs(np.degrees(np.arctan((z[0] - apo_slope) / (1 + z[0] * apo_slope))))
+        za, aa = z[0] * aspect, apo_slope * aspect
+        ang = abs(np.degrees(np.arctan((za - aa) / (1 + za * aa))))
         if not (min_pa <= ang <= max_pa):
             continue
         lengths.append(length / px_per_mm)
@@ -183,8 +184,22 @@ def drop_crossing(spans: list[tuple[float, float]]) -> list[int]:
 
 def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
             n_sites: int = 3, min_pa: float = 3.0, max_pa: float = 50.0,
-            fl_mode: str = "blend", drop_cross: bool = True) -> Architecture:
-    """Measure PA, FL and MT from two binary masks in original-image pixels."""
+            fl_mode: str = "blend", drop_cross: bool = True,
+            aspect: float = 1.0) -> Architecture:
+    """Measure PA, FL and MT from two binary masks in original-image pixels.
+
+    `px_per_cm` is the *vertical* scale, which is what a depth annotation or a
+    side ruler gives. `aspect` is the horizontal scale divided by the vertical one:
+    1.0 for square pixels, and greater than 1.0 where the delivered image has been
+    stretched horizontally relative to its acquisition geometry.
+
+    Anisotropy is not a refinement here. The competition images were re-exported at
+    a handful of canonical sizes whose aspect ratios differ from those of the native
+    masks, and an anisotropic resize rotates every angle: a slope measured in the
+    delivered frame relates to the true one by tan(true) = aspect * tan(measured).
+    Lengths are likewise mixed, since a fascicle runs mostly across the image while
+    thickness runs down it.
+    """
     if not px_per_cm or px_per_cm <= 0:
         return Architecture(None, None, None, 0, False, "no scale")
     px_per_mm = px_per_cm / 10.0
@@ -269,7 +284,9 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
         # pennation angle is measured against the local deep-aponeurosis tangent,
         # not against the horizontal
         md = deep_slope_at(np.clip(xc, lo, hi))
-        ang = abs(np.degrees(np.arctan((m - md) / (1 + m * md)))) if abs(1 + m * md) > 1e-9 else 90.0
+        ma, mda = m * aspect, md * aspect          # into physical (square-pixel) space
+        ang = (abs(np.degrees(np.arctan((ma - mda) / (1 + ma * mda))))
+               if abs(1 + ma * mda) > 1e-9 else 90.0)
         if not (min_pa <= ang <= max_pa):
             continue
         angles.append(ang)
@@ -284,7 +301,7 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
     # fascicle contours and never looks at MT.
     fl_trig = float(mt_mm / max(np.sin(np.radians(pa_deg)), 1e-3))
     dl_len, dl_ang = fascicle_lengths_dltrack(fasc_mask, sup_c, deep_c, lo, hi, px_per_mm,
-                                              drop_cross=drop_cross)
+                                              drop_cross=drop_cross, aspect=aspect)
     fl_dl = float(np.median(dl_len)) if dl_len else None
     # Average the trigonometric and DL_Track-style estimates. They are genuinely
     # independent -- one converts MT and PA without extrapolating at all, the other

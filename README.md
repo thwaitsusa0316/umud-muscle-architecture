@@ -258,3 +258,48 @@ than any other single change available.
 ## Licence
 
 GPL-3.0-or-later, as required for prize eligibility.
+
+## Setback: the benchmark score does not transfer to the test set
+
+First real submissions:
+
+| submission | public |
+|---|---|
+| full pipeline, aspect 1.35 | 1.46532 |
+| measured PA only, FL/MT at probed medians | 1.15267 |
+| **best constant** (probed medians, predicted by separability) | **1.03740** |
+| DL_Track cluster | 0.45134 |
+
+Both are *worse than a constant*. The isolation submission is unambiguous: measured
+PA alone costs 0.115 against simply guessing the median, so on the competition test
+images our pennation angle is not merely imprecise, it is worse than useless -- while
+the same code scores 1.26 deg MAE on the benchmark.
+
+**Root cause, from looking at the overlays.** On the console-screenshot images the
+aponeurosis network returns *three* bright bands -- skin/superficial fascia, the true
+superficial aponeurosis, and the deep aponeurosis -- and our "widest plausible pair"
+rule has no way to tell which two bound the muscle. The fascicle network meanwhile
+almost entirely misses the belly: on IMG_00252 it returns 3313 fascicle pixels, most
+of them in subcutaneous tissue *outside* the muscle, while the obviously striated
+belly is left blank. The sector is 437 px wide inside a 1200 px frame, so resizing the
+whole frame to 512 squeezes the fascicles to ~187 px across.
+
+Cropping to the sector first moves that image's PA from 6.9 to 15.0 deg (expected
+~16), but collapses MT from 19.4 to 9.7 mm because the pair selection then latches
+onto a different wrong pair. Aponeurosis pair selection is the linchpin: MT is
+measured between the pair, PA is measured *relative to the deep member*, and FL
+depends on both.
+
+**Retraction.** The anisotropy factor of 1.35 reported above should not be trusted.
+It was fitted so that the predicted PA and FL medians matched their probed values,
+but those predictions came from this broken segmentation, so the fit was absorbing
+segmentation failure rather than measuring a real resize. The benchmark control
+(aspect 1.0 clearly optimal on native images) remains valid; the inference that test
+images need 1.35 does not.
+
+**What the benchmark harness cannot see.** The 35 benchmark images are pre-cropped,
+single-population and native-resolution. They are the right instrument for measuring
+conventions and geometry, and were decisive for both. They cannot detect a domain
+shift to full console screenshots. The leaderboard-probed medians are the only
+label-free check that spans the real test distribution, and they are what exposed
+this.
