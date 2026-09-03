@@ -45,8 +45,8 @@ class FascicleSet(Dataset):
     made — the host's own loader does exactly this, and the two differ in native
     resolution and aspect ratio throughout the training set."""
 
-    def __init__(self, items, train: bool):
-        self.items, self.train = items, train
+    def __init__(self, items, train: bool, dilate: int = DILATE):
+        self.items, self.train, self.dilate = items, train, dilate
 
     def __len__(self):
         return len(self.items)
@@ -65,7 +65,7 @@ class FascicleSet(Dataset):
         # before the resize raises the positive fraction to ~0.8 % and, more
         # importantly, stops thin lines being erased by the downsample. The host's own
         # training notebook carries the same dilate call, commented out.
-        msk = cv2.dilate(msk, np.ones((3, 3), np.uint8), iterations=DILATE)
+        msk = cv2.dilate(msk, np.ones((3, 3), np.uint8), iterations=self.dilate)
         img = cv2.resize(img, (SIZE, SIZE), interpolation=cv2.INTER_LINEAR)
         msk = cv2.resize(msk, (SIZE, SIZE), interpolation=cv2.INTER_LINEAR)
         if self.train:
@@ -100,6 +100,9 @@ def main() -> None:
     ap.add_argument("--batch", type=int, default=6)
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--pos-weight", type=float, default=POS_WEIGHT)
+    ap.add_argument("--dilate", type=int, default=DILATE)
+    ap.add_argument("--tag", default="")
     a = ap.parse_args()
 
     torch.manual_seed(a.seed); random.seed(a.seed); np.random.seed(a.seed)
@@ -116,9 +119,9 @@ def main() -> None:
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
     # pos_weight counteracts the residual imbalance that dilation does not remove;
     # without it BCE is minimised by predicting background everywhere.
-    bce = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([POS_WEIGHT], device=dev))
-    dl_tr = DataLoader(FascicleSet(tr, True), batch_size=a.batch, shuffle=True, num_workers=0)
-    dl_va = DataLoader(FascicleSet(val, False), batch_size=a.batch, shuffle=False, num_workers=0)
+    bce = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([a.pos_weight], device=dev))
+    dl_tr = DataLoader(FascicleSet(tr, True, a.dilate), batch_size=a.batch, shuffle=True, num_workers=0)
+    dl_va = DataLoader(FascicleSet(val, False, a.dilate), batch_size=a.batch, shuffle=False, num_workers=0)
 
     CKPT.mkdir(exist_ok=True)
     best, hist = 0.0, []
@@ -143,10 +146,10 @@ def main() -> None:
               f"val_dice {d:.4f}  {hist[-1]['secs']}s", flush=True)
         if d > best:
             best = d
-            torch.save(model.state_dict(), CKPT / f"fasc_{a.arch}_best.pt")
-    (ROOT / "reports" / f"train_fasc_{a.arch}.json").write_text(
+            torch.save(model.state_dict(), CKPT / f"fasc_{a.arch}{a.tag}_best.pt")
+    (ROOT / "reports" / f"train_fasc_{a.arch}{a.tag}.json").write_text(
         json.dumps({"arch": a.arch, "best_val_dice": best, "history": hist}, indent=1))
-    print(f"\nbest val Dice {best:.4f} -> {CKPT / f'fasc_{a.arch}_best.pt'}")
+    print(f"\nbest val Dice {best:.4f} -> {CKPT / f'fasc_{a.arch}{a.tag}_best.pt'}")
 
 
 if __name__ == "__main__":

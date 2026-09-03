@@ -26,6 +26,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "src"))
 warnings.filterwarnings("ignore")
 import numpy as np, pandas as pd, cv2
 from umud import segment as S, geometry as Gm, grouping as G, submit as Sub
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TEST = ROOT / "data" / "raw" / "test_images_v2" / "test_set_v2"
@@ -34,7 +35,12 @@ ASPECT_RESIZED = 1.35
 DUMMY_SCALE = 100.0          # any positive value; PA does not depend on it
 
 
-def build(aspect: float = ASPECT_RESIZED, batch: int = 24) -> pd.DataFrame:
+def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
+          fasc_thr: float = 0.9) -> pd.DataFrame:
+    ours = None
+    if fasc_ckpt:
+        from eval_new_fascicle import load_model, predict_ours
+        ours = load_model("unet", fasc_ckpt)
     scale = json.loads((ROOT / "reports" / "scale_final.json").read_text())
     names = sorted((p.name for p in TEST.iterdir()
                     if p.suffix.lower() in {".tif", ".png"}), key=G._index)
@@ -43,7 +49,10 @@ def build(aspect: float = ASPECT_RESIZED, batch: int = 24) -> pd.DataFrame:
         chunk = names[i:i + batch]
         grays = [G.to_gray(cv2.imread(str(TEST / n), cv2.IMREAD_UNCHANGED)) for n in chunk]
         masks = S.predict_batch(grays, thr_apo=0.35, thr_fasc=0.10)
-        for n, (am, fm) in zip(chunk, masks):
+        for n, g, (am, fm) in zip(chunk, grays, masks):
+            if ours is not None:
+                from eval_new_fascicle import predict_ours
+                fm = predict_ours(ours[0], ours[1], g, thr=fasc_thr)
             info = scale.get(n) or {}
             px = info.get("px_per_cm")
             # console screenshots were re-exported and need the aspect correction;
@@ -65,9 +74,11 @@ def main() -> None:
     ap.add_argument("--aspect", type=float, default=ASPECT_RESIZED)
     ap.add_argument("--send", action="store_true")
     ap.add_argument("--message", default="")
+    ap.add_argument("--fasc-ckpt", default=None, help="use our retrained fascicle model")
+    ap.add_argument("--fasc-thr", type=float, default=0.9)
     a = ap.parse_args()
 
-    df = build(aspect=a.aspect)
+    df = build(aspect=a.aspect, fasc_ckpt=a.fasc_ckpt, fasc_thr=a.fasc_thr)
     print(f"\nPA measured on {df.pa_deg.notna().sum()}/309; "
           f"FL/MT measured on {df.measured_scale.sum()}/309")
     for c in ("pa_deg", "fl_mm", "mt_mm"):
