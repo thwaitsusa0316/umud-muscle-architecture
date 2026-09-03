@@ -275,12 +275,22 @@ def analyse(apo_mask: np.ndarray, fasc_mask: np.ndarray, px_per_cm: float,
         ys, xs = np.where(lbl == i)
         if np.ptp(xs) < 10:
             continue
+        # Only fragments lying between the two aponeuroses are muscle fascicles.
+        # Without this the median angle is taken over everything the network fired
+        # on, including subcutaneous fat and deep tissue outside the belly, where
+        # the structures run nearly horizontal. On a tightly cropped image almost
+        # every detection is inside the muscle so it makes no difference, which is
+        # why the benchmark never showed it; on a console screenshot 91% of the
+        # detections were outside and dragged the median from ~22 deg to ~7 deg.
+        xc = float(np.clip(xs.mean(), lo, hi))
+        yc = float(ys.mean())
+        if not (float(sup_c(xc)) <= yc <= float(deep_c(xc))):
+            continue
         vx, vy, x0, y0 = cv2.fitLine(np.column_stack([xs, ys]).astype(np.float32),
                                      cv2.DIST_L2, 0, 0.01, 0.01).ravel()
         if abs(vx) < 1e-6:
             continue
         m = float(vy / vx)
-        xc = float(xs.mean())
         # pennation angle is measured against the local deep-aponeurosis tangent,
         # not against the horizontal
         md = deep_slope_at(np.clip(xc, lo, hi))
