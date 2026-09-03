@@ -1,0 +1,76 @@
+{
+  "campaign": "UMUD Muscle Ultrasound",
+  "owner": "smt2",
+  "started_utc": "2026-09-03T19:55:28Z",
+  "deadline_utc": "2026-11-14T23:59:00Z",
+  "what_pays": "",
+  "optimized_metric": "",
+  "metric_validated_against_pays": {
+    "measured": false,
+    "correlation_evidence": "",
+    "resolve_by": null
+  },
+  "ground_truth_wiring": {
+    "mechanism": "",
+    "max_staleness_days": 2,
+    "last_touch_utc": null
+  },
+  "noise_floor": {
+    "measured": false
+  },
+  "feasibility_gate": {
+    "metric": "",
+    "threshold": "",
+    "by_date": null,
+    "consequence": ""
+  },
+  "pilot": {
+    "profile": "competition",
+    "phase": "P0",
+    "plan_version": 0,
+    "last_tick_utc": null,
+    "tick_open": null,
+    "ticks": 0,
+    "next_action": "P0: read the rules, prize table, deadlines, submission limits; write BRIEF.md",
+    "blocked_on": null,
+    "assumptions": [],
+    "submission": {
+      "auto_allowed": false,
+      "auto_allowed_evidence": "not yet assessed \u2014 P0 must read the rules and record the clause",
+      "mechanism": "",
+      "competition_slug": "",
+      "platform": "kaggle",
+      "limits": {
+        "per_day": null,
+        "per_week": null,
+        "total": null,
+        "hours_per_run": null,
+        "gpu_hours_per_week": 4.9,
+        "final_select": null,
+        "notes": ""
+      },
+      "used": {
+        "today": 0,
+        "week": 0,
+        "total": 0,
+        "as_of_utc": null
+      },
+      "last_submitted_utc": null,
+      "queue_dir": "submit_queue"
+    },
+    "tick_budget": {
+      "minutes": 45,
+      "max_turns": 80
+    },
+    "maibo": {
+      "test_engine": "codex",
+      "method_review_case": null
+    },
+    "allocation": {
+      "gpu_hours_this_week": 4.9,
+      "weight": 0.162,
+      "basis": "1/days_left",
+      "set_utc": "2026-09-03T19:59:27Z"
+    }
+  }
+}

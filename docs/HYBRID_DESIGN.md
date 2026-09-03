@@ -211,3 +211,28 @@ depends on the vision model being good at anything except recognition.
   Kaggle Foundational Rule 4.b prohibits it and the rules text is still unchanged. The
   ceiling is the expert noise floor either way, so the upside is small and the downside
   is disqualification.
+
+## Results: stage 3 gated, Gemini measured (2026-09-03)
+
+**Gemini 3.1 Pro, unguided, all 35 benchmark images: UMUD 1.7736.** PA MAE 7.75°,
+FL 19.1 mm, MT 7.30 mm — against a best-constant baseline of 0.7032 and our 0.3349.
+A frontier vision model measuring these parameters directly is more than twice as bad
+as submitting one number for every image. The "vision model never produces a number"
+rule is settled, not provisional.
+
+**Stage 3 passes its gate on the letter and fails it on the substance.** Over 20
+ambiguous test images: median in-muscle coverage 0.326 → 0.340, mean 0.510 → 0.527.
+The model agreed with the geometric rule on 15 of 20, was better on 3 and worse on 2.
+A net of one image in twenty is not a signal, and it costs 35 s/image and a
+reproducibility burden. **Stage 3 is not shipped.** The gate was written too weakly —
+"raise the median" admits noise; it should have required a margin.
+
+**The number that matters is that coverage stays near 0.33 whoever picks the pair.**
+Two thirds of detected fascicle pixels fall outside the muscle regardless of choice.
+The aponeurosis pair was never the binding constraint; the fascicle detector is. That
+sends the work to stage 4, which was always the local-GPU job.
+
+Revised stage order: **1 scale → 2 aponeurosis candidates → 4 fascicle model
+(retrained) → 5 geometry → 6 group consensus.** Stage 3 stays in the repository as a
+measured negative result and can be revisited if a retrained detector makes pair
+choice the limiting factor again.
