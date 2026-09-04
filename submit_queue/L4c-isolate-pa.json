@@ -1,0 +1,26 @@
+{
+  "id": "L4c-isolate-pa",
+  "artifact": "outputs/sub_L4_isolate_pa.csv",
+  "sha256": "4a5ce5410adddfc7edd967aa706db833fc4f5e4307e27474de7eaa1bdb0d483b",
+  "generator": "scripts/make_isolation.py --keep pa --source outputs/sub_pipeline_a1.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "4a5ce5410adddfc7edd967aa706db833fc4f5e4307e27474de7eaa1bdb0d483b",
+    "record": "maibo_tests/fc49d5d4017630e2.json"
+  },
+  "justification": {
+    "plan_version": 3,
+    "rung": "L4c",
+    "purpose": "gate-closing",
+    "why_now": "PLAN v3 (2026-09-04): L4a (1.25464) and L4b (1.20053) attribute the a1 excess as MT +0.21802 / FL +0.16391 and leave PA = +0.02790 by subtraction. L4c is the pre-registered checksum of that decomposition (assumption A11: fallback rows carry the L1 triple, id order identical, CSVs are what we think). This CSV holds pa_deg from the scored sub_pipeline_a1.csv on 293 measured rows with FL/MT at the probed medians (81.5 / 20.7). One slot, no model run; 2 slots left on 2026-09-04 UTC, this uses 1 and keeps 1 in reserve (policy v3).",
+    "expected_benefit": "Closes A11 mechanically: if the three isolation deltas sum to 0.40983 the whole attribution stands and every downstream rung (L6 first) rests on verified CSV provenance. Also gives the exact PA delta of the retrained detector (vs +0.116 for DL_Track fascicles).",
+    "expected_score_delta": "+0.0279 vs 1.03662, i.e. public 1.0645 +- 0.002",
+    "falsifier": "|public - 1.06452| > 0.002 -> A11 broken (CSV provenance / fallback mismatch); suspend all L4 attributions and rebuild every CSV from one generator before any further slot is spent",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4_isolate_pa.csv -m 'L4c checksum: measured PA from sub_pipeline_a1, FL/MT at probed medians (expect 1.0645)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-04T10:20:00Z",
+  "submitted_utc": "2026-09-04T10:02:33Z",
+  "submission_id": "56010423"
+}

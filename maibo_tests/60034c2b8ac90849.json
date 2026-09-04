@@ -1,0 +1,27 @@
+{
+  "set_id": "60034c2b8ac90849",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L4_isolate_fl.csv": "b9ed0430ff384a2697e3b9997e6ae989f4b0000ffaecb8ff89b10d2804a4a947"
+  },
+  "engine": "codex",
+  "context": "L4b isolation CSV: fl_mm copied from outputs/sub_pipeline_a1.csv (129 measured rows), pa_deg=16.42 and mt_mm=20.7 everywhere (probed medians from reports/public_medians.json). Comma-delimited UTF-8, 309 rows, columns image_id,pa_deg,fl_mm,mt_mm, ids with true extensions, no NaN. Previous review asked for: ValueError from build() caught; write/read-back wrapped; post-write invariants as explicit checks not assert. All three are done.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [
+    "`submit.test_ids()` and `submit.write_submission()` are opaque here; if either can raise exceptions other than the ones caught, there could still be unhandled failure paths, but the supplied material does not establish that as a real error.",
+    "`submit.test_ids()` and `submit.write_submission()` are opaque here; if either can raise exceptions other than the ones caught, there could still be unhandled failure paths, but the supplied material does not establish that as a real error."
+  ],
+  "raw": "codex\nREVIEW-134e6694 VERDICT: PASS\nUNSURE: `submit.test_ids()` and `submit.write_submission()` are opaque here; if either can raise exceptions other than the ones caught, there could still be unhandled failure paths, but the supplied material does not establish that as a real error.\ntokens used\n13,374\nREVIEW-134e6694 VERDICT: PASS\nUNSURE: `submit.test_ids()` and `submit.write_submission()` are opaque here; if either can raise exceptions other than the ones caught, there could still be unhandled failure paths, but the supplied material does not establish that as a real error.\n\ncase: 20260904T095523Z_fefea4_ask",
+  "nonce": "134e6694",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-134e6694 VERDICT: PASS\nUNSURE: `submit.test_ids()` and `submit.write_submission()` are opaque here; if either can raise exceptions other than the ones caught, there could still be unhandl"
+    }
+  ]
+}

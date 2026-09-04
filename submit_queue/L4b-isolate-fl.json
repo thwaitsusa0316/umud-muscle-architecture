@@ -1,0 +1,26 @@
+{
+  "id": "L4b-isolate-fl",
+  "artifact": "outputs/sub_L4_isolate_fl.csv",
+  "sha256": "b9ed0430ff384a2697e3b9997e6ae989f4b0000ffaecb8ff89b10d2804a4a947",
+  "generator": "scripts/make_isolation.py --keep fl --source outputs/sub_pipeline_a1.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "b9ed0430ff384a2697e3b9997e6ae989f4b0000ffaecb8ff89b10d2804a4a947",
+    "record": "maibo_tests/60034c2b8ac90849.json"
+  },
+  "justification": {
+    "plan_version": 3,
+    "rung": "L4b",
+    "purpose": "probe",
+    "why_now": "PLAN v3 (2026-09-04T10:05Z): L4a fired (1.25464, delta_MT +0.21802). The a1 excess 0.40983 over the floor 1.03662 still has 0.19181 unattributed between PA and FL. This CSV holds fl_mm from the scored sub_pipeline_a1.csv on 129 measured rows with PA/MT at the probed medians (16.42 / 20.7); delta_PA(a1) follows by subtraction. No model run; one slot. Policy v3: mechanistic probes are exempt from the 2/day rationing, >=1 slot kept in reserve (3 left on 2026-09-04 UTC before this).",
+    "expected_benefit": "Exact public attribution of FL: decides whether L7 (FL routine port) is needed after L6 (scale), or whether the remaining 0.19 is PA bias (angle convention). Paired public delta is exact (delta_public = 0).",
+    "expected_score_delta": "between -0.05 and +0.19 vs 1.03662; a1.35's FL share was +0.0946",
+    "falsifier": "delta = public - 1.03662: > +0.05 -> FL routine harmful on test (report undiluted delta x 309/129; scale first via L6, then L7); < -0.05 -> FL helpful, keep; |delta| <= 0.05 -> uninformative, do not promote or kill on it",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4_isolate_fl.csv -m 'L4b isolation: measured FL from sub_pipeline_a1, PA/MT at probed medians (floor 1.03662)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-04T10:12:00Z",
+  "submitted_utc": "2026-09-04T09:57:29Z",
+  "submission_id": "56010352"
+}

@@ -1,0 +1,67 @@
+{
+  "set_id": "d47564380167b180",
+  "files": {
+    "scripts/make_isolation.py": "91b7c628ee0f6d959210e25c3a7939a41d95b1a97ff3c8f1b87c954e0015685f",
+    "outputs/sub_L4_isolate_fl.csv": "b9ed0430ff384a2697e3b9997e6ae989f4b0000ffaecb8ff89b10d2804a4a947"
+  },
+  "engine": "codex",
+  "context": "L4b isolation CSV: fl_mm copied from outputs/sub_pipeline_a1.csv (129 measured rows), pa_deg=16.42 and mt_mm=20.7 everywhere (probed medians from reports/public_medians.json). Must be comma-delimited UTF-8, 309 rows, columns image_id,pa_deg,fl_mm,mt_mm, ids with true extensions, no NaN. Verify the CSV matches the generator and the invariants.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_isolation.py",
+      "line": "78",
+      "sev": "major",
+      "desc": "`build(source, a.keep, vals)` can raise `ValueError` for malformed source columns or missing test ids, and that obvious bad-input path is uncaught so the script aborts with a traceback",
+      "fix": "catch `ValueError` around the `build(...)` call and exit with a controlled `sys.exit(...)` message"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "80",
+      "sev": "major",
+      "desc": "output-generation failures are not handled: `submit.write_submission(df, out)` and the read-back `pd.read_csv(out)` can raise on a missing output directory, permission problem, short write, or unreadable CSV",
+      "fix": "wrap write/read-back in `try/except` for `OSError` and pandas parse/empty-file errors and exit cleanly"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "82",
+      "sev": "major",
+      "desc": "the required post-write verification is implemented with `assert`, which is stripped under `python -O`/`PYTHONOPTIMIZE` and would silently skip the invariant checks",
+      "fix": "replace the `assert` statements with explicit runtime checks that raise `SystemExit` or `ValueError` unconditionally"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "78",
+      "sev": "major",
+      "desc": "`build(source, a.keep, vals)` can raise `ValueError` for malformed source columns or missing test ids, and that obvious bad-input path is uncaught so the script aborts with a traceback",
+      "fix": "catch `ValueError` around the `build(...)` call and exit with a controlled `sys.exit(...)` message"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "80",
+      "sev": "major",
+      "desc": "output-generation failures are not handled: `submit.write_submission(df, out)` and the read-back `pd.read_csv(out)` can raise on a missing output directory, permission problem, short write, or unreadable CSV",
+      "fix": "wrap write/read-back in `try/except` for `OSError` and pandas parse/empty-file errors and exit cleanly"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "82",
+      "sev": "major",
+      "desc": "the required post-write verification is implemented with `assert`, which is stripped under `python -O`/`PYTHONOPTIMIZE` and would silently skip the invariant checks",
+      "fix": "replace the `assert` statements with explicit runtime checks that raise `SystemExit` or `ValueError` unconditionally"
+    }
+  ],
+  "unsure": [],
+  "raw": "codex\nREVIEW-4e165bd6 VERDICT: FAIL\n- 00_make_isolation.py:78 [major] `build(source, a.keep, vals)` can raise `ValueError` for malformed source columns or missing test ids, and that obvious bad-input path is uncaught so the script aborts with a traceback -> catch `ValueError` around the `build(...)` call and exit with a controlled `sys.exit(...)` message\n- 00_make_isolation.py:80 [major] output-generation failures are not handled: `submit.write_submission(df, out)` and the read-back `pd.read_csv(out)` can raise on a missing output directory, permission problem, short write, or unreadable CSV -> wrap write/read-back in `try/except` for `OSError` and pandas parse/empty-file errors and exit cleanly\n- 00_make_isolation.py:82 [major] the required post-write verification is implemented with `assert`, which is stripped under `python -O`/`PYTHONOPTIMIZE` and would silently skip the invariant checks -> replace the `assert` statements with explicit runtime checks that raise `SystemExit` or `ValueError` unconditionally\ntokens used\n15,962\nREVIEW-4e165bd6 VERDICT: FAIL\n- 00_make_isolation.py:78 [major] `build(source, a.keep, vals)` can raise `ValueError` for malformed source columns or missing test ids, and that obvious bad-input path is uncaught so the script aborts with a traceback -> catch `ValueError` around the `build(...)` call and exit with a controlled `sys.exit(...)` message\n- 00_make_isolation.py:80 [major] output-generation failures are not handled: `submit.write_submission(df, out)` and the read-back `pd.read_csv(out)` can raise on a missing output directory, permission problem, short write, or unreadable CSV -> wrap write/read-back in `try/except` for `OSError` and pandas parse/empty-file errors and exit cleanly\n- 00_make_isolation.py:82 [major] the required post-write verification is implemented with `assert`, which is stripped under `python -O`/`PYTHONOPTIMIZE` and would silently skip the invariant checks -> replace the `assert` statements with explicit runtime checks that raise `SystemExit` or `ValueError` unconditionally\n\ncase: 20260904T095233Z_42263a_ask",
+  "nonce": "4e165bd6",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-4e165bd6 VERDICT: FAIL\n- 00_make_isolation.py:78 [major] `build(source, a.keep, vals)` can raise `ValueError` for malformed source columns or missing test ids, and that obvious bad-input "
+    }
+  ]
+}

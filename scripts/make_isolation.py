@@ -75,15 +75,25 @@ def main() -> int:
         sys.exit(f"make_isolation: cannot read source CSV {a.source}: {e}")
     if source.empty:
         sys.exit(f"make_isolation: source CSV {a.source} is empty")
-    df = build(source, a.keep, vals)
+    try:
+        df = build(source, a.keep, vals)
+    except ValueError as e:
+        sys.exit(f"make_isolation: {e}")
     out = pathlib.Path(a.out) if a.out else ROOT / "outputs" / f"sub_L4_isolate_{a.keep}.csv"
-    submit.write_submission(df, out)
-    back = pd.read_csv(out)
-    assert len(back) == 309 and list(back.columns) == NEED
+    try:
+        submit.write_submission(df, out)
+        back = pd.read_csv(out)
+    except (OSError, AssertionError, pd.errors.EmptyDataError, pd.errors.ParserError) as e:
+        sys.exit(f"make_isolation: cannot write/read back {out}: {e}")
+    # post-write invariants: explicit checks, never `assert` (stripped under -O)
+    if len(back) != 309 or list(back.columns) != NEED:
+        sys.exit(f"make_isolation: read-back shape wrong: rows={len(back)} cols={list(back.columns)}")
     kept = COLS[a.keep]
     for col in NEED[1:]:
-        if col != kept:
-            assert (back[col].round(4) == round(vals[col], 4)).all(), f"{col} not constant on read-back"
+        if col != kept and not (back[col].round(4) == round(vals[col], 4)).all():
+            sys.exit(f"make_isolation: {col} not constant at {vals[col]} on read-back")
+    if back[kept].isna().any():
+        sys.exit(f"make_isolation: NaN in kept column {kept} on read-back")
     n_meas = int((back[kept].round(4) != round(vals[kept], 4)).sum())
     print(f"wrote {out}  rows={len(back)}  kept={kept}  measured(non-median) rows={n_meas}")
     return 0

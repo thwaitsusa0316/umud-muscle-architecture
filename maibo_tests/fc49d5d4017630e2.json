@@ -1,0 +1,24 @@
+{
+  "set_id": "fc49d5d4017630e2",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L4_isolate_pa.csv": "4a5ce5410adddfc7edd967aa706db833fc4f5e4307e27474de7eaa1bdb0d483b"
+  },
+  "engine": "codex",
+  "context": "L4c isolation/checksum CSV: pa_deg copied from outputs/sub_pipeline_a1.csv (293 measured rows), fl_mm=81.5 and mt_mm=20.7 everywhere (probed medians). Comma-delimited UTF-8, 309 rows, columns image_id,pa_deg,fl_mm,mt_mm, true extensions, no NaN. The script already passed review at maibo_tests/60034c2b8ac90849.json; only the CSV artifact is new.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "codex\nREVIEW-060161b6 VERDICT: PASS\ntokens used\n12,822\nREVIEW-060161b6 VERDICT: PASS\n\ncase: 20260904T100035Z_838ac5_ask",
+  "nonce": "060161b6",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-060161b6 VERDICT: PASS\ntokens used\n12,822\nREVIEW-060161b6 VERDICT: PASS\n\ncase: 20260904T100035Z_838ac5_ask"
+    }
+  ]
+}

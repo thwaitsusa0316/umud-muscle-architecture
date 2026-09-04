@@ -19,6 +19,8 @@
     "falsifier": "public > 1.03662 -> measured MT is worse than the median on the 131 measured images; aponeurosis pair selection / scale is wrong on test; promote L6 and do not use measured MT until it passes",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4_isolate_mt.csv -m 'L4a isolation: measured MT from sub_pipeline_a1, PA/FL at probed medians (floor 1.03662)'"
   },
-  "status": "queued",
-  "created_utc": "2026-09-04T03:20:00Z"
+  "status": "submitted",
+  "created_utc": "2026-09-04T03:20:00Z",
+  "submitted_utc": "2026-09-04T09:52:02Z",
+  "submission_id": "56010245"
 }
