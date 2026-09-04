@@ -3,7 +3,7 @@
   "owner": "smt2",
   "started_utc": "2026-09-03T19:55:28Z",
   "deadline_utc": "2026-11-14T23:00:00Z",
-  "what_pays": "Rank <=3 on the PRIVATE leaderboard (~207 of 309 test images) by UMUD score, subject to the FAIR/open-source/reproducibility check on the provisional top 3: CHF 1500 / 1000 / 500 (Rules s1.5; Overview Evaluation). Public cutoff 2026-09-03: #3 = 0.31898 (#1 0.29358, #4 0.35134). Ours: 1.15267, rank 121/198.",
+  "what_pays": "Rank <=3 on the PRIVATE leaderboard (~207 of 309 test images) by UMUD score, subject to the FAIR/open-source/reproducibility check on the provisional top 3: CHF 1500 / 1000 / 500 (Rules s1.5; Overview Evaluation). Public cutoff 2026-09-03: #3 = 0.31898 (#1 0.29358, #4 0.35134). Ours: 1.03662 (2026-09-04 L1 constant floor).",
   "optimized_metric": "UMUD score = (1/3)[MAE_PA/6deg + MAE_FL/12mm + MAE_MT/3mm] (+1e-6 MedAE, +1e-9 RMSE tie-breaks), lower is better; host scorer https://www.kaggle.com/code/paulritsche/umud-score mirrored in src/umud/metric.py",
   "metric_validated_against_pays": {
     "measured": true,
@@ -13,7 +13,7 @@
   "ground_truth_wiring": {
     "mechanism": ".venv/bin/kaggle competitions submissions -c umud-challenge-muscle-architecture-in-ultrasound-data; .venv/bin/kaggle competitions leaderboard -c umud-challenge-muscle-architecture-in-ultrasound-data --show (read each tick); write = .venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f <csv> -m <msg> (CSV upload, comma-delimited UTF-8, true per-file extensions; see src/umud/submit.py)",
     "max_staleness_days": 3,
-    "last_touch_utc": "2026-09-03T20:02:12Z"
+    "last_touch_utc": "2026-09-04T03:10:21Z"
   },
   "noise_floor": {
     "measured": true,
@@ -32,20 +32,20 @@
   "pilot": {
     "profile": "competition",
     "phase": "P2",
-    "plan_version": 0,
-    "last_tick_utc": "2026-09-03T20:08:13Z",
+    "plan_version": 2,
+    "last_tick_utc": "2026-09-04T03:23:38Z",
     "tick_open": null,
-    "ticks": 1,
-    "next_action": "P2: auto-submit approved (Stephen 2026-09-03). Write the L1 probed-median constant CSV, create submit_queue/L1-probed-median.json with justification (purpose: probe) + maibo_test on the generator, run submit-gate, submit if it passes.",
+    "ticks": 2,
+    "next_action": "P2: SUBMIT FIRST \u2014 submit_queue/L4a-isolate-mt.json passed a dry-run submit-gate at 2026-09-04T03:20Z (artifact sha aed1bc12\u2026, maibo_tests/5e1692e6f16c607c.json, plan v2); submit it (budget 4/5 left on 2026-09-04 UTC, 20/35 week), read the score: falsifier public > 1.03662 -> promote L6 scale lookup; else MT ships. Then build+test L4b (make_isolation.py --keep fl) for the following tick. P3: read reports/maibo_method_review_v2.md (panel pid 46620 launched 03:19Z, may still be running) and dispose its numbered findings into PLAN v3 if any change a rung. Open human gate 2 (A6): Stephen must read discussion 737782 in a browser. Interim checkpoint: a real pipeline <= 0.9366 by 2026-09-24; kill gate <= 0.45134 by 2026-10-12.",
     "blocked_on": null,
     "assumptions": [
       {
         "id": "A1",
         "claim": "A fascicle U-Net retrained on the competition's 2,761 pairs closes the benchmark->test transfer gap (in-muscle coverage >> 0.33; pipeline beats the constant floor)",
-        "evidence": "docs/HYBRID_DESIGN.md: 2/3 of DL_Track fascicle pixels fall outside the muscle on test images regardless of pair choice; untested",
+        "evidence": "2026-09-03: retrain lifted val Dice 0.0047->0.6651 and median in-muscle coverage on 60 test images 0.27->0.998 (reports/coverage_new_model.csv), but sub_pipeline_a1.csv scored 1.44645 vs measured constant floor 1.03662 (L3 falsifier fired). Coverage closed; transfer gap did not. The 133 measured images are worse than the constant.",
         "verify_every_days": 7,
-        "last_verified_utc": null,
-        "status": "unverified"
+        "last_verified_utc": "2026-09-04T03:10:00Z",
+        "status": "broken"
       },
       {
         "id": "A2",
@@ -66,42 +66,42 @@
       {
         "id": "A4",
         "claim": "Public LB tracks private LB (33/67 split of one 309-image set)",
-        "evidence": "unmeasured; estimated 95% drift ~0.14 for one method; leader at 0.29358 with 252 subs likely overfit",
-        "verify_every_days": 30,
-        "last_verified_utc": null,
+        "evidence": "not measurable before the private board (2026-11-14); reassess only at final selection (L9). Proxy: 33/67 split of one 309-image set, estimated 95% drift ~0.14.",
+        "verify_every_days": 70,
+        "last_verified_utc": "2026-09-04T03:10:00Z",
         "status": "unverified"
       },
       {
         "id": "A5",
         "claim": "src/umud/metric.py is the exact official scorer",
-        "evidence": "transcribed from host notebook paulritsche/umud-score; FL sweep arithmetic consistent (16.46 mm)",
+        "evidence": "L1 probed-median constant scored 1.03662 vs 1.0374 predicted by the separable-constant model (delta 0.0008 < 0.01 falsifier).",
         "verify_every_days": 30,
-        "last_verified_utc": "2026-09-03T20:08:00Z",
+        "last_verified_utc": "2026-09-04T03:10:00Z",
         "status": "verified"
       },
       {
         "id": "A6",
         "claim": "The OSF expert benchmark is permissible external data for a prize-eligible GPL-3.0 submission",
-        "evidence": "CC BY 4.0 node bundling a non-commercial 'DL_Track Data Usage Policy'; discussion 737782 unanswered; Rules s2.6 requires public+minimal cost+documented",
+        "evidence": "CC BY 4.0 node bundling a non-commercial DL_Track Data Usage Policy; discussion 737782 unreadable headlessly (client-rendered) on 2026-09-04; needs a browser read by Stephen; benchmark confined to development-only until resolved",
         "verify_every_days": 14,
-        "last_verified_utc": null,
+        "last_verified_utc": "2026-09-04T03:19:00Z",
         "status": "unverified"
       },
       {
         "id": "A7",
         "claim": "The top of the public board is overfit; an honest 0.30-0.35 method places top-3 on private",
-        "evidence": "leader below the mean-expert floor 0.3032 with 252 submissions on 102 images; not measurable until the private board",
-        "verify_every_days": 30,
-        "last_verified_utc": null,
+        "evidence": "not measurable before the private board; leader 0.29358 still below the expert-mean floor 0.3032 on 2026-09-04. Reassess at L9.",
+        "verify_every_days": 70,
+        "last_verified_utc": "2026-09-04T03:10:00Z",
         "status": "unverified"
       },
       {
         "id": "A8",
         "claim": "Submitting through the official Kaggle CLI/API is permitted (rules silent)",
-        "evidence": "Rules silent; 13 API submissions already accepted and scored; owner: Stephen",
+        "evidence": "Stephen 2026-09-03: auto-submit via the Kaggle CLI approved; 15 API submissions accepted and scored through 2026-09-04T03:09Z (56003661).",
         "verify_every_days": 30,
-        "last_verified_utc": null,
-        "status": "unverified"
+        "last_verified_utc": "2026-09-04T03:10:00Z",
+        "status": "verified"
       },
       {
         "id": "A9",
@@ -136,13 +136,13 @@
         "notes": "Rules s2.2.a 5/day, s2.2.b 2 finals; team size 10; total only binds mergers (5 x days running). CSV upload, no kernel time limit. gpu_hours_per_week is Helm's Kaggle quota allocation; this engagement runs all compute locally on the M3 Max and does not draw on it."
       },
       "used": {
-        "today": 2,
-        "week": 13,
-        "total": 13,
-        "as_of_utc": "2026-09-03T20:02:12Z",
+        "today": 1,
+        "week": 15,
+        "total": 15,
+        "as_of_utc": "2026-09-04T03:23:38Z",
         "note": "13 submissions 2026-08-31..09-03 (12 COMPLETE, 1 ERROR semicolon/BOM). today = 2 on 2026-09-03 (16:30, 16:41 UTC)."
       },
-      "last_submitted_utc": "2026-09-03T16:41:19Z",
+      "last_submitted_utc": "2026-09-04T03:10:21Z",
       "queue_dir": "submit_queue",
       "auto_allowed_set_utc": "2026-09-03T20:09:57Z"
     },
@@ -158,7 +158,7 @@
       "gpu_hours_this_week": 0.0,
       "weight": 0.0,
       "basis": "registry gpu_share",
-      "set_utc": "2026-09-03T20:11:57Z"
+      "set_utc": "2026-09-04T02:20:10Z"
     },
     "position": {
       "public_rank": 121,

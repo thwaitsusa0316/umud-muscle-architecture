@@ -1,0 +1,24 @@
+{
+  "id": "L4a-isolate-mt",
+  "artifact": "outputs/sub_L4_isolate_mt.csv",
+  "sha256": "aed1bc12f5fba8b1d6c894d7e9817b6ef21a575e14e2780b65c69662dee987fe",
+  "generator": "scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "aed1bc12f5fba8b1d6c894d7e9817b6ef21a575e14e2780b65c69662dee987fe",
+    "record": "maibo_tests/5e1692e6f16c607c.json"
+  },
+  "justification": {
+    "plan_version": 2,
+    "rung": "L4a",
+    "purpose": "probe",
+    "why_now": "PLAN v2 (2026-09-04): L3 fired (1.44645 > 0.937) after L2 closed coverage (0.998), so the pipeline's 0.41 excess over the measured floor 1.03662 must be attributed per target before any retrain. MT is 44% of the constant error budget and does not depend on fascicles. The CSV holds mt_mm from the scored sub_pipeline_a1.csv on 131 images (178 already at the median) with PA/FL at the probed medians. No model run; one slot. Policy: <=2 ladder submissions per UTC day; L1 used 1 on 2026-09-04.",
+    "expected_benefit": "Attributes MT's share of the excess. If MT is right on test the score drops 0.10-0.25 below 1.0366 and MT becomes the first measured target we ship; if not, the aponeurosis pair / scale is the fault and L6 (scale lookup) is promoted before L7/L8.",
+    "expected_score_delta": "-0.10 to -0.25 vs 1.03662 if measured MT beats the median; > 0 if it does not",
+    "falsifier": "public > 1.03662 -> measured MT is worse than the median on the 131 measured images; aponeurosis pair selection / scale is wrong on test; promote L6 and do not use measured MT until it passes",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4_isolate_mt.csv -m 'L4a isolation: measured MT from sub_pipeline_a1, PA/FL at probed medians (floor 1.03662)'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-04T03:20:00Z"
+}

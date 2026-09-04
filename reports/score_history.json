@@ -1,67 +1,71 @@
 {
- "metric": "UMUD score on the 35-image expert benchmark",
- "direction": "lower is better",
- "anchors": {
-  "leader_public_lb": 0.29358,
-  "expert_mean_ceiling": 0.3032,
-  "dltrack_reference": 0.3306,
-  "best_constant_floor": 0.7032
- },
- "history": [
-  {
-   "score": 0.6064,
-   "change": "v1 centreline geometry"
-  },
-  {
-   "score": 0.4609,
-   "change": "thickness measured inner-edge to inner-edge"
-  },
-  {
-   "score": 0.4477,
-   "change": "fascicle length traced to aponeurosis centrelines"
-  },
-  {
-   "score": 0.4319,
-   "change": "FL from the trigonometric identity"
-  },
-  {
-   "score": 0.4142,
-   "change": "DL_Track's own segmentation thresholds"
-  },
-  {
-   "score": 0.3637,
-   "change": "FL blended with a DL_Track-style estimate"
-  },
-  {
-   "score": 0.3473,
-   "change": "crossing-fascicle outlier filter"
-  },
-  {
-   "score": 0.3349,
-   "change": "pennation angle restricted to fascicles inside the muscle"
-  }
- ],
- "test_set_history": {
-  "metric": "UMUD public leaderboard, 309 test images (33% scored)",
+  "metric": "UMUD score on the 35-image expert benchmark",
   "direction": "lower is better",
   "anchors": {
-   "leader": 0.29358,
-   "dltrack_cluster": 0.45134,
-   "best_constant_floor": 1.0374
+    "leader_public_lb": 0.29358,
+    "expert_mean_ceiling": 0.3032,
+    "dltrack_reference": 0.3306,
+    "best_constant_floor": 0.7032
   },
   "history": [
-   {
-    "score": 1.46532,
-    "change": "pipeline v1, aspect 1.35, DL_Track fascicles"
-   },
-   {
-    "score": 1.15267,
-    "change": "diagnostic: measured PA only, constant FL/MT"
-   },
-   {
-    "score": 1.44645,
-    "change": "retrained fascicle unet pw6, in-muscle angle fix, no aspect"
-   }
-  ]
- }
+    {
+      "score": 0.6064,
+      "change": "v1 centreline geometry"
+    },
+    {
+      "score": 0.4609,
+      "change": "thickness measured inner-edge to inner-edge"
+    },
+    {
+      "score": 0.4477,
+      "change": "fascicle length traced to aponeurosis centrelines"
+    },
+    {
+      "score": 0.4319,
+      "change": "FL from the trigonometric identity"
+    },
+    {
+      "score": 0.4142,
+      "change": "DL_Track's own segmentation thresholds"
+    },
+    {
+      "score": 0.3637,
+      "change": "FL blended with a DL_Track-style estimate"
+    },
+    {
+      "score": 0.3473,
+      "change": "crossing-fascicle outlier filter"
+    },
+    {
+      "score": 0.3349,
+      "change": "pennation angle restricted to fascicles inside the muscle"
+    }
+  ],
+  "test_set_history": {
+    "metric": "UMUD public leaderboard, 309 test images (33% scored)",
+    "direction": "lower is better",
+    "anchors": {
+      "leader": 0.29358,
+      "dltrack_cluster": 0.45134,
+      "best_constant_floor": 1.03662
+    },
+    "history": [
+      {
+        "score": 1.46532,
+        "change": "pipeline v1, aspect 1.35, DL_Track fascicles"
+      },
+      {
+        "score": 1.15267,
+        "change": "diagnostic: measured PA only, constant FL/MT"
+      },
+      {
+        "score": 1.44645,
+        "change": "retrained fascicle unet pw6, in-muscle angle fix, no aspect"
+      },
+      {
+        "change": "L1 probed-median constant PA 16.42 / FL 81.5 / MT 20.7 (2026-09-04, sub 56003661)",
+        "score": 1.03662
+      }
+    ]
+  }
 }

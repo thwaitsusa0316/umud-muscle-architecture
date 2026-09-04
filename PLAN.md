@@ -1,56 +1,60 @@
-# UMUD Challenge — PLAN v1
+# UMUD Challenge — PLAN v2
 
-Supersedes: none. Rests on BRIEF.md (2026-09-03). Revisions bump the version and say why.
+Supersedes: v1 (2026-09-03). Rests on BRIEF.md (2026-09-03). Revisions bump the version and say why.
+
+**Why v2 (2026-09-04T03:10Z):** three results moved rungs. (1) L1 scored **1.03662** vs 1.0374 predicted: the separable-constant metric model and the probed medians are validated to 0.001, and every pipeline falsifier now anchors on the *measured* floor 1.0366. (2) L2 passed its gate (val Dice 0.0047 → 0.6651; median in-muscle coverage on 60 test images 0.27 → 0.998) yet (3) L3 fired: the retrained pipeline scored 1.44645 > 0.937. Coverage was necessary, not sufficient; assumption A1 is broken. 176 of 309 test images already fall back to constants, so the 133 images we measure average *worse* than guessing. The Gemini bias-corrected test read (n=12) matched neither our numbers nor the probed medians and is retired as uninformative.
 
 ## The campaign reduces to one number
-**Private-leaderboard UMUD score ≤ ~0.32 (today's public #3 = 0.31898) at 2026-11-14 23:00 UTC**, with a FAIR-compliant public GPL-3.0 repo behind it.
-Today's best banked: 1.15267 (a diagnostic, measured PA only). Best real pipeline: 1.46532. Predicted best constant: 1.0374. Gap ≈ 0.7–0.85 UMUD, of which the expert noise floor says ~0.30 is the honest ceiling.
-The gap is not a measurement problem: the pipeline scores 0.3349 on native-resolution benchmark images and fails on the test domain because the fascicle detector puts two thirds of its pixels outside the muscle (docs/HYBRID_DESIGN.md). Every rung below attacks that transfer failure or measures it.
+**Private-leaderboard UMUD score ≤ ~0.32 (public #3 = 0.31898, #1 0.29358 on 2026-09-04) at 2026-11-14 23:00 UTC**, with a FAIR-compliant public GPL-3.0 repo behind it.
+Best banked: **1.03662** (L1 constant floor, rank 108/200; leaderboard median team 0.977). Best real pipeline: 1.44645. Gap to the cutoff ≈ 0.72 UMUD; the expert noise floor says ~0.30 is the honest ceiling.
+Diagnosis after L3: the measured values are wrong in a way the benchmark cannot see (A2 broken). The only instrument that spans the test distribution is the leaderboard, and the cheapest way to use it is **per-target isolation**: submit one measured target with the other two held at the probed medians. Each isolation costs one slot, no model run, and attributes the 0.41 excess over the floor to PA, FL, or MT. Nothing is retrained until the isolations say which target to fix.
 
-## Day 1 — bank the floor (rung L0) — ALREADY DONE
-`outputs/sub_00_const_midpoint.csv` (PA 25 / FL 115 / MT 30) was submitted 2026-08-31 (Kaggle submission 55920465) and scored **2.41344**; the semicolon/BOM variant (55920456) ERRORed, which is what validated the format. The submit-and-read-back loop has since closed 12 times. Re-submitting the identical file would burn a slot on a deterministic scorer for zero information, so L0 is recorded as banked, not queued.
+## Day 1 — floor (L0) — done 2026-08-31 (2.41344); true floor L1 — done 2026-09-04 (1.03662)
 
 ## The ladder
 | rung | single variable | expected gain | cost (GPU h / subs / days) | falsifier (pre-registered) | status |
 |---|---|---|---|---|---|
 | L0 | constant midpoint (format + first score) | banks 2.41344 | 0 / 1 / 0 | n/a | **done 2026-08-31** |
-| L1 | probed-median constant PA 16.42 / FL 81.5 / MT 20.7 (`reports/public_medians.json`) — checks metric separability and banks the true constant floor | predicted **1.0374** (→ from 1.153, rank ↑) | 0 / 1 / 0 | if \|score − 1.0374\| > 0.01, the separable-constant model or a probed median is wrong → re-derive from sweeps before any pipeline is judged against it | queued (needs the CSV written and a candidate file; parked until auto-submit is authorised) |
-| L2 | fascicle U-Net retrained on the 2,761 competition pairs (`scripts/train_fascicle.py`), ranked by held-out Dice AND label-free in-muscle coverage on test | coverage 0.33 → ≥ 0.6; the prerequisite for everything above | ~6 local GPU h / 0 / 3 | if median in-muscle coverage on the 20 gated test images < 0.50 (vs 0.33 now) or benchmark UMUD regresses > 0.02, the retrain is dead at this architecture → try SegFormer / nnU-Net before abandoning | next |
-| L3 | full pipeline with the L2 detector, sector-cropped, aspect 1.0, probed-median fallback | first real score below the constant floor | 0 / 1 / 1 | if public > 1.0374 − 0.10 = 0.937 the pipeline is still worse than a constant → back to L2 diagnostics (checkpoint 2026-09-24) | queued |
-| L4 | isolation: measured MT only, PA/FL at probed medians (MT is 44 % of the error budget and needs no fascicles) | −0.10 to −0.25 vs constant | 0 / 1 / 0 | if public > 1.0374 − 0.10, aponeurosis pair selection is wrong on test → aponeurosis retrain / sector crop rung inserted | queued |
-| L5 | per-run consensus over the 27 five-frame video runs (scale + targets pooled) | −0.01 to −0.03; variance | 0 / 1 / 1 | paired sub (same pipeline ± consensus): if delta ≥ 0 the rung is dead (no sampling noise between paired subs) | queued |
-| L6 | scale as a lookup over device configurations (image shape → px/cm), validated on the 35 benchmark GT scales | fixes the 160 cropped frames | 0.5 / 0 / 2 | if lookup accuracy on benchmark < 90 % of images within 3 %, dead | queued |
-| L7 | port DL_Track's fascicle-length routine onto our PA/MT (benchmark says 0.3148 if FL matches DL_Track) | −0.05 on benchmark | 2 / 1 / 3 | benchmark FL MAE not < 5.0 mm → dead | queued |
-| L8 | SAM2 prompted aponeurosis masks + video propagation | replaces CNN pair step | 4 / 1 / 4 | benchmark UMUD not better than the CNN route by ≥ 0.01 and no coverage gain on test → dead | queued |
-| L9 | final-selection strategy: 2 finals = best public + most conservative honest pipeline | protects private | 0 / 0 / 1 | n/a — human gate | queued (P4) |
+| L1 | probed-median constant PA 16.42 / FL 81.5 / MT 20.7 | predicted 1.0374 | 0 / 1 / 0 | \|score − 1.0374\| > 0.01 | **done 2026-09-04: 1.03662, not fired** |
+| L2 | fascicle U-Net retrained on 2,761 competition pairs | coverage 0.33 → ≥ 0.6 | 6 local GPU h / 0 / 1 | coverage < 0.50 or bench regress > 0.02 | **done 2026-09-03: coverage 0.998, Dice 0.6651, bench 0.3566; not fired** |
+| L3 | full pipeline with the L2 detector, aspect 1.0, probed-median fallback | first score below the floor | 0 / 1 / 1 | public > 0.937 | **fired 2026-09-03: 1.44645** → isolations (L4) before any retrain |
+| L4a | **isolation: measured MT only** (`mt_mm` from `outputs/sub_pipeline_a1.csv`), PA/FL at probed medians. MT is 44 % of the constant error budget and needs no fascicles | −0.10 to −0.25 vs 1.0366 if the aponeurosis pair is right | 0 / 1 / 0 | if public > 1.0366 the measured MT is worse than the median on test → aponeurosis pair selection / scale is the fault; insert a sector-crop + scale-lookup rung (L6) before MT is used again | **queued (submit_queue/L4a-isolate-mt.json)** — next tick submits first |
+| L4b | isolation: measured FL only | attributes FL share | 0 / 1 / 0 | public > 1.0366 → FL routine is dead on test; L7 (DL_Track FL port) moves up | queued after L4a |
+| L4c | isolation: measured PA only with the L2 detector (the 2026-09-03 PA-only read with DL_Track fascicles was 1.15267, i.e. worse than the floor) | attributes PA share | 0 / 1 / 0 | public > 1.0366 → retrained fascicle angles are still wrong on test → in-muscle angle QC / L8 SAM2 | queued after L4b |
+| L5 | per-run consensus over the 27 five-frame video runs | −0.01 to −0.03 | 0 / 1 / 1 | paired sub delta ≥ 0 → dead | queued |
+| L6 | scale as a lookup over device configurations (image shape → px/cm), validated on the 35 benchmark GT scales; also closes A10 | fixes the 160 cropped frames | 0.5 / 0 / 2 | lookup < 90 % of benchmark images within 3 % → dead | queued; promoted if L4a fires |
+| L7 | port DL_Track's fascicle-length routine onto our PA/MT | −0.05 on benchmark | 2 / 1 / 3 | benchmark FL MAE not < 5.0 mm → dead | queued; promoted if L4b fires |
+| L8 | SAM2 prompted aponeurosis masks + video propagation | replaces CNN pair step | 4 / 1 / 4 | not better than CNN route by ≥ 0.01 and no coverage gain → dead | queued |
+| L9 | final-selection: 2 finals = best public + most conservative honest pipeline | protects private | 0 / 0 / 1 | n/a — human gate | queued (P4) |
 
-Killed before v1: VLM band identification (stage 3, net +1/20), VLM direct measurement (1.42–1.77), anisotropy 1.35, per-target calibration gains, manual test annotation (Foundational 4.b).
+Killed: VLM band identification (+1/20), VLM direct measurement (1.42–1.77), Gemini bias-corrected test read (n=12, matches neither), anisotropy 1.35, per-target calibration gains, manual test annotation (Foundational 4.b), and — as of v2 — "retrain the detector and the score follows" (A1).
 
 ## Assumption register (mirrored in campaign.json `pilot.assumptions`)
 | id | claim | evidence | verify every | last verified | status |
 |---|---|---|---|---|---|
-| A1 | retrained fascicle net closes the transfer gap | untested; coverage diagnosis | 7 d | — | unverified |
-| A2 | local CV (35-image benchmark) tracks LB | 0.3349 bench vs 1.465 LB | 14 d | 2026-09-03 | **broken** — benchmark valid for geometry conventions only |
-| A3 | submission encoding correct | 12 COMPLETE, 1 ERROR (semicolon) | 30 d | 2026-09-03 | verified |
-| A4 | public tracks private | unmeasured; est. drift ~0.14 | 30 d | — | unverified |
-| A5 | metric mirror exact | host notebook + FL-sweep arithmetic | 30 d | 2026-09-03 | verified |
-| A6 | OSF benchmark is permissible external data | licence conflict, discussion 737782 open | 14 d | — | unverified |
-| A7 | public top is overfit; honest 0.30–0.35 places | leader below expert floor | 30 d | — | unverified |
-| A8 | Kaggle CLI submission permitted | rules silent; 13 accepted | 30 d | — | unverified — Stephen |
+| A1 | retrained fascicle net closes the transfer gap | coverage 0.998 but L3 1.44645 | 7 d | 2026-09-04 | **broken** — coverage necessary, not sufficient |
+| A2 | local CV (35-image benchmark) tracks LB | 0.3566 bench vs 1.446 LB | 14 d | 2026-09-03 | **broken** — geometry conventions only |
+| A3 | submission encoding correct | 14 COMPLETE, 1 ERROR (semicolon) | 30 d | 2026-09-03 | verified |
+| A4 | public tracks private | not measurable before 2026-11-14; est. drift ~0.14 | 70 d | 2026-09-04 | unverified — reassess at L9 |
+| A5 | metric mirror exact / separable-constant model | L1 1.03662 vs 1.0374 predicted | 30 d | 2026-09-04 | verified |
+| A6 | OSF benchmark is permissible external data | licence conflict; discussion 737782 — see review ledger | 14 d | 2026-09-04 | unverified — human gate 2 |
+| A7 | public top is overfit; honest 0.30–0.35 places | leader 0.29358 < expert floor 0.3032 | 70 d | 2026-09-04 | unverified — reassess at L9 |
+| A8 | Kaggle CLI submission permitted | Stephen yes 2026-09-03; 15 accepted | 30 d | 2026-09-04 | verified |
 | A9 | VLM band identification beats geometry | +1/20 | — | 2026-09-03 | dead |
-| A10 | scale recoverable for 160 cropped frames | OCR 0/35; shape→scale lookup untested | 14 d | — | unverified |
+| A10 | scale recoverable for 160 cropped frames | OCR 0/35; shape→scale lookup untested | 14 d | — | unverified — closed by L6 |
 
 ## Submission calendar
-5/day, 2 finals. Used 13 so far (2 today). Policy: at most 2 submissions per day are spent on the ladder (one rung reading + one isolation/paired control); 3 held for a same-day fix or a probe. No submission without a `submit_queue/<id>.json` justification written against the current plan version and a `maibo_test` record for the code that produced it. Constant/probe CSVs need no model run and are the cheapest measurements available; a pipeline submission is only worth a slot once L2's coverage gate passes.
+5/day (UTC), 2 finals. Used 15 (1 on 2026-09-04). Policy unchanged: ≤ 2 ladder submissions per UTC day, 3 held for a same-day fix or probe. Isolation CSVs (L4a–c) need no model run: L4a next tick, L4b and L4c the following ticks, one per tick so each result is read before the next is spent. No submission without `submit_queue/<id>.json` justified against **v2** and a `maibo_test` record whose sha256 matches the CSV.
 
 ## Human gates
-1. **Auto-submit authorisation** (blocked now): the rules are silent on scripted submission; the mechanism is Kaggle's official CLI. Until Stephen says yes, candidates park in `submit_queue/` and are pushed.
-2. External-data declaration: the OSF benchmark licence conflict (A6) must be resolved or the benchmark confined to development-only use before the final method description.
+1. ~~Auto-submit authorisation~~ — granted 2026-09-03 (A8 verified).
+2. External-data declaration (A6): resolve the OSF licence conflict or confine the benchmark to development-only use before the final method description.
 3. Final selection of the 2 submissions (P4) and the FAIR repo release.
-4. Any change to `what_pays` (e.g. dropping from prize to publishable-method tier at the feasibility gate).
+4. Any change to `what_pays`.
 
-## Feasibility / kill gate
-metric: best public UMUD of a real (non-constant) pipeline submission · threshold: **≤ 0.45134** (stock DL_Track cluster) · by **2026-10-12** · consequence: money objective declared unreachable, numbered revision + push, drop to publishable-method tier and recommend reallocating quota. Interim checkpoint 2026-09-24: a pipeline submission beats the constant floor 1.0374 by ≥ 0.10 (rung L3 falsifier).
+## Feasibility / kill gate (unchanged dates, re-anchored)
+metric: best public UMUD of a real (non-constant) pipeline submission · threshold: **≤ 0.45134** (stock DL_Track cluster) · by **2026-10-12** · consequence: money objective declared unreachable, numbered revision + push, drop to publishable-method tier. Interim checkpoint **2026-09-24**: a pipeline submission beats the measured floor by ≥ 0.10, i.e. **≤ 0.9366**.
 
 ## Review ledger
-maibo method review not yet run (tick 1 was P0/P1 reading only; no code touched). Queued for tick 2: `maibo panel` on this plan's measurement design — specifically whether L2's coverage gate (label-free, on test images) is a sufficient proxy before a submission is spent.
+- maibo method review of v2 launched detached 2026-09-04 (`reports/maibo_method_review_v2.md`); question: are per-target isolations on the public board a sufficient diagnostic given 33 % scoring and SE ≈ 0.053, and what would make L4's falsifier uninformative. Findings disposed next tick.
+- A6: discussion 737782 re-read 2026-09-04 (result recorded in ledger).

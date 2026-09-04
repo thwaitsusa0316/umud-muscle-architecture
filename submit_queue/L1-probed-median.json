@@ -1,0 +1,26 @@
+{
+  "id": "L1-probed-median",
+  "artifact": "outputs/sub_L1_probed_median.csv",
+  "sha256": "496931f47be1958e1cd4f1787bc4778e91c71c46a3d4831792d8d108e8cc1a13",
+  "generator": "scripts/make_constant.py",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "496931f47be1958e1cd4f1787bc4778e91c71c46a3d4831792d8d108e8cc1a13",
+    "record": "maibo_tests/bdabaf5f721873a4.json"
+  },
+  "justification": {
+    "plan_version": 1,
+    "rung": "L1",
+    "purpose": "probe",
+    "why_now": "PLAN v1 rung L1 has been queued since 2026-09-03 awaiting auto-submit authorisation (Stephen, 2026-09-03: yes). Every downstream falsifier (L3: public > 0.937; L4: public > 0.937; feasibility gate 0.45134) is anchored on the predicted constant floor 1.0374, which is derived, not measured. The 2026-09-03T21:36Z pipeline score 1.44645 was judged against that derived number. Budget: 0/5 used today (UTC 2026-09-04), 21/35 left this week; this is the cheapest measurement available (no model run).",
+    "expected_benefit": "Measures the true constant floor on the public set, validating the separable-constant metric model and the three probed medians (PA 16.42 / FL 81.5 / MT 20.7) in one slot; banks the best public score so far (1.0374 vs 1.15267), moving rank up from 121/198.",
+    "expected_score_delta": "-0.115 vs current best 1.15267 (predicted 1.0374 +/- 0.01)",
+    "falsifier": "|public score - 1.0374| > 0.01 -> the separable-constant model or a probed median is wrong; re-derive medians from the sweep scores before judging any pipeline against the floor",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L1_probed_median.csv -m 'L1 probed-median constant pa=16.42 fl=81.5 mt=20.7 (predicted 1.0374)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-04T03:06:00Z",
+  "submitted_utc": "2026-09-04T03:10:21Z",
+  "submission_id": "56003661"
+}

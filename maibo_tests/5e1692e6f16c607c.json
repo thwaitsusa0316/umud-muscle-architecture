@@ -1,0 +1,34 @@
+{
+  "set_id": "5e1692e6f16c607c",
+  "files": {
+    "scripts/make_isolation.py": "91b7c628ee0f6d959210e25c3a7939a41d95b1a97ff3c8f1b87c954e0015685f",
+    "outputs/sub_L4_isolate_mt.csv": "aed1bc12f5fba8b1d6c894d7e9817b6ef21a575e14e2780b65c69662dee987fe"
+  },
+  "engine": "antigravity",
+  "context": "Rung L4a: builds a per-target isolation submission. Keeps mt_mm per image from outputs/sub_pipeline_a1.csv (a scored 309-row pipeline CSV with columns image_id,pa_deg,fl_mm,mt_mm) and sets pa_deg=16.42, fl_mm=81.5 constants from reports/public_medians.json. Uses src/umud/submit.py test_ids() (309 test filenames) and write_submission() (validates columns/ids/NaN, writes comma UTF-8 %.4f). Script lives at scripts/make_isolation.py, project root is parents[1]. Previous review asked for clean exits on missing/empty inputs and for pa_deg 0 to be valid; both applied. The attached CSV is the produced artifact for --keep mt.",
+  "local_verify": {
+    "cmd": ".venv/bin/python scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1.csv --out /tmp/l4a_check.csv && cmp /tmp/l4a_check.csv outputs/sub_L4_isolate_mt.csv",
+    "exit": 0,
+    "tail": "wrote /tmp/l4a_check.csv  rows=309  kept=mt_mm  measured(non-median) rows=131\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (219.36s)\n\nREVIEW-1800b1d2 VERDICT: PASS\n\ncase: 20260904T031913Z_ab6408_ask",
+  "nonce": "1800b1d2",
+  "tried": [
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (8.83s)\n\nI'll review the isolation script and its CSV artifact against the stated L4a contract and the project's real submit/medians APIs.\n\ncase: 20260904T031905Z_6e12f0_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (219.36s)\n\nREVIEW-1800b1d2 VERDICT: PASS\n\ncase: 20260904T031913Z_ab6408_ask"
+    }
+  ]
+}

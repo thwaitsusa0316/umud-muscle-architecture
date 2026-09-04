@@ -1,0 +1,56 @@
+{
+  "set_id": "6fff7085ebd7ec57",
+  "files": {
+    "scripts/make_isolation.py": "1f83fd800b8e25e7f52845127ba16b74cd63ca7090f00550452da125721a2f8b",
+    "outputs/sub_L4_isolate_mt.csv": "aed1bc12f5fba8b1d6c894d7e9817b6ef21a575e14e2780b65c69662dee987fe"
+  },
+  "engine": "antigravity",
+  "context": "Rung L4a: builds a per-target isolation submission. Keeps mt_mm per image from outputs/sub_pipeline_a1.csv (a scored 309-row pipeline CSV with columns image_id,pa_deg,fl_mm,mt_mm) and sets pa_deg=16.42, fl_mm=81.5 constants from reports/public_medians.json. Uses src/umud/submit.py test_ids() (309 test filenames) and write_submission() (validates columns/ids/NaN, writes comma UTF-8 %.4f). The attached CSV is the produced artifact for --keep mt; verify it is consistent with the script (309 rows, pa/fl constant, mt varying).",
+  "local_verify": {
+    "cmd": ".venv/bin/python scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1.csv --out /tmp/l4a_check.csv && cmp /tmp/l4a_check.csv outputs/sub_L4_isolate_mt.csv",
+    "exit": 0,
+    "tail": "wrote /tmp/l4a_check.csv  rows=309  kept=mt_mm  measured(non-median) rows=131\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_isolation.py",
+      "line": "23",
+      "sev": "major",
+      "desc": "The validation v > 0 incorrectly rejects a valid position angle of 0.0 or negative",
+      "fix": "Apply the v > 0 check only to strictly positive metrics (fl_mm, mt_mm)"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "56",
+      "sev": "minor",
+      "desc": "Unhandled exception when source CSV is missing or empty",
+      "fix": "Wrap pd.read_csv in try/except and exit cleanly with an error message"
+    },
+    {
+      "file": "00_make_isolation.py",
+      "line": "18",
+      "sev": "minor",
+      "desc": "Unhandled exception when medians JSON is missing",
+      "fix": "Wrap path.read_text() in try/except and exit cleanly"
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (351.25s)\n\nREVIEW-b221603a VERDICT: FAIL\n- 00_make_isolation.py:23 [major] The validation v > 0 incorrectly rejects a valid position angle of 0.0 or negative -> Apply the v > 0 check only to strictly positive metrics (fl_mm, mt_mm)\n- 00_make_isolation.py:56 [minor] Unhandled exception when source CSV is missing or empty -> Wrap pd.read_csv in try/except and exit cleanly with an error message\n- 00_make_isolation.py:18 [minor] Unhandled exception when medians JSON is missing -> Wrap path.read_text() in try/except and exit cleanly\n\nCLAIM: The median validation `if not (v > 0):` asserts that all medians must be strictly positive, but position angles (`pa_deg`) can physically be 0 or negative.\nTEST: python -c \"import json; json.dump({'median_pa_deg': 0.0, 'median_fl_mm': 81.5, 'median_mt_mm': 20.7}, open('test.json', 'w'))\" && python 00_make_isolation.py --keep mt --source outputs/sub_pipeline_a1.csv --medians test.json\nEXPECTED IF I AM RIGHT: ValueError: pa_deg median must be positive, got 0.0\nEXPECTED IF I AM WRONG: Script succeeds and sets pa_deg=0.0 in the output\nSCOPE: load_medians validation loop at line 23.\nFIXED WHEN: The validation logic allows 0.0 or valid negative values for pa_deg.\n\nCLAIM: The script does not handle obvious failure paths for missing input files, resulting in unhandled FileNotFoundError tracebacks instead of a graceful exit.\nTEST: python 00_make_isolation.py --keep mt --source non_existent.csv\nEXPECTED IF I AM RIGHT: Traceback ending in FileNotFoundError\nEXPECTED IF I AM WRONG: Graceful exit with a clear error message\nSCOPE: pd.read_csv(a.source) at line 56, and path.read_text() at line 18.\nFIXED WHEN: Passing missing files prints a user-friendly error and exits cleanly without a traceback.\n\nThe evidence given does not settle whether `parents[1]` correctly resolves the project root, as the directory structure and exact location of `00_make_isolation.py` are missing context. It also does not settle whether the JSON keys strictly match the script's `median_` prefix expectations, as `reports/public_medians.json` is not provided. I abstain on these claims.\n\ncase: 20260904T031231Z_035490_ask",
+  "nonce": "b221603a",
+  "tried": [
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (21.53s)\n\nI'll verify the isolation script against the real submit helpers and the produced CSV, then report only confident coding errors in the required format.\n\ncase: 2026"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (351.25s)\n\nREVIEW-b221603a VERDICT: FAIL\n- 00_make_isolation.py:23 [major] The validation v > 0 incorrectly rejects a valid position angle of 0.0 or negative -> Apply t"
+    }
+  ]
+}
