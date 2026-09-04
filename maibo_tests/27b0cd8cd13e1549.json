@@ -1,0 +1,66 @@
+{
+  "set_id": "27b0cd8cd13e1549",
+  "files": {
+    "scripts/scale_v2.py": "54d0a0c238de22c41b63fdab94ebc82bb029e9ce5e8809be1cf5fcf9764b4e15"
+  },
+  "engine": "codex",
+  "context": "L6 scale lookup (PLAN v3 rung 1). Reads reports/scale_final.json (per-image depth_pxcm, pitch_px, sector, chrome, run), re-fuses with tick units {0.1,0.2,0.25,0.5,1,2} within 12% tolerance, fills Siemens stills via a 5.75 cm footprint (sector_w/5.75), and on video-mode frames (sector x==0 or None) detects the left ruler's major ticks and OCRs the depth label / 'De NN mm' panel to get px/cm = tick span / depth_cm; then run- and chrome-consensus fills; writes reports/scale_v2.json. Debug run on 8 exemplars: 1200-wide video frames -> 148.1 px/cm (panel 50 mm, 5 intervals), IMG_00200 127.6 -> 159.5 (unit 0.25 -> 0.2), IMG_00002 footprint 152.0. Known gap: 644x1088 layout ticks not yet detected (label OCR drops the 5 of 50); that layout may stay unscaled this version. Review for correctness bugs, silent wrong-scale risks (e.g. a wrong tick count or OCR misread producing a confident bad px/cm), and the consensus logic.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_scale_v2.py",
+      "line": "150",
+      "sev": "major",
+      "desc": "`left-ruler` trusts any OCR depth in `20..120` mm and immediately computes `px_per_cm`, but never checks that the OCR depth is consistent with the detected major-tick comb, so a misread label can silently produce a confident wrong scale",
+      "fix": "reject or flag OCR depths that do not reconcile with `lr[\"n_intervals\"]`/`lr[\"pitch_px\"]` within tolerance and fall back to unlabeled-ruler or consensus instead."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "169",
+      "sev": "major",
+      "desc": "the `chrome` consensus pass is seeded with values already filled by the earlier `run` consensus pass, so an inferred run value can be re-propagated as if it were a direct measurement across an entire chrome cluster",
+      "fix": "keep a separate set of measured-only seeds, or exclude `*-consensus` sources from later consensus passes."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "130",
+      "sev": "minor",
+      "desc": "a missing or unreadable image makes `cv2.imread` return `None`, after which `G.to_gray(...)` / `g.shape` will raise and abort the whole batch without identifying the file cleanly",
+      "fix": "check the load result before conversion and skip or fail with an explicit per-file error."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "150",
+      "sev": "major",
+      "desc": "`left-ruler` trusts any OCR depth in `20..120` mm and immediately computes `px_per_cm`, but never checks that the OCR depth is consistent with the detected major-tick comb, so a misread label can silently produce a confident wrong scale",
+      "fix": "reject or flag OCR depths that do not reconcile with `lr[\"n_intervals\"]`/`lr[\"pitch_px\"]` within tolerance and fall back to unlabeled-ruler or consensus instead."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "169",
+      "sev": "major",
+      "desc": "the `chrome` consensus pass is seeded with values already filled by the earlier `run` consensus pass, so an inferred run value can be re-propagated as if it were a direct measurement across an entire chrome cluster",
+      "fix": "keep a separate set of measured-only seeds, or exclude `*-consensus` sources from later consensus passes."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "130",
+      "sev": "minor",
+      "desc": "a missing or unreadable image makes `cv2.imread` return `None`, after which `G.to_gray(...)` / `g.shape` will raise and abort the whole batch without identifying the file cleanly",
+      "fix": "check the load result before conversion and skip or fail with an explicit per-file error."
+    }
+  ],
+  "unsure": [],
+  "raw": "codex\nREVIEW-8aa9fb6c VERDICT: FAIL\n- 00_scale_v2.py:150 [major] `left-ruler` trusts any OCR depth in `20..120` mm and immediately computes `px_per_cm`, but never checks that the OCR depth is consistent with the detected major-tick comb, so a misread label can silently produce a confident wrong scale -> reject or flag OCR depths that do not reconcile with `lr[\"n_intervals\"]`/`lr[\"pitch_px\"]` within tolerance and fall back to unlabeled-ruler or consensus instead.\n- 00_scale_v2.py:169 [major] the `chrome` consensus pass is seeded with values already filled by the earlier `run` consensus pass, so an inferred run value can be re-propagated as if it were a direct measurement across an entire chrome cluster -> keep a separate set of measured-only seeds, or exclude `*-consensus` sources from later consensus passes.\n- 00_scale_v2.py:130 [minor] a missing or unreadable image makes `cv2.imread` return `None`, after which `G.to_gray(...)` / `g.shape` will raise and abort the whole batch without identifying the file cleanly -> check the load result before conversion and skip or fail with an explicit per-file error.\ntokens used\n15,398\nREVIEW-8aa9fb6c VERDICT: FAIL\n- 00_scale_v2.py:150 [major] `left-ruler` trusts any OCR depth in `20..120` mm and immediately computes `px_per_cm`, but never checks that the OCR depth is consistent with the detected major-tick comb, so a misread label can silently produce a confident wrong scale -> reject or flag OCR depths that do not reconcile with `lr[\"n_intervals\"]`/`lr[\"pitch_px\"]` within tolerance and fall back to unlabeled-ruler or consensus instead.\n- 00_scale_v2.py:169 [major] the `chrome` consensus pass is seeded with values already filled by the earlier `run` consensus pass, so an inferred run value can be re-propagated as if it were a direct measurement across an entire chrome cluster -> keep a separate set of measured-only seeds, or exclude `*-consensus` sources from later consensus passes.\n- 00_scale_v2.py:130 [minor] a missing or unreadable image makes `cv2.imread` return `None`, after which `G.to_gray(...)` / `g.shape` will raise and abort the whole batch without identifying the file cleanly -> check the load result before conversion and skip or fail with an explicit per-file error.\n\ncase: 20260904T173921Z_6fd07d_ask",
+  "nonce": "8aa9fb6c",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-8aa9fb6c VERDICT: FAIL\n- 00_scale_v2.py:150 [major] `left-ruler` trusts any OCR depth in `20..120` mm and immediately computes `px_per_cm`, but never checks that the OCR depth is consiste"
+    }
+  ]
+}

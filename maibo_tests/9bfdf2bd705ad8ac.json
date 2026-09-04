@@ -1,0 +1,23 @@
+{
+  "set_id": "9bfdf2bd705ad8ac",
+  "files": {
+    "scripts/scale_v2.py": "e8f196a5dfec8bf3f365c43621dc74786d7b3702f6e9e89b2b7c177613afd941"
+  },
+  "engine": "codex",
+  "context": "L6 scale lookup, fourth review. Fixed since maibo_tests/c20bbd606a639124.json: the video-layout branch no longer discards a scale measured by refuse(); a failed left-ruler read or an unreconciled label now leaves px/src as computed and only sets 'ruler-no-label'/'none' when px is None. All earlier fixes stand (measured-only consensus seeds; OCR depth must reconcile with the tick count via an admissible unit; import/CLI/load/imread guards; assumed-unit needs >=4 intervals and a top-anchored comb). Known accepted gap: 644x1088 layout stays unscaled. Judge correctness; do not fail on robustness polish alone.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "codex\nREVIEW-918217f3 VERDICT: PASS\ntokens used\n9,399\nREVIEW-918217f3 VERDICT: PASS\n\ncase: 20260904T174353Z_781e02_ask",
+  "nonce": "918217f3",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-918217f3 VERDICT: PASS\ntokens used\n9,399\nREVIEW-918217f3 VERDICT: PASS\n\ncase: 20260904T174353Z_781e02_ask"
+    }
+  ]
+}

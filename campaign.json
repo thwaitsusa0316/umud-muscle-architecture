@@ -37,11 +37,11 @@
   "pilot": {
     "profile": "competition",
     "phase": "P2",
-    "plan_version": 3,
-    "last_tick_utc": "2026-09-04T03:23:38Z",
-    "tick_open": "2026-09-04T09:49:13Z",
-    "ticks": 2,
-    "next_action": "P2: SUBMIT FIRST — submit_queue/L4a-isolate-mt.json passed a dry-run submit-gate at 2026-09-04T03:20Z (artifact sha aed1bc12…, maibo_tests/5e1692e6f16c607c.json, plan v2); submit it (budget 4/5 left on 2026-09-04 UTC, 20/35 week), read the score: falsifier public > 1.03662 -> promote L6 scale lookup; else MT ships. Then build+test L4b (make_isolation.py --keep fl) for the following tick. P3: read reports/maibo_method_review_v2.md (panel pid 46620 launched 03:19Z, may still be running) and dispose its numbered findings into PLAN v3 if any change a rung. Open human gate 2 (A6): Stephen must read discussion 737782 in a browser. Interim checkpoint: a real pipeline <= 0.9366 by 2026-09-24; kill gate <= 0.45134 by 2026-10-12.",
+    "plan_version": 4,
+    "last_tick_utc": "2026-09-04T17:45:58Z",
+    "tick_open": null,
+    "ticks": 4,
+    "next_action": "P2 rung L6b (PLAN v4 rung 1): (a) change scripts/predict_test.py to read reports/scale_v2.json (269/309 scaled; 40 fallback) with the MT plausibility gate MT in [8,35] mm else median 20.7 -> maibo_test.py PASS before it runs; (b) re-run the a1 pipeline (checkpoints, thr 0.9) -> reports/test_predictions.csv, check the label-free fingerprint (median MT vs 20.7, FL vs 81.5 should move from +14%/+13% toward 0 now that 74 scales moved, e.g. 127.6->159.5); (c) scripts/make_isolation.py --keep mt -> submit_queue/L6b-isolate-mt.json with justification against v4, submit-gate, submit on 2026-09-05 UTC (5 slots; 0 used); falsifier: public > 1.03662 (undiluted delta_MT x309/n > 0) -> scale is not the MT fault, pairing is -> L8. Rung 2 (same tick if time): fix the 644x1088 left-ruler comb in scripts/scale_v2.py (ticks on the spine at column 0, dimmer than bg+25; label OCR drops the 5 of '50'; 50 frames = 10 runs) and audit the 6/43 runs with within-run spread > 2% (90th pct 7.6%) before shipping those rows. Human gate 2 (A6) still open: Stephen reads discussion 737782 in a browser. Interim checkpoint <= 0.9366 by 2026-09-24; kill gate <= 0.45134 by 2026-10-12; coverage ceiling now ~0.12 (was ~0.51).",
     "blocked_on": null,
     "assumptions": [
       {
@@ -120,10 +120,10 @@
       {
         "id": "A10",
         "claim": "Scale (px/cm) is recoverable for the 160 cropped test frames",
-        "evidence": "2026-09-04 reports/scale_final.json: px/cm for 133/309 (sources: chrome-consensus 43, fused 63, depth 27), none for 176 incl. all 138 video-run frames; <=12 discrete values (135 px/cm on 42). The 178 FL/MT fallback rows are the no-scale rows. Lookup (L6) untested; L6 falsifier: fallback rows not < 60/309 -> dead.",
+        "evidence": "2026-09-04 reports/scale_final.json: px/cm for 133/309 (sources: chrome-consensus 43, fused 63, depth 27), none for 176 incl. all 138 video-run frames; <=12 discrete values (135 px/cm on 42). The 178 FL/MT fallback rows are the no-scale rows. Lookup (L6) untested; L6 falsifier: fallback rows not < 60/309 -> dead. | 2026-09-04T17:45Z scale_v2.json: 269/309 scaled (left-ruler 80, footprint 56, fused 54, depth 36, consensus 43); 40 fallback (<60, L6 not fired); 50 at 644x1088 + 19 other-device singletons open (partial).",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-04T10:05:00Z",
-        "status": "unverified"
+        "last_verified_utc": "2026-09-04T17:45:00Z",
+        "status": "verified"
       },
       {
         "id": "A11",
@@ -158,10 +158,10 @@
         "notes": "Rules s2.2.a 5/day, s2.2.b 2 finals; team size 10; total only binds mergers (5 x days running). CSV upload, no kernel time limit. gpu_hours_per_week is Helm's Kaggle quota allocation; this engagement runs all compute locally on the M3 Max and does not draw on it."
       },
       "used": {
-        "today": 3,
-        "week": 17,
-        "total": 17,
-        "as_of_utc": "2026-09-04T10:01:02Z",
+        "today": 4,
+        "week": 18,
+        "total": 18,
+        "as_of_utc": "2026-09-04T17:30:46Z",
         "note": "13 submissions 2026-08-31..09-03 (12 COMPLETE, 1 ERROR semicolon/BOM). today = 2 on 2026-09-03 (16:30, 16:41 UTC)."
       },
       "last_submitted_utc": "2026-09-04T10:02:33Z",
@@ -180,7 +180,7 @@
       "gpu_hours_this_week": 0.0,
       "weight": 0.0,
       "basis": "registry gpu_share",
-      "set_utc": "2026-09-04T09:33:10Z"
+      "set_utc": "2026-09-04T17:01:18Z"
     },
     "position": {
       "public_rank": 121,

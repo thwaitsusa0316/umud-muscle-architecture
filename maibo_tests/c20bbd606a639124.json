@@ -1,0 +1,38 @@
+{
+  "set_id": "c20bbd606a639124",
+  "files": {
+    "scripts/scale_v2.py": "4d226d564863f5a519631c52e7fb4d76fd1725bc7e456093aee9170cb21f4e4a"
+  },
+  "engine": "codex",
+  "context": "L6 scale lookup, third review. Fixed since maibo_tests/e061a1226074362b.json: pytesseract import moved inside the try; --only is nargs='+' and unknown ids exit; scale_final.json load is guarded; the assumed-unit fallback now requires >=4 intervals and a comb starting near the top of the frame. Earlier fixes (measured-only consensus seeds fixed before both passes; OCR depth must reconcile with the tick count via an admissible unit within 12%) are in. Reads per-image fields from reports/scale_final.json, re-fuses with units {0.1,0.2,0.25,0.5,1,2}, fills Siemens stills via the 5.75 cm footprint, reads the left ruler + 'De NN mm' panel on video frames, writes reports/scale_v2.json. Known accepted gap: 644x1088 layout stays unscaled in this version. Judge correctness; do not fail on robustness polish alone.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_scale_v2.py",
+      "line": "136",
+      "sev": "major",
+      "desc": "The `video_layout` branch can erase a valid scale already computed by `refuse()`: if `left_ruler()` fails or the OCR depth does not reconcile, lines 156 and 158 set `px, src = None, ...`, so a measured `depth`/`fused(...)` value from `scale_final.json` is dropped and the frame is later treated as unmeasured",
+      "fix": "preserve the pre-video `px`/`src` as the fallback and only overwrite them when the left-ruler path produces a validated measurement."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "136",
+      "sev": "major",
+      "desc": "The `video_layout` branch can erase a valid scale already computed by `refuse()`: if `left_ruler()` fails or the OCR depth does not reconcile, lines 156 and 158 set `px, src = None, ...`, so a measured `depth`/`fused(...)` value from `scale_final.json` is dropped and the frame is later treated as unmeasured",
+      "fix": "preserve the pre-video `px`/`src` as the fallback and only overwrite them when the left-ruler path produces a validated measurement."
+    }
+  ],
+  "unsure": [],
+  "raw": "codex\nREVIEW-b2a6196f VERDICT: FAIL\n- 00_scale_v2.py:136 [major] The `video_layout` branch can erase a valid scale already computed by `refuse()`: if `left_ruler()` fails or the OCR depth does not reconcile, lines 156 and 158 set `px, src = None, ...`, so a measured `depth`/`fused(...)` value from `scale_final.json` is dropped and the frame is later treated as unmeasured -> preserve the pre-video `px`/`src` as the fallback and only overwrite them when the left-ruler path produces a validated measurement.\ntokens used\n11,050\nREVIEW-b2a6196f VERDICT: FAIL\n- 00_scale_v2.py:136 [major] The `video_layout` branch can erase a valid scale already computed by `refuse()`: if `left_ruler()` fails or the OCR depth does not reconcile, lines 156 and 158 set `px, src = None, ...`, so a measured `depth`/`fused(...)` value from `scale_final.json` is dropped and the frame is later treated as unmeasured -> preserve the pre-video `px`/`src` as the fallback and only overwrite them when the left-ruler path produces a validated measurement.\n\ncase: 20260904T174234Z_c44379_ask",
+  "nonce": "b2a6196f",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-b2a6196f VERDICT: FAIL\n- 00_scale_v2.py:136 [major] The `video_layout` branch can erase a valid scale already computed by `refuse()`: if `left_ruler()` fails or the OCR depth does not rec"
+    }
+  ]
+}

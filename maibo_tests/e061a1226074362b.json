@@ -1,0 +1,66 @@
+{
+  "set_id": "e061a1226074362b",
+  "files": {
+    "scripts/scale_v2.py": "032a8d7ffc9f810c34c621b49685aacedb66886306a1d2488cf9c2e614720f19"
+  },
+  "engine": "codex",
+  "context": "L6 scale lookup, second review after fixing the three findings of maibo_tests/27b0cd8cd13e1549.json: (1) consensus seeds are now measured-only and fixed before both passes; (2) an OCR depth is accepted only if depth_cm / n_intervals is within 12% of an admissible tick unit {0.1,0.2,0.25,0.5,1,2} cm, else flagged and left for consensus; (3) cv2.imread None now exits with the file name. Reads reports/scale_final.json per-image fields, re-fuses depth+pitch with the extended unit set, fills Siemens stills via the 5.75 cm footprint, reads the left ruler + 'De NN mm' panel on video frames, writes reports/scale_v2.json. Known accepted gap: 644x1088 layout stays unscaled in this version.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_scale_v2.py",
+      "line": "52",
+      "sev": "major",
+      "desc": "`_ocr_digits()` imports `pytesseract` before the `try`, so an environment without that module crashes on the first OCR path instead of falling back to `\"\"` as intended",
+      "fix": "move the import inside the `try` block or catch `ImportError` explicitly."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "91",
+      "sev": "major",
+      "desc": "`--only` is declared with `nargs=\"*\"` and the filter uses `not a.only`, so invoking `--only` with no image IDs silently processes the full dataset instead of rejecting bad CLI usage",
+      "fix": "change this to `nargs=\"+\"` or raise an error when `a.only == []`."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "95",
+      "sev": "major",
+      "desc": "loading `reports/scale_final.json` is unguarded, so a missing, unreadable, or malformed input file raises a raw exception on an obvious failure path the script otherwise tries to handle cleanly",
+      "fix": "wrap the read/parse in `try/except` and exit with a controlled message naming the path."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "52",
+      "sev": "major",
+      "desc": "`_ocr_digits()` imports `pytesseract` before the `try`, so an environment without that module crashes on the first OCR path instead of falling back to `\"\"` as intended",
+      "fix": "move the import inside the `try` block or catch `ImportError` explicitly."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "91",
+      "sev": "major",
+      "desc": "`--only` is declared with `nargs=\"*\"` and the filter uses `not a.only`, so invoking `--only` with no image IDs silently processes the full dataset instead of rejecting bad CLI usage",
+      "fix": "change this to `nargs=\"+\"` or raise an error when `a.only == []`."
+    },
+    {
+      "file": "00_scale_v2.py",
+      "line": "95",
+      "sev": "major",
+      "desc": "loading `reports/scale_final.json` is unguarded, so a missing, unreadable, or malformed input file raises a raw exception on an obvious failure path the script otherwise tries to handle cleanly",
+      "fix": "wrap the read/parse in `try/except` and exit with a controlled message naming the path."
+    }
+  ],
+  "unsure": [],
+  "raw": "codex\nREVIEW-80d6a753 VERDICT: FAIL\n- 00_scale_v2.py:52 [major] `_ocr_digits()` imports `pytesseract` before the `try`, so an environment without that module crashes on the first OCR path instead of falling back to `\"\"` as intended -> move the import inside the `try` block or catch `ImportError` explicitly.\n- 00_scale_v2.py:91 [major] `--only` is declared with `nargs=\"*\"` and the filter uses `not a.only`, so invoking `--only` with no image IDs silently processes the full dataset instead of rejecting bad CLI usage -> change this to `nargs=\"+\"` or raise an error when `a.only == []`.\n- 00_scale_v2.py:95 [major] loading `reports/scale_final.json` is unguarded, so a missing, unreadable, or malformed input file raises a raw exception on an obvious failure path the script otherwise tries to handle cleanly -> wrap the read/parse in `try/except` and exit with a controlled message naming the path.\ntokens used\n14,549\nREVIEW-80d6a753 VERDICT: FAIL\n- 00_scale_v2.py:52 [major] `_ocr_digits()` imports `pytesseract` before the `try`, so an environment without that module crashes on the first OCR path instead of falling back to `\"\"` as intended -> move the import inside the `try` block or catch `ImportError` explicitly.\n- 00_scale_v2.py:91 [major] `--only` is declared with `nargs=\"*\"` and the filter uses `not a.only`, so invoking `--only` with no image IDs silently processes the full dataset instead of rejecting bad CLI usage -> change this to `nargs=\"+\"` or raise an error when `a.only == []`.\n- 00_scale_v2.py:95 [major] loading `reports/scale_final.json` is unguarded, so a missing, unreadable, or malformed input file raises a raw exception on an obvious failure path the script otherwise tries to handle cleanly -> wrap the read/parse in `try/except` and exit with a controlled message naming the path.\n\ncase: 20260904T174108Z_949868_ask",
+  "nonce": "80d6a753",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-80d6a753 VERDICT: FAIL\n- 00_scale_v2.py:52 [major] `_ocr_digits()` imports `pytesseract` before the `try`, so an environment without that module crashes on the first OCR path instead of f"
+    }
+  ]
+}
