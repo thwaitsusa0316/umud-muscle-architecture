@@ -42,9 +42,13 @@ DUMMY_SCALE = 100.0        # PA is scale-free; any positive value
 VAL_FRAC, VAL_MIN, SEED = 0.12, 40, 0   # must mirror train_fascicle.py
 
 
-def _shape(p: pathlib.Path) -> tuple[int, int]:
-    with Image.open(p) as im:
-        return im.size[1], im.size[0]
+def _shape(p: pathlib.Path) -> tuple[int, int] | None:
+    """(h, w) of an image file, or None when PIL cannot read it (empty/corrupt)."""
+    try:
+        with Image.open(p) as im:
+            return im.size[1], im.size[0]
+    except (OSError, ValueError, Image.UnidentifiedImageError):
+        return None
 
 
 def val_ids() -> set[str] | None:
@@ -64,30 +68,26 @@ def val_ids() -> set[str] | None:
     return ids
 
 
-def select(shape: tuple[int, int], n: int, prefer_val: set[str] | None) -> list[str]:
-    imgs = {p.stem: p for p in FASC_IMG.iterdir() if p.suffix.lower() in EXT}
-    masks = {p.stem: p for p in FASC_MSK.iterdir() if p.suffix.lower() in EXT}
-    stems = sorted(s for s in imgs if s in masks)          # any extension pairing
-    if not stems:
+def select(shape: tuple[int, int], n: int, prefer_val: set[str] | None
+           ) -> list[tuple[str, pathlib.Path, pathlib.Path]]:
+    """(stem, image path, mask path) triples, resolved ONCE so the shape filter and the
+    run use the same files even if a stem exists under several extensions."""
+    imgs = {p.stem: p for p in sorted(FASC_IMG.iterdir()) if p.suffix.lower() in EXT}
+    masks = {p.stem: p for p in sorted(FASC_MSK.iterdir()) if p.suffix.lower() in EXT}
+    items = [(s, imgs[s], masks[s]) for s in sorted(imgs) if s in masks]
+    if not items:
         raise SystemExit(f"no image/mask pairs under {FASC_IMG} and {FASC_MSK}")
-    stems = [s for s in stems if _shape(imgs[s]) == shape]
-    if not stems:
-        raise SystemExit(f"no training fascicle images of shape {shape}")
+    items = [it for it in items if _shape(it[1]) == shape]
+    if not items:
+        raise SystemExit(f"no readable training fascicle images of shape {shape}")
     if prefer_val:
-        v = [s for s in stems if s in prefer_val]
-        rest = [s for s in stems if s not in prefer_val]
+        v = [it for it in items if it[0] in prefer_val]
+        rest = [it for it in items if it[0] not in prefer_val]
         rng = random.Random(SEED); rng.shuffle(rest)
-        stems = v + rest
+        items = v + rest
     else:
-        rng = random.Random(SEED); rng.shuffle(stems)
-    return stems[:n]
-
-
-def _find(d: pathlib.Path, stem: str) -> pathlib.Path:
-    for p in d.glob(stem + ".*"):
-        if p.suffix.lower() in EXT:
-            return p
-    raise SystemExit(f"no image file for {stem} under {d}")
+        rng = random.Random(SEED); rng.shuffle(items)
+    return items[:n]
 
 
 def _read_mask(p: pathlib.Path) -> np.ndarray:
@@ -97,19 +97,26 @@ def _read_mask(p: pathlib.Path) -> np.ndarray:
     return (m > 127).astype(np.uint8)
 
 
-def run(stems: list[str], ckpt: pathlib.Path | None, thr: float, val: set[str] | None,
-        batch: int = 16) -> pd.DataFrame:
+def run(items: list[tuple[str, pathlib.Path, pathlib.Path]], ckpt: pathlib.Path | None,
+        thr: float, val: set[str] | None, batch: int = 16) -> pd.DataFrame:
     model = dev = None
     if ckpt is not None:
         from eval_new_fascicle import load_model, predict_ours
         model, dev = load_model("unet", ckpt)
     rows = []
-    for i in range(0, len(stems), batch):
-        chunk = stems[i:i + batch]
-        paths = [_find(FASC_IMG, s) for s in chunk]
-        grays = [G.to_gray(cv2.imread(str(p), cv2.IMREAD_UNCHANGED)) for p in paths]
-        for s, g, (am, fm_dl) in zip(chunk, grays, S.predict_batch(grays, thr_apo=0.35, thr_fasc=0.10)):
-            gt = _read_mask(_find(FASC_MSK, s))
+    for i in range(0, len(items), batch):
+        chunk = []
+        grays = []
+        for s, ip, mp in items[i:i + batch]:
+            raw = cv2.imread(str(ip), cv2.IMREAD_UNCHANGED)
+            if raw is None or raw.size == 0:
+                print(f"  [skip] unreadable image {ip}")
+                continue
+            chunk.append((s, mp)); grays.append(G.to_gray(raw))
+        if not grays:
+            continue
+        for (s, mp), g, (am, fm_dl) in zip(chunk, grays, S.predict_batch(grays, thr_apo=0.35, thr_fasc=0.10)):
+            gt = _read_mask(mp)
             mh, mw = gt.shape[:2]          # the mask's own grid: its aspect vs the image's is the export stretch
             if gt.shape != g.shape[:2]:
                 gt = cv2.resize(gt, (g.shape[1], g.shape[0]), interpolation=cv2.INTER_NEAREST)
@@ -125,7 +132,7 @@ def run(stems: list[str], ckpt: pathlib.Path | None, thr: float, val: set[str] |
                 r_us = Gm.analyse(am, predict_ours(model, dev, g, thr=thr), DUMMY_SCALE, aspect=1.0)
                 row.update(pa_ours=r_us.pa_deg, n_ours=r_us.n_fascicles)
             rows.append(row)
-        print(f"  {min(i + batch, len(stems))}/{len(stems)}", flush=True)
+        print(f"  {min(i + batch, len(items))}/{len(items)}", flush=True)
     return pd.DataFrame(rows)
 
 
@@ -180,10 +187,10 @@ def main() -> int:
     if ckpt is not None and not ckpt.exists():
         return print(f"checkpoint not found: {ckpt}") or 2
     val = None if a.no_detector else val_ids()
-    stems = select((h, w), a.n, val)
-    print(f"{len(stems)} training frames of {h}x{w}"
-          + (f" ({sum(s in val for s in stems)} held out of training)" if val else ""))
-    df = run(stems, ckpt, a.thr, val)
+    items = select((h, w), a.n, val)
+    print(f"{len(items)} training frames of {h}x{w}"
+          + (f" ({sum(it[0] in val for it in items)} held out of training)" if val else ""))
+    df = run(items, ckpt, a.thr, val)
     out = pathlib.Path(a.out); out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False)
     summarise(df)
