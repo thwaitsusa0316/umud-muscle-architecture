@@ -72,6 +72,8 @@ def select(shape: tuple[int, int], n: int, prefer_val: set[str] | None
            ) -> list[tuple[str, pathlib.Path, pathlib.Path]]:
     """(stem, image path, mask path) triples, resolved ONCE so the shape filter and the
     run use the same files even if a stem exists under several extensions."""
+    if not FASC_IMG.is_dir() or not FASC_MSK.is_dir():
+        raise SystemExit(f"no image/mask pairs under {FASC_IMG} and {FASC_MSK}")
     imgs = {p.stem: p for p in sorted(FASC_IMG.iterdir()) if p.suffix.lower() in EXT}
     masks = {p.stem: p for p in sorted(FASC_MSK.iterdir()) if p.suffix.lower() in EXT}
     items = [(s, imgs[s], masks[s]) for s in sorted(imgs) if s in masks]

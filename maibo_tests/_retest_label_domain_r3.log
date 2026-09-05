@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_label_domain_pa.py",
+      "line": "47",
+      "sev": "major",
+      "desc": "`pathlib.Path.iterdir()` raises `FileNotFoundError` if a directory does not exist, crashing the script before the intended `SystemExit` check for missing data can run",
+      "fix": "verify `FASC_IMG.is_dir()` and `FASC_MSK.is_dir()` before iterating, or handle the exception."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The script crashes with an unhandled FileNotFoundError on the obvious failure path of missing raw data directories, completely bypassing the explicitly coded graceful exit message on line 51.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `mkdir -p /tmp/pa_test && cp 00_label_domain_pa.py /tmp/pa_test/ && cd /tmp/pa_test && python3 00_label_domain_pa.py`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 A Python traceback ending with `FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pa_test/data/raw/fasc_imgs_v1/fasc_images_new_model_v1'`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 A clean exit printing `no image/mask pairs under ...`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `00_label_domain_pa.py:47-48` where `iterdir()` is called on `FASC_IMG` and `FASC_MSK`.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 Running the script in an environment where the data directories do not exist safely triggers the intended \"no image/mask pairs\" exit message instead of a stack trace.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/6756859e8aab28e8.json",
+  "sha256": {
+    "scripts/label_domain_pa.py": "209f576f8ad0a6d5903d93af640722b9c9efdb05847c9bf485f6b8f69c08876e"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "set_id": "fc5beb1d1a7428db",
+  "files": {
+    "scripts/label_domain_pa.py": "d36495a39414ac84676d1363e6ba2f1f9dec90c5dbb7bd39a0e149e359b6bd11"
+  },
+  "engine": "antigravity",
+  "context": "Fourth round: only change vs round 3 is an is_dir() guard on FASC_IMG/FASC_MSK before iterdir() (the round-3 finding). Diagnostic script only (writes reports/label_domain_pa.csv).",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (200.59s)\n\nREVIEW-6a0e498d VERDICT: PASS\n\ncase: 20260905T162407Z_825c68_ask",
+  "nonce": "6a0e498d",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (32.67s)\n\nI'll review the attached script against the repo APIs and failure paths, and only report errors I'm confident about.\n\ncase: 20260905T162335Z_92d963_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (200.59s)\n\nREVIEW-6a0e498d VERDICT: PASS\n\ncase: 20260905T162407Z_825c68_ask"
+    }
+  ]
+}
