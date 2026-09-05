@@ -1,0 +1,27 @@
+{
+  "id": "L6b-isolate-mt",
+  "artifact": "outputs/sub_L6b_isolate_mt.csv",
+  "sha256": "be2017725354173c5dd8b4ce5a7a6f901c9ee3165e6dcd0167afdbdd5d733cce",
+  "generator": "scripts/make_submission.py --aspect 1 --fasc-ckpt checkpoints/fasc_unet_pw6_best.pt --fasc-thr 0.9 --scale reports/scale_v2.json --mt-gate 8 35 --out outputs/sub_pipeline_a1_scalev2.csv; scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1_scalev2.csv --out outputs/sub_L6b_isolate_mt.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "be2017725354173c5dd8b4ce5a7a6f901c9ee3165e6dcd0167afdbdd5d733cce",
+    "record": "maibo_tests/6e360ef281320071.json",
+    "generator_record": "maibo_tests/3973e32574b1fe76.json"
+  },
+  "justification": {
+    "plan_version": 4,
+    "rung": "L6b",
+    "purpose": "probe",
+    "why_now": "PLAN v4 (2026-09-04T17:45Z) rung 1: L6 delivered reports/scale_v2.json (269/309 scaled, fallback 40 < 60) and L4a showed measured MT from the old scale (133 rows, 127.6 px/cm on the fused cluster) carried +0.21802 over the floor 1.03662. The pipeline was re-run 2026-09-05T01:10Z with scale_v2 and the MT plausibility gate [8,35] mm (265 measured MT rows, 44 at the median 20.7; label-free fingerprint MT median on measured rows 22.81 vs 23.58 before, p90 29 vs 45). This CSV holds that mt_mm column with PA/FL at the probed medians 16.42/81.5. One slot on 2026-09-05 UTC (0/5 used); the isolation is exact against the floor (delta_public = 0) and is the decision-table row 'MT harmful -> scale vs pairing'.",
+    "expected_benefit": "Decides whether the MT fault was scale (L6 fixed it) or aponeurosis pairing (L8 next). If delta_MT <= -0.05 measured MT becomes the first shipped target and L6c routing follows; if delta_MT in (-0.05,+0.05) uninformative -> L6a' (50 unscaled 644x1088 frames) then re-isolate; if > +0.05 pairing is the fault -> L8 promoted.",
+    "expected_score_delta": "-0.15 to -0.05 vs 1.03662 if scale was the fault (undiluted per-row x309/265 = 1.17); > 0 if pairing dominates. Pre-registered minimum interpretable delta +-0.05 (v3).",
+    "falsifier": "public > 1.03662 (delta_MT undiluted x309/265 > 0) -> scale is not the MT fault; pairing is -> promote L8 (SAM2 aponeurosis masks) and keep MT at the median until it beats it",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6b_isolate_mt.csv -m 'L6b isolation: measured MT (scale_v2 269/309, gate 8-35mm, 265 rows), PA/FL at probed medians (floor 1.03662)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-05T01:16:00Z",
+  "submitted_utc": "2026-09-05T01:16:48Z",
+  "submission_id": "56022395"
+}

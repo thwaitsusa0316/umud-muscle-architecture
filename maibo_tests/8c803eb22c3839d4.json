@@ -1,0 +1,85 @@
+{
+  "set_id": "8c803eb22c3839d4",
+  "files": {
+    "scripts/make_submission.py": "7d83124590f602738efb50f2e23ebdc9f7c161f004b5dbef84d2d35addbf26bd"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v4 rung L6b. Change: (1) scale lookup now reads reports/scale_v2.json (dict of 309 image_id -> {px_per_cm: float|null,...}) via load_scale with validation; (2) gate_mt: MT outside [8,35] mm or None/NaN falls back to the probed median 20.7 and is flagged mt_measured=False; (3) new CLI flags --scale, --mt-gate LO HI, --out, --report. Everything else (retrained fascicle ckpt via eval_new_fascicle, geometry.analyse, submit.write_submission) is unchanged and out of scope. Check: gate boundary semantics, None/NaN handling, mt_raw column when px missing, that --out does not overwrite scored outputs by default, argparse validity.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_submission.py",
+      "line": "60",
+      "sev": "critical",
+      "desc": "The fallback logic for `pa_deg` and `fl_mm` relies on truthiness (`if r.pa_deg` and `if (px and r.fl_mm)`), which evaluates to True for `NaN` in Python. This bypasses the fallback entirely and silently leaks `NaN`s into the final submission instead of using the probed medians.",
+      "fix": "Use `np.isfinite()` to check for valid measurements before falling back, identical to how `gate_mt` handles it."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The fallback logic for `pa_deg` and `fl_mm` fails to replace `NaN` values with the probed medians because `NaN` is truthy, resulting in invalid submission values.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `nan`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `16.42`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `00_make_submission.py`: lines 60 and 61 (`pa_deg` and `fl_mm` dictionary assignments). Every subsequent operation on these columns, including the `.clip()` bounds and the final CSV write, inherits these unhandled `NaN`s.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 The assignments use explicit numerical checks (e.g., `np.isfinite(r.pa_deg)`) instead of implicit truthiness, and the test script correctly outputs `16.42` when supplied with `np.nan`.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (183.78s)\n\nREVIEW-af452c0d VERDICT: FAIL\n\n- 00_make_submission.py:60 [critical] The fallback logic for `pa_deg` and `fl_mm` relies on truthiness (`if r.pa_deg` and `if (px and r.fl_mm)`), which evaluates to True for `NaN` in Python. This bypasses the fallback entirely and silently leaks `NaN`s into the final submission instead of using the probed medians. -> Use `np.isfinite()` to check for valid measurements before falling back, identical to how `gate_mt` handles it.\n\n**TEST PROTOCOL**\n- **CLAIM** \u2014 The fallback logic for `pa_deg` and `fl_mm` fails to replace `NaN` values with the probed medians because `NaN` is truthy, resulting in invalid submission values.\n- **TEST** \u2014\n  ```python\n  import numpy as np\n  r_pa_deg = np.nan\n  MED_pa_deg = 16.42\n  \n  # The script's exact fallback logic at line 60:\n  pa_deg = r_pa_deg if r_pa_deg else MED_pa_deg\n  print(pa_deg)\n  ```\n- **EXPECTED IF I AM RIGHT** \u2014 `nan`\n- **EXPECTED IF I AM WRONG** \u2014 `16.42`\n- **SCOPE** \u2014 `00_make_submission.py`: lines 60 and 61 (`pa_deg` and `fl_mm` dictionary assignments). Every subsequent operation on these columns, including the `.clip()` bounds and the final CSV write, inherits these unhandled `NaN`s.\n- **FIXED WHEN** \u2014 The assignments use explicit numerical checks (e.g., `np.isfinite(r.pa_deg)`) instead of implicit truthiness, and the test script correctly outputs `16.42` when supplied with `np.nan`.\n\ncase: 20260905T004913Z_3f1d70_ask",
+  "nonce": "af452c0d",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (10.91s)\n\nI'll review the attached submission script against the stated L6b changes, checking gate semantics, CLI defaults, and scale/MT handling against the repo where need"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (183.78s)\n\nREVIEW-af452c0d VERDICT: FAIL\n\n- 00_make_submission.py:60 [critical] The fallback logic for `pa_deg` and `fl_mm` relies on truthiness (`if r.pa_deg` and `if "
+    }
+  ]
+}

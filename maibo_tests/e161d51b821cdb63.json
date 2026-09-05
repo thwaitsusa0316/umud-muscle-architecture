@@ -1,0 +1,40 @@
+{
+  "set_id": "e161d51b821cdb63",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L6b_isolate_fl.csv": "8b50ed3b3e4073231d3ace87798c28cede7f1b6776e4d5c377a27d0a6f909c09"
+  },
+  "engine": "antigravity",
+  "context": "Rung L6b-fl (PLAN v5): per-target isolation submission, script unchanged since its L4a PASS (maibo_tests/5e1692e6f16c607c.json) and L6b PASS (6e360ef281320071). Keeps fl_mm per image from outputs/sub_pipeline_a1_scalev2.csv (309-row pipeline CSV, columns image_id,pa_deg,fl_mm,mt_mm; scale_v2 269/309, FL measured on 262 rows, 47 at the median 81.5, FL clipped to [30,200]) and sets pa_deg=16.42, mt_mm=20.7 from reports/public_medians.json. The attached CSV is the produced artifact for --keep fl. Check the artifact: 309 rows, header image_id,pa_deg,fl_mm,mt_mm, comma-delimited UTF-8 no BOM, 4-decimal floats, pa/mt constant, fl within [30,200], no NaN, ids carry .tif/.png extensions.",
+  "local_verify": {
+    "cmd": ".venv/bin/python scripts/make_isolation.py --keep fl --source outputs/sub_pipeline_a1_scalev2.csv --out /tmp/l6bfl_check.csv && cmp /tmp/l6bfl_check.csv outputs/sub_L6b_isolate_fl.csv",
+    "exit": 0,
+    "tail": "wrote /tmp/l6bfl_check.csv  rows=309  kept=fl_mm  measured(non-median) rows=262\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (218.05s)\n\nREVIEW-6590f8a9 VERDICT: PASS\n\ncase: 20260905T011716Z_0749b1_ask",
+  "nonce": "6590f8a9",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (18.35s)\n\nI'll verify the isolation script and the produced CSV against the stated invariants, then report only confirmed errors.\n\ncase: 20260905T011658Z_0b4f38_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (218.05s)\n\nREVIEW-6590f8a9 VERDICT: PASS\n\ncase: 20260905T011716Z_0749b1_ask"
+    }
+  ]
+}

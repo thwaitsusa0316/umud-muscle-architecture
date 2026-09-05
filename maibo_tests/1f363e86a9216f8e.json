@@ -1,0 +1,50 @@
+{
+  "set_id": "1f363e86a9216f8e",
+  "files": {
+    "scripts/make_submission.py": "2c011b59dfc31179418c7059ef760abbd59e5015e03bfba9cfd530c427e3b8cd"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v4 rung L6b, round 2 (round 1 FAIL fixed: NaN truthiness on pa_deg/fl_mm now handled by _finite()). Change: (1) scale lookup reads reports/scale_v2.json (dict of 309 image_id -> {px_per_cm: float|null,...}) via load_scale with validation; (2) gate_mt: MT outside [8,35] mm or None/NaN falls back to the probed median 20.7, flagged mt_measured=False; (3) new CLI flags --scale, --mt-gate LO HI, --out, --report. Unit check run: gate_mt(nan)->(20.7,False), 8.0->(8.0,True), 35.0->(35.0,True), 35.01->(20.7,False). eval_new_fascicle, geometry.analyse, submit.write_submission unchanged and out of scope.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_submission.py",
+      "line": "119",
+      "sev": "major",
+      "desc": "df.pa_deg.notna().sum() always equals the total number of rows because pa_deg is pre-filled with the median fallback",
+      "fix": "compute the measurement count before fallback, e.g. by adding a pa_raw column."
+    },
+    {
+      "file": "00_make_submission.py",
+      "line": "116",
+      "sev": "major",
+      "desc": "Empty test directory results in an empty DataFrame with no columns, causing an AttributeError on df.measured_scale",
+      "fix": "pass explicit columns to pd.DataFrame(rows) or check if rows is empty."
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (222.87s)\n\nREVIEW-de5cf615 VERDICT: FAIL\n- 00_make_submission.py:119 [major] df.pa_deg.notna().sum() always equals the total number of rows because pa_deg is pre-filled with the median fallback -> compute the measurement count before fallback, e.g. by adding a pa_raw column.\n- 00_make_submission.py:116 [major] Empty test directory results in an empty DataFrame with no columns, causing an AttributeError on df.measured_scale -> pass explicit columns to pd.DataFrame(rows) or check if rows is empty.\n\nCLAIM: The printed \"PA measured on\" count is artificially inflated to the total number of images because `df.pa_deg` is populated with a fallback value (16.42) for unmeasured images before `.notna()` is evaluated.\nTEST: Hand-computation for an image where `r.pa_deg` is NaN. `_finite(NaN)` evaluates to False, so the dict receives `pa_deg = MED[\"pa_deg\"]` (16.42). The DataFrame stores 16.42 instead of NaN. Calling `df.pa_deg.notna()` evaluates to True for this row, and `.sum()` includes it.\nEXPECTED IF I AM RIGHT: df.pa_deg.notna().sum() evaluates to 1 for the unmeasured image.\nEXPECTED IF I AM WRONG: df.pa_deg.notna().sum() evaluates to 0 for the unmeasured image.\nSCOPE: `build()` dict construction and `main()` logging for `pa_deg`.\nFIXED WHEN: The log count accurately reflects only the images where the raw PA measurement was finite.\n\nCLAIM: Supplying an empty test directory causes an unhandled AttributeError because `pd.DataFrame([])` produces a DataFrame without columns.\nTEST: Hand-computation for an empty test directory. `len(names)` is 0, the `for` loop does not execute, and `rows` remains `[]`. `df = pd.DataFrame([])` creates a DataFrame with no columns. The code then attempts to evaluate `df.measured_scale.sum()`.\nEXPECTED IF I AM RIGHT: AttributeError: 'DataFrame' object has no attribute 'measured_scale'\nEXPECTED IF I AM WRONG: The script evaluates the sum to 0.\nSCOPE: `main()` when aggregating summary statistics (`n_scale`, `n_mt_raw`, `n_mt`).\nFIXED WHEN: Running the script against an empty directory prints 0 for the counts or exits cleanly without throwing an AttributeError.\n\ncase: 20260905T005434Z_5bf556_ask",
+  "nonce": "de5cf615",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (82.05s)\n\nI'll review the attached submission script against the stated L6b changes and look for concrete coding errors only.\n\ncase: 20260905T005312Z_1ff764_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (222.87s)\n\nREVIEW-de5cf615 VERDICT: FAIL\n- 00_make_submission.py:119 [major] df.pa_deg.notna().sum() always equals the total number of rows because pa_deg is pre-filled"
+    }
+  ]
+}

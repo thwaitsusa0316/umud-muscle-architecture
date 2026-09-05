@@ -1,4 +1,14 @@
-# UMUD Challenge — PLAN v4
+# UMUD Challenge — PLAN v5
+
+Supersedes: v4 (2026-09-04T17:45Z; v4 and v3 text retained below as the base, v5 changes listed first).
+
+**Why v5 (2026-09-05T01:20Z):** **L6b ran and its falsifier did not fire.** `scripts/make_submission.py` now reads `reports/scale_v2.json` and applies the MT plausibility gate [8, 35] mm (maibo_test PASS `maibo_tests/3973e32574b1fe76.json` after 2 FAIL rounds: NaN truthiness on pa/fl, meaningless PA count, empty-dir crash). Pipeline re-run (6:39 on MPS) → `outputs/sub_pipeline_a1_scalev2.csv`: PA measured 297, FL 262, MT 269 → **265 after the gate** (4 gated out at 35.5–56.3 mm). Label-free fingerprint on measured rows: MT median **22.81** (was 23.58; +10 % vs 20.7, was +14 %), p90 29 (was 45); FL median 93.5 (+15 %); PA 13.03 (−21 %, unchanged, scale-free).
+**MT isolation (`outputs/sub_L6b_isolate_mt.csv`, submission 56022395): public 0.91568 vs floor 1.03662 → Δ_MT = −0.12094 (undiluted ×309/265 = −0.141).** Below the −0.05 interpretability line: measured MT beats the constant by ~1.3 mm MAE per measured row. MT-isolation trend: +0.218 (L4a, old scale, 133 rows) → **−0.121** (L6b). Decision-table row "MT harmful → scale vs pairing" resolves to **scale**; L8 (SAM2 pairing) is demoted to conditional. Score trend: 1.03662 → 1.06452 → **0.91568 (green)**; first non-constant submission below the floor. Interim checkpoint (≤ 0.9366 by 2026-09-24) is met numerically by an *isolation*, not a full pipeline — flagged, not claimed.
+Rung moves: L6b → **done (not fired)**; **L6b-fl promoted to rung 1**: FL isolation from the same scale_v2 pipeline (262 measured rows, `outputs/sub_L6b_isolate_fl.csv`, artifact PASS `maibo_tests/e161d51b821cdb63.json`, queued `submit_queue/L6b-isolate-fl.json`, 1 slot 2026-09-05; falsifier Δ_FL > +0.05 → FL geometry (endpoint selection) at fault → L7; < −0.05 → FL ships; else uninformative → L6a′ first). **L6c rung 2**: the composed pipeline — measured MT (265 rows) + FL if L6b-fl passes, PA at the median 16.42 until its −21 % bias is explained mechanistically (PA is precise, MAD 0.13°, so this is one convention/aspect correction, checked on the benchmark, not tuned on public); expected ≈ 0.9157 + Δ_FL; falsifier: not < 0.91568 → the composition is not additive (A5 interpolation part broken) → L4d bracketing before anything else. **L6a′ rung 3**: the 50 unscaled 644×1088 frames (left-ruler comb on the spine at column 0) and the 6/43 runs with within-run spread > 2 %. L4d bracketing stays on idle slots. Kill gate unchanged: full pipeline ≤ 0.45134 by 2026-10-12; today's ceiling with 44 MT-fallback rows and PA/FL still at medians is far above it, so L6c and the PA bias are the path.
+Assumptions: A1 evidence updated (the transfer gap was scale, not the detector); A10 verified (partial, 269/309); A5 to be re-tested by L6c additivity; A6 unchanged (Stephen, human gate 2).
+
+---
+*(v4 text follows.)*
 
 Supersedes: v3 (2026-09-04T10:05Z; v3 text retained below as the base, v4 changes listed first).
 
@@ -94,3 +104,5 @@ metric: best public UMUD of a real (non-constant) pipeline submission · thresho
 - L4b read 2026-09-04T09:57Z: 1.20053 (Δ_FL +0.164). Decision table row 'FL harmful' → L6 first, L7 only if FL still harmful after L6. No rung moved; v3 stands.
 - L4c read 2026-09-04T10:02Z: 1.06452, checksum exact. Attribution of a1's 0.40983 excess is closed: PA +0.028 / FL +0.164 / MT +0.218. Next slot use: L6 pipeline (scale) then L6b MT re-isolation; L4d bracketing on idle slots 2026-09-05/06.
 - A6: unchanged, owner Stephen.
+- L6b read 2026-09-05T01:16Z: **0.91568**, Δ_MT −0.121 (not fired) → scale was the MT fault; measured MT ships. v5 written.
+- L6b-fl read 2026-09-05T01:24Z: **1.03907**, Δ_FL +0.002 → **uninformative** (was +0.164 under the old scale). FL stays at the median in L6c; the +15 % FL median bias is geometry (endpoint selection), so L7 joins L6a′ at rung 3. Slots used 2/5 on 2026-09-05.

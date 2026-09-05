@@ -1,0 +1,35 @@
+{
+  "set_id": "3973e32574b1fe76",
+  "files": {
+    "scripts/make_submission.py": "4b11f4f0aa2ddada88e040847213e019e74635d152d21ad74a181bb1663148cb"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v4 rung L6b, round 3. Round 1 FAIL (NaN truthiness on pa/fl) fixed with _finite(); round 2 FAIL fixed: per-row pa_measured/fl_measured flags now drive the summary counts (pa_deg is median-prefilled so notna() was meaningless), and an empty test directory raises FileNotFoundError before the DataFrame is built. Change under test: (1) scale lookup reads reports/scale_v2.json (dict of 309 image_id -> {px_per_cm: float|null,...}) via load_scale; (2) gate_mt: MT outside [8,35] mm or None/NaN -> probed median 20.7, mt_measured=False; (3) CLI flags --scale, --mt-gate LO HI, --out, --report. eval_new_fascicle, geometry.analyse, submit.write_submission are unchanged and out of scope; the physiological clip to [10,50] after the gate is intentional and pre-existing.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (271.17s)\n\nREVIEW-a4e3b7e6 VERDICT: PASS\n\ncase: 20260905T005928Z_658674_ask",
+  "nonce": "a4e3b7e6",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (40.21s)\n\nI'll review the submission script against the stated L6b changes and check related scale/gate usage for real coding errors.\n\ncase: 20260905T005848Z_ab89ef_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (271.17s)\n\nREVIEW-a4e3b7e6 VERDICT: PASS\n\ncase: 20260905T005928Z_658674_ask"
+    }
+  ]
+}

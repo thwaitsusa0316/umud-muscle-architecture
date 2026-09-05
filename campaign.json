@@ -13,7 +13,7 @@
   "ground_truth_wiring": {
     "mechanism": ".venv/bin/kaggle competitions submissions -c umud-challenge-muscle-architecture-in-ultrasound-data; .venv/bin/kaggle competitions leaderboard -c umud-challenge-muscle-architecture-in-ultrasound-data --show (read each tick); write = .venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f <csv> -m <msg> (CSV upload, comma-delimited UTF-8, true per-file extensions; see src/umud/submit.py)",
     "max_staleness_days": 3,
-    "last_touch_utc": "2026-09-04T10:02:00Z",
+    "last_touch_utc": "2026-09-05T01:22:17Z",
     "last_read": "leaderboard #1 0.29358 / #3 0.31898 / #4 0.35134; ours best 1.03662 (L1); L4a 1.25464, L4b 1.20053, L4c 1.06452 read 2026-09-04T09:50-10:02Z"
   },
   "noise_floor": {
@@ -37,9 +37,9 @@
   "pilot": {
     "profile": "competition",
     "phase": "P2",
-    "plan_version": 4,
+    "plan_version": 5,
     "last_tick_utc": "2026-09-04T17:45:58Z",
-    "tick_open": null,
+    "tick_open": "2026-09-05T00:47:16Z",
     "ticks": 4,
     "next_action": "P2 rung L6b (PLAN v4 rung 1): (a) change scripts/predict_test.py to read reports/scale_v2.json (269/309 scaled; 40 fallback) with the MT plausibility gate MT in [8,35] mm else median 20.7 -> maibo_test.py PASS before it runs; (b) re-run the a1 pipeline (checkpoints, thr 0.9) -> reports/test_predictions.csv, check the label-free fingerprint (median MT vs 20.7, FL vs 81.5 should move from +14%/+13% toward 0 now that 74 scales moved, e.g. 127.6->159.5); (c) scripts/make_isolation.py --keep mt -> submit_queue/L6b-isolate-mt.json with justification against v4, submit-gate, submit on 2026-09-05 UTC (5 slots; 0 used); falsifier: public > 1.03662 (undiluted delta_MT x309/n > 0) -> scale is not the MT fault, pairing is -> L8. Rung 2 (same tick if time): fix the 644x1088 left-ruler comb in scripts/scale_v2.py (ticks on the spine at column 0, dimmer than bg+25; label OCR drops the 5 of '50'; 50 frames = 10 runs) and audit the 6/43 runs with within-run spread > 2% (90th pct 7.6%) before shipping those rows. Human gate 2 (A6) still open: Stephen reads discussion 737782 in a browser. Interim checkpoint <= 0.9366 by 2026-09-24; kill gate <= 0.45134 by 2026-10-12; coverage ceiling now ~0.12 (was ~0.51).",
     "blocked_on": null,
@@ -47,17 +47,17 @@
       {
         "id": "A1",
         "claim": "A fascicle U-Net retrained on the competition's 2,761 pairs closes the benchmark->test transfer gap (in-muscle coverage >> 0.33; pipeline beats the constant floor)",
-        "evidence": "2026-09-03: retrain lifted val Dice 0.0047->0.6651 and median in-muscle coverage on 60 test images 0.27->0.998 (reports/coverage_new_model.csv), but sub_pipeline_a1.csv scored 1.44645 vs measured constant floor 1.03662 (L3 falsifier fired). Coverage closed; transfer gap did not. The 133 measured images are worse than the constant. | 2026-09-04 L4a: measured MT alone (no fascicles) carries +0.21802 over the floor (1.25464); the transfer failure is scale/pairing, not only the detector.",
+        "evidence": "2026-09-03: retrain lifted val Dice 0.0047->0.6651 and median in-muscle coverage on 60 test images 0.27->0.998 (reports/coverage_new_model.csv), but sub_pipeline_a1.csv scored 1.44645 vs measured constant floor 1.03662 (L3 falsifier fired). Coverage closed; transfer gap did not. The 133 measured images are worse than the constant. | 2026-09-04 L4a: measured MT alone (no fascicles) carries +0.21802 over the floor (1.25464); the transfer failure is scale/pairing, not only the detector. | 2026-09-05 re-check: no new evidence; stays broken until L6b MT isolation reads (scale_v2 pipeline).",
         "verify_every_days": 7,
-        "last_verified_utc": "2026-09-04T10:05:00Z",
+        "last_verified_utc": "2026-09-05T00:58:19Z",
         "status": "broken"
       },
       {
         "id": "A2",
         "claim": "Local CV (35-image expert benchmark) tracks the leaderboard",
-        "evidence": "BROKEN for the DL_Track-weights pipeline: benchmark 0.3349 vs public 1.46532. Benchmark is valid for conventions/geometry only; only leaderboard-probed medians span the test distribution | 2026-09-04: benchmark kept only for unit/convention/scale checks with real GT (L6).",
+        "evidence": "BROKEN for the DL_Track-weights pipeline: benchmark 0.3349 vs public 1.46532. Benchmark is valid for conventions/geometry only; only leaderboard-probed medians span the test distribution | 2026-09-04: benchmark kept only for unit/convention/scale checks with real GT (L6). | 2026-09-05 re-check: unchanged; benchmark used only for convention/unit checks.",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-04T10:05:00Z",
+        "last_verified_utc": "2026-09-05T00:58:19Z",
         "status": "broken"
       },
       {
@@ -71,9 +71,9 @@
       {
         "id": "A4",
         "claim": "Public LB tracks private LB (33/67 split of one 309-image set)",
-        "evidence": "not measurable before the private board (2026-11-14); delta_transfer = 0.10 (2 SE); delta_public = 0 (deterministic, paired deltas exact). Reassess at L9.",
+        "evidence": "not measurable before the private board (2026-11-14); delta_transfer = 0.10 (2 SE); delta_public = 0 (deterministic, paired deltas exact). Reassess at L9. | 2026-09-05 re-check: still not measurable before 2026-11-14; no action.",
         "verify_every_days": 70,
-        "last_verified_utc": "2026-09-04T10:05:00Z",
+        "last_verified_utc": "2026-09-05T00:58:19Z",
         "status": "unverified"
       },
       {
@@ -87,9 +87,9 @@
       {
         "id": "A6",
         "claim": "The OSF expert benchmark is permissible external data for a prize-eligible GPL-3.0 submission",
-        "evidence": "CC BY 4.0 node bundling a non-commercial DL_Track Data Usage Policy; discussion 737782 unreadable headlessly (client-rendered) on 2026-09-04; needs a browser read by Stephen; benchmark confined to development-only until resolved",
+        "evidence": "CC BY 4.0 node bundling a non-commercial DL_Track Data Usage Policy; discussion 737782 unreadable headlessly (client-rendered) on 2026-09-04; needs a browser read by Stephen; benchmark confined to development-only until resolved | 2026-09-05 re-check: still unreadable headlessly; owner Stephen, human gate 2 open.",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-04T03:19:00Z",
+        "last_verified_utc": "2026-09-05T00:58:19Z",
         "status": "unverified"
       },
       {
@@ -158,13 +158,13 @@
         "notes": "Rules s2.2.a 5/day, s2.2.b 2 finals; team size 10; total only binds mergers (5 x days running). CSV upload, no kernel time limit. gpu_hours_per_week is Helm's Kaggle quota allocation; this engagement runs all compute locally on the M3 Max and does not draw on it."
       },
       "used": {
-        "today": 4,
-        "week": 18,
-        "total": 18,
-        "as_of_utc": "2026-09-04T17:30:46Z",
+        "today": 1,
+        "week": 19,
+        "total": 19,
+        "as_of_utc": "2026-09-05T01:21:49Z",
         "note": "13 submissions 2026-08-31..09-03 (12 COMPLETE, 1 ERROR semicolon/BOM). today = 2 on 2026-09-03 (16:30, 16:41 UTC)."
       },
-      "last_submitted_utc": "2026-09-04T10:02:33Z",
+      "last_submitted_utc": "2026-09-05T01:22:17Z",
       "queue_dir": "submit_queue",
       "auto_allowed_set_utc": "2026-09-03T20:09:57Z"
     },
@@ -180,7 +180,7 @@
       "gpu_hours_this_week": 0.0,
       "weight": 0.0,
       "basis": "registry gpu_share",
-      "set_utc": "2026-09-04T17:01:18Z"
+      "set_utc": "2026-09-05T00:01:55Z"
     },
     "position": {
       "public_rank": 121,

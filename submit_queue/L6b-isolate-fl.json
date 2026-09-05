@@ -1,0 +1,27 @@
+{
+  "id": "L6b-isolate-fl",
+  "artifact": "outputs/sub_L6b_isolate_fl.csv",
+  "sha256": "8b50ed3b3e4073231d3ace87798c28cede7f1b6776e4d5c377a27d0a6f909c09",
+  "generator": "scripts/make_isolation.py --keep fl --source outputs/sub_pipeline_a1_scalev2.csv --out outputs/sub_L6b_isolate_fl.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "8b50ed3b3e4073231d3ace87798c28cede7f1b6776e4d5c377a27d0a6f909c09",
+    "record": "maibo_tests/e161d51b821cdb63.json",
+    "generator_record": "maibo_tests/3973e32574b1fe76.json"
+  },
+  "justification": {
+    "plan_version": 5,
+    "rung": "L6b-fl",
+    "purpose": "probe",
+    "why_now": "PLAN v5 (2026-09-05T01:20Z) rung 1. L6b showed scale was the MT fault (0.91568, delta_MT -0.121). L4b showed measured FL under the old scale was harmful (+0.164, 129 rows). The same scale_v2 pipeline run (outputs/sub_pipeline_a1_scalev2.csv, 2026-09-05T01:10Z) measures FL on 262 rows (median 93.5 vs probed 81.5, +15%). This CSV holds that fl_mm column with PA/MT at the probed medians 16.42/20.7. Exact against the floor (delta_public = 0), 0 compute, 1 slot on 2026-09-05 UTC (1/5 used).",
+    "expected_benefit": "Decides whether FL ships in L6c. delta_FL <= -0.05: FL ships and L6c expected ~0.9157 + delta_FL. > +0.05: FL endpoint geometry is at fault (not scale) -> L7 (DL_Track FL routine on our masks). Between: uninformative -> L6a prime first.",
+    "expected_score_delta": "-0.10 to +0.10 vs 1.03662; the +15% median bias predicts a small positive delta unless the per-row variance is what the old scale broke",
+    "falsifier": "public > 1.03662 + 0.05 (delta_FL undiluted x309/262 > 0) -> FL geometry at fault -> L7; FL stays at the median in L6c",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6b_isolate_fl.csv -m 'L6b-fl isolation: measured FL (scale_v2, 262 rows), PA/MT at probed medians (floor 1.03662)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-05T01:21:00Z",
+  "submitted_utc": "2026-09-05T01:22:17Z",
+  "submission_id": "56022487"
+}
