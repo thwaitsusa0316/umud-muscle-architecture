@@ -1,0 +1,66 @@
+{
+  "set_id": "87f238936ab04802",
+  "files": {
+    "scripts/label_domain_pa.py": "0191655f793fd7a52739e2cb9e09d7f045d9e78f6e8af04d4b8064d4e5cca4a6"
+  },
+  "engine": "antigravity",
+  "context": "Diagnostic for PLAN v5 rung L6c (PA bias). Reads host fascicle masks on 800x1200 training frames, runs DL_Track aponeurosis seg + our U-Net (eval_new_fascicle.predict_ours), computes PA via umud.geometry.analyse at aspect 1.0, prints medians and a verdict. Writes reports/label_domain_pa.csv only; touches no submission. Check: correctness of split reproduction vs scripts/train_fascicle.py (seed 0, shuffle, 12%/40 val), mask/image shape handling, path/glob robustness, summarise() edge cases, argparse validation.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_label_domain_pa.py",
+      "line": "47",
+      "sev": "critical",
+      "desc": "stems[0] raises IndexError if no files match the directory and extension filters",
+      "fix": "check `if not stems:` before attempting to determine the shape of the first item"
+    },
+    {
+      "file": "00_label_domain_pa.py",
+      "line": "46",
+      "sev": "major",
+      "desc": "`(FASC_MSK / p.name).exists()` requires masks to have the exact same extension as images, excluding valid pairs where image is e.g. .png and mask is .tif",
+      "fix": "check `list(FASC_MSK.glob(p.stem + \".*\"))` instead of `p.name`"
+    },
+    {
+      "file": "00_label_domain_pa.py",
+      "line": "47",
+      "sev": "critical",
+      "desc": "checking only the first element for `.tif` causes FileNotFoundError on subsequent images if the dataset contains a mix of extensions",
+      "fix": "use `next(FASC_IMG.glob(s + \".*\"))` for all images"
+    },
+    {
+      "file": "00_label_domain_pa.py",
+      "line": "94",
+      "sev": "major",
+      "desc": "`df.h.iloc[0]` unconditionally accesses the first row, raising IndexError if the dataframe is empty",
+      "fix": "check `if df.empty:` before attempting to access `.iloc[0]`"
+    }
+  ],
+  "unsure": [
+    "Cannot verify the correctness of the split reproduction vs `scripts/train_fascicle.py` because `train_fascicle.py` was not provided in the context; it is not possible to determine if slicing via `[:n_val]` perfectly aligns with its inner logic."
+  ],
+  "raw": "[antigravity / google / mid] ok (180.15s)\n\nREVIEW-fd7c402f VERDICT: FAIL\n- 00_label_domain_pa.py:47 [critical] stems[0] raises IndexError if no files match the directory and extension filters -> check `if not stems:` before attempting to determine the shape of the first item\n- 00_label_domain_pa.py:46 [major] `(FASC_MSK / p.name).exists()` requires masks to have the exact same extension as images, excluding valid pairs where image is e.g. .png and mask is .tif -> check `list(FASC_MSK.glob(p.stem + \".*\"))` instead of `p.name`\n- 00_label_domain_pa.py:47 [critical] checking only the first element for `.tif` causes FileNotFoundError on subsequent images if the dataset contains a mix of extensions -> use `next(FASC_IMG.glob(s + \".*\"))` for all images\n- 00_label_domain_pa.py:94 [major] `df.h.iloc[0]` unconditionally accesses the first row, raising IndexError if the dataframe is empty -> check `if df.empty:` before attempting to access `.iloc[0]`\n\nCLAIM: The script crashes with an IndexError when no valid images are found, because it accesses `stems[0]` before checking if `stems` is empty.\nTEST:\n```bash\nmkdir -p test_empty/scripts test_empty/data/raw/fasc_imgs_v1/fasc_images_new_model_v1 test_empty/data/raw/fasc_masks_v1/fasc_masks_new_model_v1\ncp 00_label_domain_pa.py test_empty/scripts/\ncd test_empty/scripts\npython3 00_label_domain_pa.py\n```\nEXPECTED IF I AM RIGHT:\nAn `IndexError: list index out of range` is raised in a traceback from the `select` function.\nEXPECTED IF I AM WRONG:\nThe script cleanly exits with `SystemExit: no training fascicle images of shape 800x1200`.\nSCOPE: `select` function (line 47)\nFIXED WHEN: The script cleanly exits with the expected SystemExit message on an empty directory without an IndexError.\n\nCLAIM: The image selection incorrectly drops valid image/mask pairs if they have different extensions, because `select()` strictly checks `p.name` which includes the image's extension, contradicting `run()` which supports mixed extensions.\nTEST:\n```python\nimport os, sys, pathlib, subprocess\nimport numpy as np\nfrom PIL import Image\n\nbase = pathlib.Path(\"test_ext\")\nimg_dir = base / \"data/raw/fasc_imgs_v1/fasc_images_new_model_v1\"\nmsk_dir = base / \"data/raw/fasc_masks_v1/fasc_masks_new_model_v1\"\nimg_dir.mkdir(parents=True, exist_ok=True)\nmsk_dir.mkdir(parents=True, exist_ok=True)\n\nimg = Image.fromarray(np.zeros((10, 10), dtype=np.uint8))\nimg.save(img_dir / \"im1.png\")\nimg.save(msk_dir / \"im1.tif\")\n\n(base / \"scripts\").mkdir(exist_ok=True)\nwith open(base / \"scripts\" / \"test_pa.py\", \"w\") as f:\n    f.write(open(\"00_label_domain_pa.py\").read())\n\nres = subprocess.run([sys.executable, \"test_pa.py\", \"--shape\", \"10x10\", \"--no-detector\"], cwd=base / \"scripts\", capture_output=True, text=True)\nprint(\"ERR:\", res.stderr)\n```\nEXPECTED IF I AM RIGHT:\nThe `ERR:` output contains `IndexError: list index out of range` because `im1` was wrongly filtered out, leaving `stems` empty.\nEXPECTED IF I AM WRONG:\nThe script successfully finds and processes `im1.png`, and the error log is empty or contains normal trace output.\nSCOPE: `select` function (line 46)\nFIXED WHEN: The script successfully includes and processes image-mask pairs that have different extensions.\n\nCLAIM: The script crashes with a FileNotFoundError if the dataset contains a mix of `.tif` and non-`.tif` images, because checking only the first element's extension incorrectly assumes all subsequent images match it.\nTEST:\n```python\nimport os, sys, pathlib, subprocess\nimport numpy as np\nfrom PIL import Image\n\nbase = pathlib.Path(\"test_mix\")\nimg_dir = base / \"data/raw/fasc_imgs_v1/fasc_images_new_model_v1\"\nmsk_dir = base / \"data/raw/fasc_masks_v1/fasc_masks_new_model_v1\"\nimg_dir.mkdir(parents=True, exist_ok=True)\nmsk_dir.mkdir(parents=True, exist_ok=True)\n\n(base / \"scripts\").mkdir(exist_ok=True)\nwith open(base / \"scripts\" / \"test_mix.py\", \"w\") as f:\n    f.write(open(\"00_label_domain_pa.py\").read())\n\nimg = Image.fromarray(np.zeros((10, 10), dtype=np.uint8))\nimg.save(img_dir / \"a_img.tif\")\nimg.save(msk_dir / \"a_img.tif\")\nimg.save(img_dir / \"b_img.png\")\nimg.save(msk_dir / \"b_img.png\")\n\nres = subprocess.run([sys.executable, \"test_mix.py\", \"--shape\", \"10x10\", \"--no-detector\"], cwd=base / \"scripts\", capture_output=True, text=True)\nprint(\"ERR:\", res.stderr)\n```\nEXPECTED IF I AM RIGHT:\nThe `ERR:` output contains `FileNotFoundError` for `b_img.tif` because the code assumes it's `.tif` based on `a_img.tif`.\nEXPECTED IF I AM WRONG:\nThe script processes both images successfully without throwing a FileNotFoundError.\nSCOPE: `select` function (lines 47-48)\nFIXED WHEN: The script successfully handles a directory with mixed extensions without crashing.\n\nCLAIM: The `summarise()` function crashes with an IndexError when the resulting dataframe is empty because it unconditionally evaluates `df.h.iloc[0]`.\nTEST:\n```python\nimport pandas as pd\nimport subprocess, sys\n\nscript = \"\"\"\nimport pandas as pd\nimport importlib.util\nspec = importlib.util.spec_from_file_location(\"mod\", \"00_label_domain_pa.py\")\nmod = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\nmod.summarise(pd.DataFrame(columns=[\"h\", \"w\", \"stretch\", \"pa_host\", \"pa_ours\", \"pa_dltrack\"]))\n\"\"\"\nwith open(\"test_empty_df.py\", \"w\") as f:\n    f.write(script)\nres = subprocess.run([sys.executable, \"test_empty_df.py\"], capture_output=True, text=True)\nprint(\"ERR:\", res.stderr)\n```\nEXPECTED IF I AM RIGHT:\nThe `ERR:` output contains `IndexError: single positional indexer is out-of-bounds`.\nEXPECTED IF I AM WRONG:\nThe script completes without error and gracefully handles the empty dataframe.\nSCOPE: `summarise` function, specifically the first print statement.\nFIXED WHEN: Calling `summarise` with an empty DataFrame does not raise an exception.\n\nUNSURE: Cannot verify the correctness of the split reproduction vs `scripts/train_fascicle.py` because `train_fascicle.py` was not provided in the context; it is not possible to determine if slicing via `[:n_val]` perfectly aligns with its inner logic.\n\ncase: 20260905T085048Z_318c73_ask",
+  "nonce": "fd7c402f",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (18.74s)\n\nI'll review the attached diagnostic against the real training split, geometry API, and path handling in the repo before issuing a verdict.\n\ncase: 20260905T085029Z_"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (180.15s)\n\nREVIEW-fd7c402f VERDICT: FAIL\n- 00_label_domain_pa.py:47 [critical] stems[0] raises IndexError if no files match the directory and extension filters -> check"
+    }
+  ]
+}

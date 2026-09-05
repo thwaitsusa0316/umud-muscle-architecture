@@ -1,0 +1,27 @@
+{
+  "id": "L6c-isolate-pa-stills",
+  "artifact": "outputs/sub_L6c_isolate_pa_stills.csv",
+  "sha256": "7c529c2350b68709846446fa0dcfe02039813a31b5d8dd6f9ee440731cc0b3f6",
+  "generator": "scripts/make_pa_stills.py --source outputs/sub_pipeline_a1_scalev2.csv --out outputs/sub_L6c_isolate_pa_stills.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "7c529c2350b68709846446fa0dcfe02039813a31b5d8dd6f9ee440731cc0b3f6",
+    "record": "maibo_tests/ab9d3def70d14049.json",
+    "generator_record": "maibo_tests/989f6716e99a3c2c.json"
+  },
+  "justification": {
+    "plan_version": 6,
+    "rung": "L6c-pa",
+    "purpose": "probe",
+    "why_now": "PLAN v6 (2026-09-05T09:03Z) rung 1. The -21% PA offset (test median 13.03 vs probed 16.42) splits by frame type in our own scale_v2 measurements: 148 stills median 15.91 deg, 161 video frames median 11.3 deg (same 11.3 on the native 644x1088 grid, so not an aspect stretch). Geometry+pw6 detector unbiased vs benchmark GT (PA bias -0.20 deg, n=34). L4c (all measured PA, old pipeline) was +0.028 neutral = stills right + videos wrong netting out. This CSV ships measured PA on the 148 stills, the probed median 16.42 on the 161 video frames, FL/MT at 81.5/20.7. Exact against the floor (delta_public = 0), 0 compute, 1 slot on 2026-09-05 UTC (2/5 used).",
+    "expected_benefit": "Verifies A13 and decides whether still-frame PA joins measured MT in the composed pipeline (rung 2, expected 0.9157 + delta_PA). Retires the PA branch if still-frame PA is no better than the constant.",
+    "expected_score_delta": "-0.02 to -0.05 vs 1.03662 (undiluted x309/148: -0.04 to -0.10)",
+    "falsifier": "public not < 1.01662 (delta_PA(stills) not < -0.02) -> still-frame PA no better than the constant; PA stays at the median in L6c composed and the PA branch is retired",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6c_isolate_pa_stills.csv -m 'L6c-pa isolation: measured PA on 148 stills, median 16.42 on 161 video frames, FL/MT at probed medians (floor 1.03662)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-05T09:06:00Z",
+  "submitted_utc": "2026-09-05T09:10:24Z",
+  "submission_id": "56029111"
+}

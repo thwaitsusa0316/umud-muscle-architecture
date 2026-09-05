@@ -1,0 +1,37 @@
+{
+  "set_id": "989f6716e99a3c2c",
+  "files": {
+    "scripts/make_pa_stills.py": "9847d5ce7778283d747bda5b3f721f170b12f0a6ad91aac9057a266aafa62302"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v6 rung L6c-pa generator. Builds a Kaggle CSV (309 rows, columns image_id,pa_deg,fl_mm,mt_mm) from outputs/sub_pipeline_a1_scalev2.csv: measured pa_deg kept only on rows whose reports/scale_v2.json entry has method=='still' (147+1 rows), probed median 16.42 on method=='video' rows (161), fl_mm/mt_mm constant at probed medians 81.5/20.7 from reports/public_medians.json. Uses umud.submit.test_ids() and write_submission() (same as the already-tested scripts/make_isolation.py). Check: id order, NaN handling, read-back invariants, exit codes, the still/video routing logic, and that no video row can carry a measured PA.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [
+    "The evidence given does not settle whether Kaggle image IDs are numeric or if the source CSV contains duplicate IDs. If IDs are numeric strings (e.g. \"12345\"), `pd.read_csv` infers them as integers, causing `meth.get(n)` to return `None` (silently bypassing the video invariant check) and the print statement to crash with a `KeyError` on `meth[back.image_id[i]]`. If the source CSV has duplicates, `src.loc[ids]` returns extra rows, causing `zip(pa, still)` to silently truncate and misalign `pa_deg` assignments. I would need the actual data files to test these."
+  ],
+  "raw": "[antigravity / google / mid] ok (242.99s)\n\nREVIEW-18e05496 VERDICT: PASS\nUNSURE: The evidence given does not settle whether Kaggle image IDs are numeric or if the source CSV contains duplicate IDs. If IDs are numeric strings (e.g. \"12345\"), `pd.read_csv` infers them as integers, causing `meth.get(n)` to return `None` (silently bypassing the video invariant check) and the print statement to crash with a `KeyError` on `meth[back.image_id[i]]`. If the source CSV has duplicates, `src.loc[ids]` returns extra rows, causing `zip(pa, still)` to silently truncate and misalign `pa_deg` assignments. I would need the actual data files to test these.\n\ncase: 20260905T085854Z_addbb0_ask",
+  "nonce": "18e05496",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (19.06s)\n\nI'll review the attached script against the project's submit helpers and related artifacts for real coding errors.\n\ncase: 20260905T085835Z_0d7d5d_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (242.99s)\n\nREVIEW-18e05496 VERDICT: PASS\nUNSURE: The evidence given does not settle whether Kaggle image IDs are numeric or if the source CSV contains duplicate IDs. If"
+    }
+  ]
+}

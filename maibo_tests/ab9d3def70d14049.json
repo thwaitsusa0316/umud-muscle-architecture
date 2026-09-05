@@ -1,0 +1,42 @@
+{
+  "set_id": "ab9d3def70d14049",
+  "files": {
+    "scripts/make_pa_stills.py": "9847d5ce7778283d747bda5b3f721f170b12f0a6ad91aac9057a266aafa62302",
+    "outputs/sub_L6c_isolate_pa_stills.csv": "7c529c2350b68709846446fa0dcfe02039813a31b5d8dd6f9ee440731cc0b3f6"
+  },
+  "engine": "local",
+  "context": "Artifact check for PLAN v6 rung L6c-pa. The CSV must have exactly 309 rows, header image_id,pa_deg,fl_mm,mt_mm, 4-decimal floats, comma separated, no BOM; fl_mm constant 81.5000 and mt_mm constant 20.7000 on every row; pa_deg = 16.4200 on all 161 video rows (reports/scale_v2.json method=='video') and the measured value (5..45 deg) on the 148 still rows (147 non-median: one still measures exactly the median). Generator scripts/make_pa_stills.py already PASSed (maibo_tests/989f6716e99a3c2c.json). Verify the CSV against these invariants.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[local / open-weights / light] ok (48.94s)\n\nREVIEW-62f60ce4 VERDICT: PASS\n\ncase: 20260905T090700Z_633a8c_ask",
+  "nonce": "62f60ce4",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (26.24s)\n\nI'll verify the CSV against the stated invariants and the scale lookup, not just read the script.\n\ncase: 20260905T090331Z_538e5f_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[antigravity / google / mid] empty (181.7s)\n\n\n\ncase: 20260905T090358Z_614d30_ask"
+    },
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (48.94s)\n\nREVIEW-62f60ce4 VERDICT: PASS\n\ncase: 20260905T090700Z_633a8c_ask"
+    }
+  ]
+}
