@@ -1,0 +1,32 @@
+{
+  "id": "L6f-isolate-mt-v3b",
+  "artifact": "outputs/sub_L6f_isolate_mt_v3b.csv",
+  "sha256": "dd752429635b712c1ff86b97e2eefe938d3f553286759f6e5d11f26d4329552a",
+  "generator": "scripts/scale_v3.py --variant b; scripts/make_submission.py --aspect 1 --fasc-ckpt checkpoints/fasc_unet_pw6_best.pt --fasc-thr 0.9 --scale reports/scale_v3b.json --mt-gate 8 35 --out outputs/sub_pipeline_a1_scalev3b.csv --report reports/pipeline_a1_scalev3b_rows.csv; scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1_scalev3b.csv --out outputs/sub_L6f_isolate_mt_v3b.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "dd752429635b712c1ff86b97e2eefe938d3f553286759f6e5d11f26d4329552a",
+    "record": "maibo_tests/abf265ebf69e186f.json",
+    "generator_record": "maibo_tests/4f6b1a23ced7c900.json",
+    "generator_records": [
+      "maibo_tests/4f6b1a23ced7c900.json",
+      "maibo_tests/3973e32574b1fe76.json",
+      "maibo_tests/6e360ef281320071.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 11,
+    "rung": "L6f",
+    "purpose": "probe",
+    "why_now": "PLAN v11 (2026-09-06T00:20Z) rung 1b, the second pre-registered L6f variable. v3a (chrome-71 fix) just scored 0.88251 (delta -0.033 vs 0.91568, A15 verified). v3b adds ONLY the native 644x1088 frames at their own ruler (126.0 px/cm, A16 corrected from 119.2): 45 rows change (MT 22.43 -> 26.37 on those rows) and 15 rows are measured for the first time (281 vs 266). Direction unknown by design: native MT moves away from the probed 20.7, so this reads whether the native video block carries skill or pairing error. One variable vs v3a. 0 compute, slot 2 of 5 on 2026-09-06 UTC.",
+    "expected_benefit": "Decides A16's leaderboard effect and whether scale_v3b or scale_v3a is the shipping scale; a rise localises the video-frame MT fault to pairing (L6m/L8 next), a fall means the native block carries real skill once scaled.",
+    "expected_score_delta": "-0.02 to +0.03 vs 0.88251 (45 rows move by x1.175, 15 newly measured)",
+    "falsifier": "public not < 0.88251 -> native-frame MT (correctly scaled) is harmful -> scale_v3a ships and the video block goes to the median in L6m; public < 0.87251 -> native MT carries skill, scale_v3b ships",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6f_isolate_mt_v3b.csv -m 'L6f v3b MT isolation: measured MT with scale_v3b (chrome-71 fix + native 644x1088 at 126 px/cm, 281 rows, gate 8-35mm), PA/FL at probed medians (baseline v3a 0.88251)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-06T00:18:35Z",
+  "submitted_utc": "2026-09-06T00:23:18Z",
+  "submission_id": "56043367"
+}

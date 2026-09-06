@@ -1,0 +1,32 @@
+{
+  "id": "L6f-isolate-mt-v3a",
+  "artifact": "outputs/sub_L6f_isolate_mt_v3a.csv",
+  "sha256": "f1ed6e0cb41f4159f16ced0ed8312a6cf8ac867de0ebc7f454b7a846586e6db4",
+  "generator": "scripts/scale_v3.py --variant a; scripts/make_submission.py --aspect 1 --fasc-ckpt checkpoints/fasc_unet_pw6_best.pt --fasc-thr 0.9 --scale reports/scale_v3a.json --mt-gate 8 35 --out outputs/sub_pipeline_a1_scalev3a.csv --report reports/pipeline_a1_scalev3a_rows.csv; scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1_scalev3a.csv --out outputs/sub_L6f_isolate_mt_v3a.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "f1ed6e0cb41f4159f16ced0ed8312a6cf8ac867de0ebc7f454b7a846586e6db4",
+    "record": "maibo_tests/7db88135fd5e3f4a.json",
+    "generator_record": "maibo_tests/4f6b1a23ced7c900.json",
+    "generator_records": [
+      "maibo_tests/4f6b1a23ced7c900.json",
+      "maibo_tests/3973e32574b1fe76.json",
+      "maibo_tests/6e360ef281320071.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 10,
+    "rung": "L6f",
+    "purpose": "probe",
+    "why_now": "PLAN v10 (2026-09-06T00:05Z) rung 1. L6s (2026-09-05T16:31Z) found the 31 depth-source chrome-71/72 PNG rows low by median 12% because their sectors are bottom-cropped (constant 172.4 px/cm across heights 530-604) -> A15: px/cm = sector_w / 2.894 cm. scripts/scale_v3.py PASS maibo_tests/4f6b1a23ced7c900.json; pipeline re-run reproduces the label-free prediction exactly: measured MT 265 -> 266, whole-file MT median 22.81 -> 22.41, the 51 chrome rows 20.59 -> 19.64 (toward the probed 20.7), all 258 other rows unchanged to 4 dp. One variable vs L6b (0.91568). 0 compute, slot 1 of 5 on 2026-09-06 UTC.",
+    "expected_benefit": "Verifies A15 on the leaderboard: whether the chrome-71 depth-source rows carry part of the MT error that L6b isolated (delta_MT -0.121). If A15 holds, scale_v3 replaces scale_v2 in the composed pipeline; if not, the MT error sits elsewhere (video pairing, L6m rung 2).",
+    "expected_score_delta": "-0.005 to -0.02 vs 0.91568 (only 51/309 rows move; |MT-20.7| on them 3.38 -> 2.52 mm)",
+    "falsifier": "public not < 0.90568 (-0.01) -> A15 wrong or underpowered: chrome-71 rows are not where the MT error sits; read together with v3b and L6m before retiring the rule",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6f_isolate_mt_v3a.csv -m 'L6f v3a MT isolation: measured MT with scale_v3a (chrome-71 footprint fix, 266 rows, gate 8-35mm), PA/FL at probed medians (baseline L6b 0.91568)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-06T00:08:55Z",
+  "submitted_utc": "2026-09-06T00:16:25Z",
+  "submission_id": "56043247"
+}

@@ -1,0 +1,44 @@
+=== v3a start Sun Sep  6 00:01:45 UTC 2026
+  24/309
+  48/309
+  72/309
+  96/309
+  120/309
+  144/309
+  168/309
+  192/309
+  216/309
+  240/309
+  264/309
+  288/309
+  309/309
+
+PA measured on 297/309; FL measured on 262/309; scale on 269/309; MT raw on 269, shipped after gate [8, 35] mm on 266 (gated out 3)
+  pa_deg   median   13.29  (probed 16.42)
+  fl_mm    median   86.52  (probed 81.5)
+  mt_mm    median   21.26  (probed 20.7)
+
+wrote outputs/sub_pipeline_a1_scalev3a.csv
+=== v3a exit 0 Sun Sep  6 00:07:58 UTC 2026
+=== v3b start Sun Sep  6 00:07:58 UTC 2026
+  24/309
+  48/309
+  72/309
+  96/309
+  120/309
+  144/309
+  168/309
+  192/309
+  216/309
+  240/309
+  264/309
+  288/309
+  309/309
+
+PA measured on 297/309; FL measured on 282/309; scale on 289/309; MT raw on 289, shipped after gate [8, 35] mm on 281 (gated out 8)
+  pa_deg   median   13.29  (probed 16.42)
+  fl_mm    median   92.54  (probed 81.5)
+  mt_mm    median   21.89  (probed 20.7)
+
+wrote outputs/sub_pipeline_a1_scalev3b.csv
+=== v3b exit 0 Sun Sep  6 00:17:55 UTC 2026

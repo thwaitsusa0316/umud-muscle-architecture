@@ -1,0 +1,138 @@
+{
+  "set_id": "7c9e62b3203c67a4",
+  "files": {
+    "scripts/scale_v3.py": "f2c96d5f764c557b27db81ecd1b622d9593ea9967e79b1d8b8118ddb161f3a36"
+  },
+  "engine": "antigravity",
+  "context": "Round 2. Round 1 FAIL fixed: fix_native no longer overwrites depth_cm (the 50 mm ruler length is not the depth setting); the sources summary uses v.get('source','') so rows without a source key cannot KeyError. L6f rung: label-free px/cm fixes on top of reports/scale_v2.json. Fix A: chrome-71/72 PNG stills px/cm = sector_w / 2.894 cm (3.18 cm on 582-px zoom rows). Fix B: native 644x1088 video frames take their own left-ruler comb pitch (126.0 px, 1 cm ticks, 0-50 mm spans the frame). Output JSON keeps 309 rows, same schema as scale_v2.json plus px_v2; consumed by scripts/make_submission.py --scale.",
+  "local_verify": {
+    "cmd": ".venv/bin/python scripts/scale_v3.py --variant b --dry-run",
+    "exit": 0,
+    "tail": "fix A chrome-71/72: 51 rows re-scaled by footprint, 29 moved > 2 %; ratio new/old median 1.062 range [0.922, 1.608]\nfix B native (644, 1088): 50 rows, direct comb 44, consensus 6, family median 126.0 px/cm (pitch 126.0-126.0)\nscaled 289/309 (scale_v2 had 269)\nsources: [('left-ruler', 80), ('footprint', 56), ('chrome71-footprint', 51), ('native-ruler', 44), ('fused', 36), ('none', 18), ('run-consensus', 10), ('native-consensus', 6), ('depth', 5), ('ruler-no-label', 2), ('chrome-consensus', 1)]\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_scale_v3.py",
+      "line": "79",
+      "sev": "critical",
+      "desc": "The filter `hw[n] == NATIVE_HW` compares `(h, w)` from `image_hw` against `(w, h)` in `NATIVE_HW`, dropping all native frames.",
+      "fix": "Compare against `(1088, 644)` or change `image_hw` to return `(w, h)`."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 `NATIVE_HW` is defined as `(644, 1088)` (width, height), but `image_hw` returns `(h, w)`, causing the `hw[n] == NATIVE_HW` filter to evaluate to `(1088, 644) == (644, 1088)` which is False, filtering out all native frames.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.NATIVE_HW == (1088, 644))'`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `False`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `True`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `fix_native` line 79 list comprehension `names = [...]`, which causes `SystemExit` because no frames match.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 `NATIVE_HW` is defined as `(1088, 644)` or `image_hw` returns `(w, h)`, making the test condition evaluate to True.",
+      "fix": null
+    },
+    {
+      "file": "00_scale_v3.py",
+      "line": "72",
+      "sev": "critical",
+      "desc": "The `0.90 * h <= span5` condition requires a 50mm ruler (~630px) to span 90% of the 1088px frame (~979px), rejecting all valid combs.",
+      "fix": "Remove the 90% frame height requirement or compare `span5` against 630 instead of `h`."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The condition `0.90 * h <= span5` in `native_pitch` requires a 50mm ruler (5 * 126.0 = 630px) to span 90% of the 1088px frame height (979.2px), which contradicts the context (ruler is ~630px) and causes all valid combs to be rejected.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.native_pitch({\"ruler\": {\"ok\": True, \"pitch_px\": 126.0, \"n_intervals\": 5}}, 1088))'`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `None`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `126.0`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `native_pitch` line 72, which causes `fix_native` to raise `SystemExit` because no direct combs pass validation.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 `native_pitch` correctly returns `126.0` for valid combs.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (143.19s)\n\nREVIEW-994eb006 VERDICT: FAIL\n- 00_scale_v3.py:79 [critical] The filter `hw[n] == NATIVE_HW` compares `(h, w)` from `image_hw` against `(w, h)` in `NATIVE_HW`, dropping all native frames. -> Compare against `(1088, 644)` or change `image_hw` to return `(w, h)`.\n  - **CLAIM** \u2014 `NATIVE_HW` is defined as `(644, 1088)` (width, height), but `image_hw` returns `(h, w)`, causing the `hw[n] == NATIVE_HW` filter to evaluate to `(1088, 644) == (644, 1088)` which is False, filtering out all native frames.\n  - **TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.NATIVE_HW == (1088, 644))'`\n  - **EXPECTED IF I AM RIGHT** \u2014 `False`\n  - **EXPECTED IF I AM WRONG** \u2014 `True`\n  - **SCOPE** \u2014 `fix_native` line 79 list comprehension `names = [...]`, which causes `SystemExit` because no frames match.\n  - **FIXED WHEN** \u2014 `NATIVE_HW` is defined as `(1088, 644)` or `image_hw` returns `(w, h)`, making the test condition evaluate to True.\n- 00_scale_v3.py:72 [critical] The `0.90 * h <= span5` condition requires a 50mm ruler (~630px) to span 90% of the 1088px frame (~979px), rejecting all valid combs. -> Remove the 90% frame height requirement or compare `span5` against 630 instead of `h`.\n  - **CLAIM** \u2014 The condition `0.90 * h <= span5` in `native_pitch` requires a 50mm ruler (5 * 126.0 = 630px) to span 90% of the 1088px frame height (979.2px), which contradicts the context (ruler is ~630px) and causes all valid combs to be rejected.\n  - **TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.native_pitch({\"ruler\": {\"ok\": True, \"pitch_px\": 126.0, \"n_intervals\": 5}}, 1088))'`\n  - **EXPECTED IF I AM RIGHT** \u2014 `None`\n  - **EXPECTED IF I AM WRONG** \u2014 `126.0`\n  - **SCOPE** \u2014 `native_pitch` line 72, which causes `fix_native` to raise `SystemExit` because no direct combs pass validation.\n  - **FIXED WHEN** \u2014 `native_pitch` correctly returns `126.0` for valid combs.\n\ncase: 20260905T235345Z_51ed5a_ask",
+  "nonce": "994eb006",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (35.76s)\n\nI'll review the attached script against the stated context and the repo artifacts it depends on, looking only for real coding errors.\n\ncase: 20260905T235309Z_9aa54"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (143.19s)\n\nREVIEW-994eb006 VERDICT: FAIL\n- 00_scale_v3.py:79 [critical] The filter `hw[n] == NATIVE_HW` compares `(h, w)` from `image_hw` against `(w, h)` in `NATIVE_HW"
+    }
+  ]
+}

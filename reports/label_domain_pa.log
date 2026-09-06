@@ -1,0 +1,31 @@
+300 training frames of 800x1200 (203 held out of training)
+  16/300
+  32/300
+  48/300
+  64/300
+  80/300
+  96/300
+  112/300
+  128/300
+  144/300
+  160/300
+  176/300
+  192/300
+  208/300
+  224/300
+  240/300
+  256/300
+  272/300
+  288/300
+  300/300
+
+frames 300  shape 800x1200  probed test median 16.42  our test median 13.03
+  host mask grids: {(556, 660): 29, (556, 996): 121, (600, 800): 2, (644, 1088): 21, (652, 800): 1, (688, 1234): 3, (768, 1196): 14, (810, 1340): 23, (864, 1152): 86}  image/mask horizontal-over-vertical stretch median 0.907
+  pa_host     n= 285  median  17.81  IQR [13.65, 21.98]
+  pa_ours     n= 285  median  17.17  IQR [13.33, 21.93]
+  pa_dltrack  n= 286  median  16.95  IQR [13.12, 21.89]
+  paired ours-host: n=284  median -0.27 deg  mean -0.45  MAD 0.70
+  held-out only:    n=189  median -0.23 deg  host median 18.16  ours median 17.32
+  verdict: detector (b): host tracings sit near the probed 16.42 on the same frames, so our U-Net draws fascicles too flat -> fix the detector, not the geometry
+
+wrote /Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/reports/label_domain_pa.csv

@@ -1,0 +1,46 @@
+{
+  "set_id": "abf265ebf69e186f",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L6f_isolate_mt_v3b.csv": "dd752429635b712c1ff86b97e2eefe938d3f553286759f6e5d11f26d4329552a"
+  },
+  "engine": "local",
+  "context": "L6f v3b MT isolation artifact for Kaggle UMUD (309 rows, columns image_id,pa_deg,fl_mm,mt_mm). make_isolation.py unchanged since PASS maibo_tests/6e360ef281320071.json; CSV keeps measured MT from outputs/sub_pipeline_a1_scalev3b.csv (scale_v3b.json: chrome-71 fix + native 644x1088 frames at 126.0 px/cm) and sets PA/FL to the probed medians 16.42/81.5. Check: 309 rows, no NaN, PA/FL constant, MT within [8,35] or the median 20.7, header exact, no BOM/semicolons.",
+  "local_verify": {
+    "cmd": ".venv/bin/python -c \"import pandas as pd; d=pd.read_csv('outputs/sub_L6f_isolate_mt_v3b.csv'); assert list(d.columns)==['image_id','pa_deg','fl_mm','mt_mm'] and len(d)==309 and not d.isna().any().any() and d.mt_mm.between(8,35).all(), d.describe()\"",
+    "exit": 0,
+    "tail": ""
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[local / open-weights / light] ok (48.76s)\n\nREVIEW-d20332ee VERDICT: PASS\n\n- The code checks for missing file, empty input, and other obvious failure \npaths.\n- The CLI flags and API usage are consistent with the stated context.\n- The logic in the code does not contradict the stated context.\n- The JSON schema mismatches between writer and reader are not present.\n- The paths and working-directory assumptions are correct.\n- The shell quoting is correct.\n- The code does not contain syntax errors.\n- There are no off-by-one and boundary errors.\n- The code does not crash or silently produce a wrong result.\n\ncase: 20260906T002107Z_ed52d8_ask",
+  "nonce": "d20332ee",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (17.68s)\n\nI'll verify the isolation script and the CSV artifact against the author's claims, checking for real coding errors only.\n\ncase: 20260906T001803Z_1536a1_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[antigravity / google / mid] empty (166.98s)\n\n\n\ncase: 20260906T001820Z_5c217e_ask"
+    },
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (48.76s)\n\nREVIEW-d20332ee VERDICT: PASS\n\n- The code checks for missing file, empty input, and other obvious failure \npaths.\n- The CLI flags and API usage are consiste"
+    }
+  ]
+}

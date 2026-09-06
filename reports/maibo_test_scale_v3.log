@@ -1,0 +1,110 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_scale_v3.py",
+      "line": "64",
+      "sev": "major",
+      "desc": "The code silently overwrites `depth_cm` to 5.0 on native frames, conflating the 50 mm physical ruler length with the camera depth setting",
+      "fix": "Remove `v[\"depth_cm\"] = 5.0`"
+    },
+    {
+      "file": "00_scale_v3.py",
+      "line": "108",
+      "sev": "minor",
+      "desc": "`v[\"source\"]` crashes with KeyError if any unmodified row lacks a `\"source\"` key (a case anticipated on line 65)",
+      "fix": "Use `v.get(\"source\", \"\").split(\"(\")[0]` instead"
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: The script silently corrupts data by overwriting `depth_cm` to 5.0 on native frames, conflating the 50 mm physical ruler length with the camera depth setting.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: Python script",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: 5.0",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: 10.0",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: 00_scale_v3.py:fix_native",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: The test outputs 10.0, indicating `depth_cm` is left unmodified.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: The script crashes with a KeyError when summarizing sources if any unmodified row lacks a `\"source\"` key.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: Python script",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: KeyError: 'source'",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: Execution completes without error",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: 00_scale_v3.py:main",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: The snippet executes cleanly by safely handling the missing key.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/16ad7924621ee581.json",
+  "sha256": {
+    "scripts/scale_v3.py": "95f7b7b510495fa61202171f1aa69451be0644fe52ca480cc7a4e3e264a41abe"
+  }
+}

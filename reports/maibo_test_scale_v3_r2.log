@@ -1,0 +1,110 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_scale_v3.py",
+      "line": "79",
+      "sev": "critical",
+      "desc": "The filter `hw[n] == NATIVE_HW` compares `(h, w)` from `image_hw` against `(w, h)` in `NATIVE_HW`, dropping all native frames.",
+      "fix": "Compare against `(1088, 644)` or change `image_hw` to return `(w, h)`."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 `NATIVE_HW` is defined as `(644, 1088)` (width, height), but `image_hw` returns `(h, w)`, causing the `hw[n] == NATIVE_HW` filter to evaluate to `(1088, 644) == (644, 1088)` which is False, filtering out all native frames.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.NATIVE_HW == (1088, 644))'`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `False`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `True`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `fix_native` line 79 list comprehension `names = [...]`, which causes `SystemExit` because no frames match.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 `NATIVE_HW` is defined as `(1088, 644)` or `image_hw` returns `(w, h)`, making the test condition evaluate to True.",
+      "fix": null
+    },
+    {
+      "file": "00_scale_v3.py",
+      "line": "72",
+      "sev": "critical",
+      "desc": "The `0.90 * h <= span5` condition requires a 50mm ruler (~630px) to span 90% of the 1088px frame (~979px), rejecting all valid combs.",
+      "fix": "Remove the 90% frame height requirement or compare `span5` against 630 instead of `h`."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The condition `0.90 * h <= span5` in `native_pitch` requires a 50mm ruler (5 * 126.0 = 630px) to span 90% of the 1088px frame height (979.2px), which contradicts the context (ruler is ~630px) and causes all valid combs to be rejected.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c 'import importlib.util; spec = importlib.util.spec_from_file_location(\"m\", \"00_scale_v3.py\"); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); print(m.native_pitch({\"ruler\": {\"ok\": True, \"pitch_px\": 126.0, \"n_intervals\": 5}}, 1088))'`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `None`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `126.0`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 `native_pitch` line 72, which causes `fix_native` to raise `SystemExit` because no direct combs pass validation.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 `native_pitch` correctly returns `126.0` for valid combs.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/7c9e62b3203c67a4.json",
+  "sha256": {
+    "scripts/scale_v3.py": "f2c96d5f764c557b27db81ecd1b622d9593ea9967e79b1d8b8118ddb161f3a36"
+  }
+}

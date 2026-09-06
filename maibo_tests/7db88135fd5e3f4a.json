@@ -1,0 +1,40 @@
+{
+  "set_id": "7db88135fd5e3f4a",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L6f_isolate_mt_v3a.csv": "f1ed6e0cb41f4159f16ced0ed8312a6cf8ac867de0ebc7f454b7a846586e6db4"
+  },
+  "engine": "antigravity",
+  "context": "L6f v3a MT isolation artifact for Kaggle UMUD (309 rows, columns image_id,pa_deg,fl_mm,mt_mm). make_isolation.py is unchanged since its PASS record maibo_tests/6e360ef281320071.json; the CSV keeps measured MT from outputs/sub_pipeline_a1_scalev3a.csv (scale_v3a.json: chrome-71 footprint fix) and sets PA/FL to the probed medians 16.42/81.5. Check: 309 rows, no NaN, PA/FL constant, MT within [8,35] or the median 20.7, header exact, no BOM/semicolons.",
+  "local_verify": {
+    "cmd": ".venv/bin/python -c \"import pandas as pd; d=pd.read_csv('outputs/sub_L6f_isolate_mt_v3a.csv'); assert list(d.columns)==['image_id','pa_deg','fl_mm','mt_mm'] and len(d)==309 and not d.isna().any().any() and d.mt_mm.between(8,35).all(), d.describe()\"",
+    "exit": 0,
+    "tail": ""
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (246.94s)\n\nREVIEW-937249fa VERDICT: PASS\n\ncase: 20260906T000842Z_b6fac4_ask",
+  "nonce": "937249fa",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (16.09s)\n\nI'll verify the attached script and CSV against the stated invariants and the repo artifacts, not just the author notes.\n\ncase: 20260906T000826Z_d4892e_ask"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (246.94s)\n\nREVIEW-937249fa VERDICT: PASS\n\ncase: 20260906T000842Z_b6fac4_ask"
+    }
+  ]
+}
