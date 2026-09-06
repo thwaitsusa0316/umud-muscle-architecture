@@ -1,0 +1,86 @@
+{
+  "set_id": "1d85c8d7e3506712",
+  "files": {
+    "scripts/make_pa_stills.py": "25da54f8351cb1a5099799eacc57f6b298568e3c25d33f9d60d11ad125e02b69"
+  },
+  "engine": "local",
+  "context": "PLAN v12 rung L6m: generalised the PA-on-stills isolation script with --keep {pa,fl,mt} (default pa = unchanged L6c-pa behaviour; verified byte-identical output). Kept target measured on still frames per reports/scale_v3b.json method field, probed median on video frames, other two targets at medians everywhere. Runs with --keep mt on outputs/sub_pipeline_a1_scalev3b.csv (309 rows, columns image_id,pa_deg,fl_mm,mt_mm) to write outputs/sub_L6m_isolate_mt_stills.csv. src/umud/submit.py provides test_ids() (309 ids) and write_submission(df, path).",
+  "local_verify": {
+    "cmd": "cd \"/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle\" && .venv/bin/python scripts/make_pa_stills.py --keep pa --source outputs/sub_pipeline_a1_scalev2.csv --out /tmp/l6m_regress_pa.csv && cmp /tmp/l6m_regress_pa.csv outputs/sub_L6c_isolate_pa_stills.csv && .venv/bin/python scripts/make_pa_stills.py --keep mt --source outputs/sub_pipeline_a1_scalev3b.csv --scale reports/scale_v3b.json --out /tmp/l6m_verify_mt.csv | grep -q \"kept=mt_mm  stills=148  video=161  measured(non-median) mt_mm rows=145\"",
+    "exit": 0,
+    "tail": "wrote /tmp/l6m_regress_pa.csv  rows=309  kept=pa_deg  stills=148  video=161  measured(non-median) pa_deg rows=147  still pa_deg median=15.98\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "34",
+      "sev": "minor",
+      "desc": "The comment about the script's functional",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "100",
+      "sev": "critical",
+      "desc": "The `submit.test_ids()` function is a",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "127",
+      "sev": "critical",
+      "desc": "The script checks if the number of ro",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "131",
+      "sev": "critical",
+      "desc": "The script checks if the columns in t",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "136",
+      "sev": "critical",
+      "desc": "The script assumes that the `submit.w",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "146",
+      "sev": "critical",
+      "desc": "The script assumes that the `load_med",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "151",
+      "sev": "critical",
+      "desc": "The script assumes that the `load_met",
+      "fix": null
+    },
+    {
+      "file": "00_make_pa_stills.py",
+      "line": "173",
+      "sev": "critical",
+      "desc": "The script assumes that the `pd.read_",
+      "fix": null
+    }
+  ],
+  "unsure": [
+    "The script does not handle cases where the `submit.test_ids()` func"
+  ],
+  "raw": "[local / open-weights / light] ok (29.64s)\n\nREVIEW-73807233 VERDICT: FAIL\n- 00_make_pa_stills.py:34 [minor] The comment about the script's functional\nfunctionality could be more aligned with the actual code. The comment menti\nmentions \"PLAN v6 rung L6c-pa; v12 rung L6m\" but the code is described as g\ngeneralizing the script for PLAN v12 rung L6m.\n- 00_make_pa_stills.py:100 [critical] The `submit.test_ids()` function is a\nassumed to return a list of IDs, but there is no guarantee that it will alw\nalways return exactly 309 IDs. This could lead to a mismatch between the ex\nexpected and actual number of IDs, causing a failure.\n- 00_make_pa_stills.py:127 [critical] The script checks if the number of ro\nrows in the read-back CSV is exactly 309, but this is an assumption based o\non the context. If the number of rows changes in the future, this check wil\nwill fail.\n- 00_make_pa_stills.py:131 [critical] The script checks if the columns in t\nthe read-back CSV match the expected columns, but it does not validate the \ntypes or formats of the columns. This could lead to silent errors if the da\ndata does not match the expected format.\n- 00_make_pa_stills.py:136 [critical] The script assumes that the `submit.w\n`submit.write_submission(df, out)` function will always succeed. If the fun\nfunction fails for any reason (e.g., network timeout, disk space issues), t\nthe script will exit without further information.\n- 00_make_pa_stills.py:146 [critical] The script assumes that the `load_med\n`load_medians` function will always return valid medians. If the medians fi\nfile is missing, malformed, or contains implausible values, the script will\nwill exit without further information.\n- 00_make_pa_stills.py:151 [critical] The script assumes that the `load_met\n`load_methods` function will always return a valid dictionary. If the scale\nscale lookup file is missing, malformed, or contains invalid values, the sc\nscript will exit without further information.\n- 00_make_pa_stills.py:173 [critical] The script assumes that the `pd.read_\n`pd.read_csv` function will always succeed. If the source CSV file is missi\nmissing, empty, or malformed, the script will exit without further informat\ninformation.\n\nUNSURE: The script does not handle cases where the `submit.test_ids()` func\nfunction returns a list of IDs that are not in the same order as the IDs in\nin the source CSV file. This could potentially lead to silent errors if the\nthe IDs are not aligned correctly.\n\ncase: 20260906T071131Z_1bae97_ask",
+  "nonce": "73807233",
+  "tried": [
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (29.64s)\n\nREVIEW-73807233 VERDICT: FAIL\n- 00_make_pa_stills.py:34 [minor] The comment about the script's functional\nfunctionality could be more aligned with the actua"
+    }
+  ]
+}

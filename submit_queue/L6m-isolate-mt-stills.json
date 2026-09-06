@@ -1,0 +1,31 @@
+{
+  "id": "L6m-isolate-mt-stills",
+  "artifact": "outputs/sub_L6m_isolate_mt_stills.csv",
+  "sha256": "5fad8d738ed98b88802efb9efe1e3167729e197da19fa867921b131115ee3f41",
+  "generator": "scripts/make_pa_stills.py --keep mt --source outputs/sub_pipeline_a1_scalev3b.csv --scale reports/scale_v3b.json --out outputs/sub_L6m_isolate_mt_stills.csv (source = scale_v3.py --variant b + make_submission.py as in L6f-isolate-mt-v3b)",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "5fad8d738ed98b88802efb9efe1e3167729e197da19fa867921b131115ee3f41",
+    "record": "maibo_tests/1f853c6c37d71ed7.json",
+    "generator_record": "maibo_tests/18bc7dc107600dbd.json",
+    "generator_records": [
+      "maibo_tests/18bc7dc107600dbd.json",
+      "maibo_tests/4f6b1a23ced7c900.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 12,
+    "rung": "L6m",
+    "purpose": "probe",
+    "why_now": "PLAN v12 (2026-09-06T00:24Z) rung 1, pre-registered since v8 rung 2. L6f v3b (0.86256, 00:22Z) is the all-rows MT isolation with 281 measured rows: 145 stills (median 20.56, on the probed 20.7) + 136 video frames (median 25.99, +26% over the probed median). This candidate keeps ONLY the 145 still rows measured and puts the 136 video rows at 20.7 (|v3b MT - 20.7| on those rows: median 5.97 mm). One variable vs v3b (PA/FL identical). 0 compute, slot 3 of 5 on 2026-09-06 UTC (2 remain after it, kept for FL isolation at scale_v3b and reserve).",
+    "expected_benefit": "Splits the -0.174 MT skill (1.03662 -> 0.86256) into a still block and a video block, read exactly: delta_video = 0.86256 - S, delta_stills = S - 1.03662. Decides whether the 800x1200 video MT block (+26% MT) is real anatomy (video frames are a different population) or the remaining pairing fault, i.e. whether L8/L6v (video pairing) is the next mechanism or the composed pipeline ships video MT as is.",
+    "expected_score_delta": "if skill is uniform per row, S ~ 1.03662 - 0.174*145/281 = 0.947 (+0.085 vs 0.86256); if the video block is harmful, S < 0.86256",
+    "falsifier": "public >= 0.86256 -> the video MT block carries skill and stays in the composed pipeline (video pairing NOT the fault; L6v/L8 demoted); public < 0.86256 -> video MT is harmful -> pairing fault on video frames -> L8/L6v promoted to rung 1",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6m_isolate_mt_stills.csv -m 'L6m MT still/video split: measured MT (scale_v3b) on 145 still rows only, probed median 20.7 on 161 video frames, PA/FL at probed medians (baseline v3b all-rows 0.86256)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-06T07:22:00Z",
+  "submitted_utc": "2026-09-06T07:23:44Z",
+  "submission_id": "56049681"
+}

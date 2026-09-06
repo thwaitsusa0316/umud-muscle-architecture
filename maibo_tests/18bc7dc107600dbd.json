@@ -1,0 +1,27 @@
+{
+  "set_id": "18bc7dc107600dbd",
+  "files": {
+    "scripts/make_pa_stills.py": "6c97ba8d067114122740656c2e48f390f17e561179b4de473a05ec33dedd59e5"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v12 rung L6m, round 2 (round 1 local FAIL: items were intended sys.exit paths and out-of-range line numbers; hardened anyway: explicit N_TEST=309 id-count invariant, label-based alignment noted, read-back id order check). Script generalises the PA-on-stills isolation with --keep {pa,fl,mt} (default pa = unchanged L6c-pa behaviour, verified byte-identical by the local verify). Kept target measured on still frames per the scale lookup's method field ('still'/'video'), probed median on video frames, other two targets at medians everywhere. Runs with --keep mt on outputs/sub_pipeline_a1_scalev3b.csv (309 rows, columns image_id,pa_deg,fl_mm,mt_mm). src/umud/submit.py provides test_ids() (309 ids, official order) and write_submission(df, path). The competition test set is exactly 309 images by construction, so the 309 check is an invariant, not an assumption.",
+  "local_verify": {
+    "cmd": "cd \"/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle\" && .venv/bin/python scripts/make_pa_stills.py --keep pa --source outputs/sub_pipeline_a1_scalev2.csv --out /tmp/l6m_regress_pa.csv && cmp /tmp/l6m_regress_pa.csv outputs/sub_L6c_isolate_pa_stills.csv && .venv/bin/python scripts/make_pa_stills.py --keep mt --source outputs/sub_pipeline_a1_scalev3b.csv --scale reports/scale_v3b.json --out /tmp/l6m_verify_mt.csv | grep -q \"kept=mt_mm  stills=148  video=161  measured(non-median) mt_mm rows=145\"",
+    "exit": 0,
+    "tail": "wrote /tmp/l6m_regress_pa.csv  rows=309  kept=pa_deg  stills=148  video=161  measured(non-median) pa_deg rows=147  still pa_deg median=15.98\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (272.44s)\n\nREVIEW-ae69ce29 VERDICT: PASS\n\ncase: 20260906T071240Z_6453c2_ask",
+  "nonce": "ae69ce29",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (272.44s)\n\nREVIEW-ae69ce29 VERDICT: PASS\n\ncase: 20260906T071240Z_6453c2_ask"
+    }
+  ]
+}

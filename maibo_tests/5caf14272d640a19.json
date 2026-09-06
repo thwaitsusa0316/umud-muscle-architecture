@@ -1,0 +1,24 @@
+{
+  "set_id": "5caf14272d640a19",
+  "files": {
+    "scripts/make_isolation.py": "d0e1a27807ac07e4f0c358246fc19c9037fb511568a59979071f93f52905d103",
+    "outputs/sub_L6b_isolate_fl_v3b.csv": "2d1217538b10b8e82bcc6c821c822b279387c2024d1ac4a1758a3cbb7d093979"
+  },
+  "engine": "antigravity",
+  "context": "FL isolation artifact at scale_v3b (PLAN v12 rung 2). The CSV was produced by the attached, previously PASSed script (maibo_tests/abf265ebf69e186f.json) with --keep fl --source outputs/sub_pipeline_a1_scalev3b.csv. Expected: 309 rows, columns image_id,pa_deg,fl_mm,mt_mm, comma-delimited UTF-8, no BOM, no index column; pa_deg constant 16.42 and mt_mm constant 20.7 on all rows (probed medians); fl_mm measured (positive, plausibly 20-200 mm) on ~282 rows and 81.5 (probed median) on the rest. Check it is a valid Kaggle submission for the UMUD competition (ids like IMG_00001.tif with true per-file extensions), no NaN, no duplicate ids.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (222.53s)\n\nREVIEW-8aaa7b61 VERDICT: PASS\n\ncase: 20260906T072415Z_3e1559_ask",
+  "nonce": "8aaa7b61",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (222.53s)\n\nREVIEW-8aaa7b61 VERDICT: PASS\n\ncase: 20260906T072415Z_3e1559_ask"
+    }
+  ]
+}

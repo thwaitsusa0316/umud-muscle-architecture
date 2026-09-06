@@ -1,0 +1,24 @@
+{
+  "set_id": "1f853c6c37d71ed7",
+  "files": {
+    "scripts/make_pa_stills.py": "6c97ba8d067114122740656c2e48f390f17e561179b4de473a05ec33dedd59e5",
+    "outputs/sub_L6m_isolate_mt_stills.csv": "5fad8d738ed98b88802efb9efe1e3167729e197da19fa867921b131115ee3f41"
+  },
+  "engine": "antigravity",
+  "context": "L6m artifact test (PLAN v12 rung 1). The CSV was produced by the attached script (PASS maibo_tests/18bc7dc107600dbd.json) with --keep mt --source outputs/sub_pipeline_a1_scalev3b.csv --scale reports/scale_v3b.json. Expected: 309 rows, columns image_id,pa_deg,fl_mm,mt_mm, comma-delimited UTF-8, no BOM, no index column; pa_deg constant 16.42 and fl_mm constant 81.5 on all rows (probed medians); mt_mm = 20.7 (probed median) on the 161 video frames and on 3 stills that the pipeline could not measure, measured values in [8,35] mm on the other 145 still rows (median ~20.56). Check the CSV is a valid Kaggle submission for the UMUD competition (image ids like IMG_00001.tif with true per-file extensions), no NaN, no duplicate ids.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (303.61s)\n\nREVIEW-63bfedb6 VERDICT: PASS\n\ncase: 20260906T071739Z_c7c8e6_ask",
+  "nonce": "63bfedb6",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (303.61s)\n\nREVIEW-63bfedb6 VERDICT: PASS\n\ncase: 20260906T071739Z_c7c8e6_ask"
+    }
+  ]
+}

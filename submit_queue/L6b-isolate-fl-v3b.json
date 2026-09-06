@@ -1,0 +1,31 @@
+{
+  "id": "L6b-isolate-fl-v3b",
+  "artifact": "outputs/sub_L6b_isolate_fl_v3b.csv",
+  "sha256": "2d1217538b10b8e82bcc6c821c822b279387c2024d1ac4a1758a3cbb7d093979",
+  "generator": "scripts/make_isolation.py --keep fl --source outputs/sub_pipeline_a1_scalev3b.csv --out outputs/sub_L6b_isolate_fl_v3b.csv (source = scale_v3.py --variant b + make_submission.py as in L6f-isolate-mt-v3b)",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "2d1217538b10b8e82bcc6c821c822b279387c2024d1ac4a1758a3cbb7d093979",
+    "record": "maibo_tests/5caf14272d640a19.json",
+    "generator_record": "maibo_tests/abf265ebf69e186f.json",
+    "generator_records": [
+      "maibo_tests/abf265ebf69e186f.json",
+      "maibo_tests/4f6b1a23ced7c900.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 12,
+    "rung": "L6b-fl-v3b",
+    "purpose": "probe",
+    "why_now": "PLAN v12 (2026-09-06T00:24Z) rung 2: FL isolation at the shipping scale_v3b. L6b-fl at scale_v2 read 1.03907 (+0.002 vs floor 1.03662, uninformative) but FL is scale-bound like MT, and scale_v3b moved MT from 0.91568 to 0.86256; 100 of 309 FL rows change vs the scale_v2 FL CSV (282 measured vs 262; measured FL median 94.5, video 103.6 vs stills 77.7 - the same +26% video population seen in MT, which L6m (0.92204, 07:23Z) just showed is real). One variable vs the floor (PA/MT at medians). 0 compute, slot 4 of 5 on 2026-09-06 UTC; 1 slot kept in reserve per the calendar policy.",
+    "expected_benefit": "Decides whether FL enters the composed pipeline (floor 0.86256 + delta_FL) or stays at the median; a fall of >= 0.01 promotes the composed MT+FL pipeline to rung 1 with expected 0.86256 + delta_FL.",
+    "expected_score_delta": "-0.03 to +0.02 vs 1.03662 (282 rows measured, |FL - 81.5| median 20.3 mm)",
+    "falsifier": "public not < 1.02662 -> FL has no per-image skill at scale_v3b either -> FL branch stays retired (median in the composed pipeline; L7 FL routine port is the only FL rung left); public < 1.02662 -> FL ships in the composed pipeline",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6b_isolate_fl_v3b.csv -m 'L6b-fl v3b isolation: measured FL at scale_v3b (282 rows), PA/MT at probed medians (floor 1.03662; scale_v2 FL read 1.03907)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-06T07:29:00Z",
+  "submitted_utc": "2026-09-06T07:28:30Z",
+  "submission_id": "56049758"
+}
