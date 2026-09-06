@@ -1,0 +1,28 @@
+{
+  "id": "L6g-isolate-mt-v3c",
+  "artifact": "outputs/sub_L6g_isolate_mt_v3c.csv",
+  "sha256": "27a8958b0b5cca498f1519ec55b77ecd05b5eceb3cba43bf9d713fa39c23cec0",
+  "generator": "scripts/scale_v3.py --variant c; scripts/make_submission.py --aspect 1 --fasc-ckpt checkpoints/fasc_unet_pw6_best.pt --fasc-thr 0.9 --scale reports/scale_v3c.json --mt-gate 8 35 --out outputs/sub_pipeline_a1_scalev3c.csv --report reports/pipeline_a1_scalev3c_rows.csv; scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1_scalev3c.csv --out outputs/sub_L6g_isolate_mt_v3c.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "local",
+    "sha256": "27a8958b0b5cca498f1519ec55b77ecd05b5eceb3cba43bf9d713fa39c23cec0",
+    "record": "maibo_tests/5aebd044803cfadb.json",
+    "generator_record": "maibo_tests/3d806f38feaea678.json",
+    "generator_records": [
+      "maibo_tests/3d806f38feaea678.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 14,
+    "rung": "L6g",
+    "purpose": "probe",
+    "why_now": "PLAN v14 (2026-09-06T14:40Z) rung 1. The 12 chrome-free 853-row frames (IMG_00036-39, 47, 49-55) had no scale in scale_v2/v3b; their bottom-edge 1 cm comb reads 166.8 px/cm (A19), so scale_v3c measures MT on them for the first time. ONE variable vs the banked v3b isolation 0.86256: the other 297 scale rows are byte-identical. 0 compute; slot 1 of 5 on 2026-09-07 UTC (the 09-06 reserve slot is not spent).",
+    "expected_benefit": "Closes MT coverage on the largest remaining block (12 of 28 unmeasured rows) and tests A19; a fall confirms the edge-comb rule and unlocks L6g-d (8 more rows).",
+    "expected_score_delta": "-0.007 (12 rows x -0.00062/row) -> ~0.855 vs 0.86256; early-warning line 0.85 (2026-09-12) is then 0.005 away",
+    "falsifier": "public not < 0.86256 -> A19 broken (the 853-row family carries no MT skill or the unit is wrong); MT coverage closes at 281 and L6g-d is dropped",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6g_isolate_mt_v3c.csv -m 'L6g v3c MT isolation: measured MT with scale_v3c (v3b + bottom-edge 1 cm comb 166.8 px/cm on the 12 chrome-free 853-row frames), PA/FL at probed medians (baseline v3b 0.86256)'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-06T14:45:00Z"
+}

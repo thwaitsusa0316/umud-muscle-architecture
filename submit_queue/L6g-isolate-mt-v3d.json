@@ -1,0 +1,28 @@
+{
+  "id": "L6g-isolate-mt-v3d",
+  "artifact": "outputs/sub_L6g_isolate_mt_v3d.csv",
+  "sha256": "5f4d848ba608a79f7410cf2c5521f44fdc17e28752a994caa2c86826051dcb0e",
+  "generator": "scripts/scale_v3.py --variant d; scripts/make_submission.py --aspect 1 --fasc-ckpt checkpoints/fasc_unet_pw6_best.pt --fasc-thr 0.9 --scale reports/scale_v3d.json --mt-gate 8 35 --out outputs/sub_pipeline_a1_scalev3d.csv --report reports/pipeline_a1_scalev3d_rows.csv; scripts/make_isolation.py --keep mt --source outputs/sub_pipeline_a1_scalev3d.csv --out outputs/sub_L6g_isolate_mt_v3d.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "5f4d848ba608a79f7410cf2c5521f44fdc17e28752a994caa2c86826051dcb0e",
+    "record": "maibo_tests/a45f8249735e6caf.json",
+    "generator_record": "maibo_tests/9c58c98ae990564d.json",
+    "generator_records": [
+      "maibo_tests/9c58c98ae990564d.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 15,
+    "rung": "L6g-d",
+    "purpose": "probe",
+    "why_now": "PLAN v15 (2026-09-06T22:00Z) rung 2. The 8 chrome-free 512-513-row RGB frames (IMG_00040-46, 48) had no scale in scale_v3c; their slanted dashed right-edge ruler reads 124.0 px/cm (A20: major ticks at rows 122/246/370, 1 cm by depth plausibility 4.14 cm), so scale_v3d measures MT on them for the first time and MT coverage reaches 309/309. ONE variable vs the v3c isolation: the other 301 scale rows are byte-identical. 0 compute; AFTER the v3c read (slot 1 on 2026-09-07) so the baseline is known. UNIT CAVEAT (PLAN v15, recorded before any read): at 124 px/cm the family pipeline medians are MT 10.0 / FL 33.9 vs 22.7 / 94.5 on the other 281 measured rows (0.4x, isotropic), so the tick unit may be 2 cm (62 px/cm); the pre-registered order is d2 (62 px/cm) first as slot 2 if it is built and passes maibo_test, this 124 px/cm candidate as slot 3 only if d2 does not fall below v3c.",
+    "expected_benefit": "Closes MT coverage on the last unscaled block and tests A20; both L6g reads together end the coverage rung and leave L4d bracketing + L6t as the only levers.",
+    "expected_score_delta": "-0.0025 (4 rows changed: IMG_00040/41/43/45; the other 4 fell outside the [8,35] mm gate) on top of the v3c read (~0.855 expected); exact paired delta, readable at this size",
+    "falsifier": "public not < the v3c read -> 1 cm is the wrong unit or the family carries no MT skill; with d2 also not < v3c, A20 broken and MT coverage closes at 305",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6g_isolate_mt_v3d.csv -m 'L6g-d v3d MT isolation: measured MT with scale_v3d (v3c + dashed right-edge ruler 124.0 px/cm on the 8 chrome-free 513-row RGB frames), PA/FL at probed medians (baseline v3c)'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-06T22:00:00Z"
+}

@@ -1,0 +1,27 @@
+{
+  "set_id": "9c58c98ae990564d",
+  "files": {
+    "scripts/scale_v3.py": "2692edad1f35087e9ab89f8bd5e963af5931cf94ba867c9750788918669f5e86"
+  },
+  "engine": "antigravity",
+  "context": "Round 1 of L6g variant d (fix D) in scripts/scale_v3.py; variants a, b, c are unchanged (the verify-cmd rebuilds variant c and asserts its output is byte-identical to reports/scale_v3c.json, then builds variant d and asserts exactly the 8 chrome-free 512-513-row RGB frames IMG_00040-46, 48 change to 118-130 px/cm with >= 4 direct reads and 301 rows identical). Fix D: those 8 frames carry a dim 1-2 px wide DASHED ruler (dash period ~6 px) drawn slanted (~+0.04 px/row) inside the right edge, with major ticks as short horizontal bars extending LEFT of the line. dash_pitch(): horizontal top-hat (band minus a 9-px horizontal median) keeps the thin ruler and removes wider speckle; the 70-column right band is sheared over 97 slopes in [-0.12, 0.12] px/row and the slope/column with the largest column sum is the ruler; major ticks are peaks (>= 60 rows apart, above the 97th percentile) of the mass in sheared columns x-7..x-2; regular intervals within 6% of their median, >= 2 needed for a direct read (only 3 ticks fit in 513 rows: observed at rows 122/246/370 on 6 frames, pitch 124.0 px); family median voted by direct reads (>= 4 required), spread <= PITCH_TOL 4%, others take the consensus; unit resolved by resolve_unit(fam, 513) with DEPTH_OK [3, 8] cm (124 px -> 1 cm -> 124.0 px/cm, depth 4.14 cm; 0.5 cm -> 2.07, 2 cm -> 8.27 both excluded). Look for real defects: slope-search or shear arithmetic (np.interp direction), the regularity/median logic, silent paths that would let a frame take the consensus wrongly, anything that could alter fix A/B/C rows, and the argparse/main wiring for variant d. Be concise.",
+  "local_verify": {
+    "cmd": "/tmp/verify_v3d.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: variant c byte-identical; 8 rows changed to 118-130 px/cm (6 direct), 301 rows identical to scale_v3c.json, scaled 309/309\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (429.51s)\n\nREVIEW-ca108a92 VERDICT: PASS\n\ncase: 20260906T215544Z_c6a158_ask",
+  "nonce": "ca108a92",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (429.51s)\n\nREVIEW-ca108a92 VERDICT: PASS\n\ncase: 20260906T215544Z_c6a158_ask"
+    }
+  ]
+}

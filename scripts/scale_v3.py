@@ -34,6 +34,7 @@
     scale_v3.py --variant a   -> reports/scale_v3a.json   (fix A only)
     scale_v3.py --variant b   -> reports/scale_v3b.json   (A + B)
     scale_v3.py --variant c   -> reports/scale_v3c.json   (A + B + C)
+    scale_v3.py --variant d   -> reports/scale_v3d.json   (A + B + C + D)
 
 Each variant is one leaderboard variable (v3a = A15 falsifier, v3b = A16 falsifier,
 v3c = A19 falsifier: the 12 rows must move the MT isolation below 0.86256).
@@ -65,6 +66,18 @@ EDGE_MIN_INT = 2              # regular intervals needed for a direct read
 EDGE_STRONG_INT = 4           # regular intervals needed to vote on the family pitch
 EDGE_UNITS = (0.25, 0.5, 1.0, 2.0)   # candidate tick units, cm
 DEPTH_OK = (3.0, 8.0)         # a musculoskeletal sector depth, cm: resolves the tick unit
+DASH_H = 513                  # fix D family nominal height (sector depth uses it); frames are 512 or 513 rows
+DASH_H_RANGE = (512, 513)     # inclusive row range of the family: 512-513 rows, 461-466 columns, RGB, no chrome, dashed right-edge ruler
+DASH_W = (461, 466)           # inclusive column range of the family
+N_DASH = 8                    # how many test frames are on that grid (inventory census)
+DASH_BAND = 70                # right-edge band (columns) searched for the dashed ruler
+DASH_TOPHAT = 9               # horizontal median window: the 1-2 px wide ruler survives, wider speckle does not
+DASH_SLOPES = np.linspace(-0.12, 0.12, 97)   # px per row; the ruler is drawn slanted (~0.04 px/row)
+DASH_TICK_COLS = (7, 1)       # major-tick mass = sheared columns x-7 .. x-2 (a bar extending LEFT of the line)
+DASH_TICK_MIN_ROWS = 60       # major ticks are at least this many rows apart
+DASH_TICK_PCT = 97            # a major-tick row's left mass is above this percentile of all rows
+DASH_REG_TOL = 0.06           # tick intervals within this of the median count as regular
+DASH_MIN_INT = 2              # regular intervals needed for a direct read (3 ticks fit in 513 rows)
 
 
 def image_hw(name: str) -> tuple[int, int]:
@@ -219,6 +232,99 @@ def fix_edge(rows: dict, hw: dict) -> tuple[dict, dict]:
                       pitch_min=min(direct.values()), pitch_max=max(direct.values()))
 
 
+def dash_pitch(name: str) -> dict:
+    """Fix D read on one frame: the dashed right-edge ruler and its major ticks.
+
+    The ruler is a 1-2 px wide dashed line (dash period ~6 px) drawn slightly slanted
+    inside the right edge; every major tick is a short horizontal bar extending LEFT of
+    the line.  A horizontal top-hat keeps 1-2 px wide bright structure and removes the
+    wider speckle; the band is then sheared over candidate slopes and the slope/column
+    with the largest column sum is the ruler.  Major ticks are rows where the mass just
+    left of the line peaks.  Returns pitch_px (mean of the regular tick intervals, or
+    None), n regular intervals, and diagnostics (slope, column, dash period)."""
+    from PIL import Image
+    from scipy.ndimage import median_filter
+    from scipy.signal import find_peaks
+    with Image.open(TEST / name) as im:
+        a = np.asarray(im.convert("L"), dtype=float)
+    h, w = a.shape
+    band = a[:, w - DASH_BAND:]
+    th = np.clip(band - median_filter(band, size=(1, DASH_TOPHAT)), 0, None)
+    cols = np.arange(DASH_BAND)
+    best = None
+    for s in DASH_SLOPES:
+        sh = np.empty_like(th)
+        for r in range(h):
+            sh[r] = np.interp(cols + s * (r - h / 2), cols, th[r], left=0.0, right=0.0)
+        colsum = sh.sum(axis=0)
+        x = int(colsum.argmax())
+        if best is None or colsum[x] > best[0]:
+            best = (float(colsum[x]), float(s), x, sh)
+    score, slope, x, sh = best
+    line = sh[:, max(0, x - 1): x + 2].max(axis=1)
+    p = line - line.mean()
+    ac = np.correlate(p, p, "full")[h - 1:]
+    ac = ac / ac[0] if ac[0] > 0 else ac
+    lag = np.arange(3, 40)
+    dash_period = int(lag[ac[lag].argmax()])
+    left = sh[:, max(0, x - DASH_TICK_COLS[0]): max(0, x - DASH_TICK_COLS[1])].sum(axis=1)
+    peaks, _ = find_peaks(left, distance=DASH_TICK_MIN_ROWS, height=np.percentile(left, DASH_TICK_PCT))
+    out = dict(slope=slope, line_col=w - DASH_BAND + x, dash_period=dash_period,
+               ticks=[int(t) for t in peaks], pitch=None, n_reg=0)
+    if peaks.size < 3:
+        return out
+    d = np.diff(peaks).astype(float)
+    med = float(np.median(d))
+    if med <= 0:
+        return out
+    reg = np.abs(d - med) / med <= DASH_REG_TOL
+    out["n_reg"] = int(reg.sum())
+    if int(reg.sum()) < DASH_MIN_INT:
+        return out
+    out["pitch"] = float(np.mean(d[reg]))
+    return out
+
+
+def fix_dash(rows: dict, hw: dict) -> tuple[dict, dict]:
+    """Fix D on the chrome-free 513-row RGB frames. Returns (updated rows, summary)."""
+    names = [n for n, v in rows.items()
+             if DASH_H_RANGE[0] <= hw[n][0] <= DASH_H_RANGE[1] and DASH_W[0] <= hw[n][1] <= DASH_W[1] and v.get("method") == "video"
+             and not v.get("px_per_cm")]
+    if len(names) != N_DASH:
+        raise SystemExit(f"scale_v3: expected {N_DASH} chrome-free {DASH_H_RANGE[0]}-{DASH_H_RANGE[1]}-row frames without scale, matched {len(names)}")
+    reads = {n: dash_pitch(n) for n in names}
+    strong = [r["pitch"] for r in reads.values() if r["pitch"]]
+    if len(strong) < 4:
+        raise SystemExit(f"scale_v3: only {len(strong)} frames read the dashed ruler (need 4); fix D cannot run")
+    fam = float(np.median(strong))
+    spread = max(abs(p - fam) / fam for p in strong)
+    if spread > PITCH_TOL:
+        raise SystemExit(f"scale_v3: dashed-ruler pitches disagree by {spread:.1%} (> {PITCH_TOL:.0%}); fix D cannot run")
+    direct = {n: r["pitch"] for n, r in reads.items() if r["pitch"] and abs(r["pitch"] - fam) / fam <= PITCH_TOL}
+    unit = resolve_unit(fam, DASH_H)
+    if unit is None:
+        raise SystemExit(f"scale_v3: no unique tick unit puts {DASH_H} rows / {fam:.1f} px in {DEPTH_OK} cm")
+    n_direct = n_cons = 0
+    for n in names:
+        v = dict(rows[n])
+        r = reads[n]
+        p = direct.get(n)
+        v["px_v2"] = rows[n].get("px_per_cm")
+        if p is not None:
+            v["px_per_cm"], v["source"] = p / unit, f"dash-ruler(unit={unit:g}cm)"
+            v["pitch_px"] = p
+            n_direct += 1
+        else:
+            v["px_per_cm"], v["source"] = fam / unit, f"dash-ruler-consensus(unit={unit:g}cm)"
+            n_cons += 1
+        v["dash"] = dict(slope=r["slope"], line_col=r["line_col"], dash_period=r["dash_period"], ticks=r["ticks"])
+        v["flags"] = list(rows[n].get("flags") or []) + [f"L6g-D: {rows[n].get('source')} -> {v['source']}"]
+        rows[n] = v
+    return rows, dict(n=len(names), family_median=fam, unit_cm=unit, px_per_cm=fam / unit,
+                      depth_cm=DASH_H / (fam / unit), direct=n_direct, consensus=n_cons,
+                      pitch_min=min(direct.values()), pitch_max=max(direct.values()))
+
+
 def validate(rows: dict) -> None:
     if len(rows) != N_TEST:
         raise SystemExit(f"scale_v3: expected {N_TEST} rows, got {len(rows)}")
@@ -230,8 +336,9 @@ def validate(rows: dict) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", choices=["a", "b", "c"], required=True,
-                    help="a = chrome-71 footprint only; b = a + native 644x1088 ruler; c = b + bottom-edge comb on the 853-row frames")
+    ap.add_argument("--variant", choices=["a", "b", "c", "d"], required=True,
+                    help="a = chrome-71 footprint only; b = a + native 644x1088 ruler; c = b + bottom-edge comb on the 853-row frames; "
+                         "d = c + dashed right-edge ruler on the 513-row frames")
     ap.add_argument("--src", default=str(SRC))
     ap.add_argument("--out", default="", help="default reports/scale_v3<variant>.json")
     ap.add_argument("--dry-run", action="store_true", help="print the summary, write nothing")
@@ -263,8 +370,8 @@ def main() -> int:
         raise SystemExit("scale_v3: fix A matched no chrome-71/72 rows; wrong source file?")
 
     # fix B
-    summary_b = summary_c = None
-    if a.variant in ("b", "c"):
+    summary_b = summary_c = summary_d = None
+    if a.variant in ("b", "c", "d"):
         try:
             hw = {n: image_hw(n) for n in rows}
         except (OSError, ValueError) as e:
@@ -273,7 +380,7 @@ def main() -> int:
         print(f"fix B native {NATIVE_H}x{NATIVE_W} (rows x cols): {summary_b['n']} rows, direct comb {summary_b['direct']}, "
               f"consensus {summary_b['consensus']}, family median {summary_b['family_median']:.1f} px/cm "
               f"(pitch {summary_b['pitch_min']:.1f}-{summary_b['pitch_max']:.1f})")
-    if a.variant == "c":
+    if a.variant in ("c", "d"):
         try:
             rows, summary_c = fix_edge(rows, hw)
         except (OSError, ValueError) as e:
@@ -282,6 +389,15 @@ def main() -> int:
               f"consensus {summary_c['consensus']}, pitch median {summary_c['family_median']:.1f} px "
               f"(range {summary_c['pitch_min']:.1f}-{summary_c['pitch_max']:.1f}), unit {summary_c['unit_cm']:g} cm "
               f"-> {summary_c['px_per_cm']:.1f} px/cm, depth {summary_c['depth_cm']:.2f} cm")
+    if a.variant == "d":
+        try:
+            rows, summary_d = fix_dash(rows, hw)
+        except (OSError, ValueError) as e:
+            raise SystemExit(f"scale_v3: cannot read a chrome-free frame for fix D: {e}")
+        print(f"fix D dashed right-edge ruler on {DASH_H}-row frames: {summary_d['n']} rows, direct {summary_d['direct']}, "
+              f"consensus {summary_d['consensus']}, pitch median {summary_d['family_median']:.1f} px "
+              f"(range {summary_d['pitch_min']:.1f}-{summary_d['pitch_max']:.1f}), unit {summary_d['unit_cm']:g} cm "
+              f"-> {summary_d['px_per_cm']:.1f} px/cm, depth {summary_d['depth_cm']:.2f} cm")
 
     validate(rows)
     have_old = sum(1 for v in base.values() if v.get("px_per_cm"))
@@ -291,7 +407,7 @@ def main() -> int:
     untouched = [n for n in rows if rows[n].get("px_per_cm") != base[n].get("px_per_cm")
                  and "px_v2" not in rows[n]]
     if untouched:
-        raise SystemExit(f"scale_v3: rows changed outside the two rules: {untouched[:3]}")
+        raise SystemExit(f"scale_v3: rows changed outside the fix rules: {untouched[:3]}")
 
     if a.dry_run:
         return 0

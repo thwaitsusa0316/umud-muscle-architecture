@@ -1,0 +1,25 @@
+22:03:24Z
+  24/309
+  48/309
+  72/309
+  96/309
+  120/309
+  144/309
+  168/309
+  192/309
+  216/309
+  240/309
+  264/309
+  288/309
+  309/309
+
+PA measured on 297/309; FL measured on 297/309; scale on 309/309; MT raw on 307, shipped after gate [8, 35] mm on 296 (gated out 11)
+  pa_deg   median   13.29  (probed 16.42)
+  fl_mm    median   92.85  (probed 81.5)
+  mt_mm    median   21.92  (probed 20.7)
+
+wrote outputs/sub_pipeline_a1_scalev3d.csv
+wrote outputs/sub_L6g_isolate_mt_v3d.csv  rows=309  kept=mt_mm  measured(non-median) rows=296
+VERIFY OK: 309 rows, id order = sample, PA/FL at probed medians, exactly 4 MT rows differ from sub_L6g_isolate_mt_v3c.csv (['IMG_00040.tif', 'IMG_00041.tif', 'IMG_00043.tif', 'IMG_00045.tif']), all within the [8,35] gate, 310 newlines, single trailing newline
+22:09:36Z
+CHAIN_DONE
