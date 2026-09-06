@@ -19,10 +19,24 @@
      the rest take the family median (native-consensus). Verifies assumption A16
      (which predicted 119.2; the ruler says 126.0).
 
+  C  chrome-free 853-row video stills (IMG_00036-00039, 00047, 00049-00055; 12 frames,
+     1069 or 959 columns, grayscale, scale source 'none' in scale_v2/v3b). The frame is a
+     cropped sector with a tick comb along its BOTTOM edge (1-2 px bright strokes in rows
+     h-5..h-2; the very last row h-1 is the frame border and is deliberately left out of
+     the strip; ticks sit at identical columns 100/266/434/600/766/934 on every 1069-wide frame):
+     pitch 166.8 px on 8 of 12 frames read directly (>= 4 regular intervals vote on the
+     family pitch; a weaker read is kept only within 4 % of it). The tick unit is resolved by depth
+     plausibility: 853 rows / (166.8 px per tick) = 5.1 cm at 1 cm per tick, 2.6 cm at
+     0.5 cm, 10.2 cm at 2 cm; only 1 cm lands in [3, 8] cm. Rule: px/cm = comb pitch /
+     unit when the comb is regular (>= 2 consistent intervals within 6 % of the median),
+     else the family median (edge-comb-consensus). Verifies assumption A19 (L6g).
+
     scale_v3.py --variant a   -> reports/scale_v3a.json   (fix A only)
     scale_v3.py --variant b   -> reports/scale_v3b.json   (A + B)
+    scale_v3.py --variant c   -> reports/scale_v3c.json   (A + B + C)
 
-Each variant is one leaderboard variable (v3a = A15 falsifier, v3b = A16 falsifier).
+Each variant is one leaderboard variable (v3a = A15 falsifier, v3b = A16 falsifier,
+v3c = A19 falsifier: the 12 rows must move the MT isolation below 0.86256).
 Every other row is copied from scale_v2.json unchanged; `px_v2` keeps the old value.
 """
 from __future__ import annotations
@@ -40,6 +54,17 @@ NATIVE_H, NATIVE_W = 644, 1088   # native video grid: 644 ROWS tall x 1088 COLUM
 N_NATIVE = 50                    # how many test frames are on that grid (inventory census)
 PITCH_TOL = 0.04              # a native comb pitch must sit this close to the family median
 N_TEST = 309
+EDGE_H = 853                  # fix C family: 853 rows, 959 or 1069 columns, grayscale, no chrome
+EDGE_W = {959, 1069}
+N_EDGE = 12                   # how many test frames are on that grid (inventory census)
+EDGE_STRIP = (5, 1)           # comb strip = rows h-5 .. h-2 inclusive (a[h-5:h-1]); row h-1 is the frame border and is EXCLUDED on purpose
+EDGE_THR = 120                # a tick is brighter than this in EVERY strip row
+EDGE_GAP = 2                  # columns closer than this belong to one tick
+EDGE_REG_TOL = 0.06           # intervals within this of the median count as regular
+EDGE_MIN_INT = 2              # regular intervals needed for a direct read
+EDGE_STRONG_INT = 4           # regular intervals needed to vote on the family pitch
+EDGE_UNITS = (0.25, 0.5, 1.0, 2.0)   # candidate tick units, cm
+DEPTH_OK = (3.0, 8.0)         # a musculoskeletal sector depth, cm: resolves the tick unit
 
 
 def image_hw(name: str) -> tuple[int, int]:
@@ -115,6 +140,85 @@ def fix_native(rows: dict, hw: dict) -> tuple[dict, dict]:
                       pitch_min=min(direct.values()), pitch_max=max(direct.values()))
 
 
+def edge_pitch(name: str) -> tuple[float | None, int]:
+    """Fix C comb read on one frame: (pitch_px or None, n regular intervals).
+
+    The bottom-edge ticks are 1-2 px wide and bright in all of rows h-5..h-2, while
+    speckle above them is not: the column-wise MIN over the strip isolates the ticks.
+    Row h-1 (the frame border) is excluded on purpose: EDGE_STRIP = (5, 1) -> a[h-5:h-1]."""
+    from PIL import Image
+    with Image.open(TEST / name) as im:
+        a = np.asarray(im.convert("L"), dtype=float)
+    h = a.shape[0]
+    strip = a[h - EDGE_STRIP[0]: h - EDGE_STRIP[1]]
+    prof = strip.min(axis=0)
+    idx = np.where(prof > EDGE_THR)[0]
+    if idx.size == 0:
+        return None, 0
+    groups = [[int(idx[0])]]
+    for i in idx[1:]:
+        if int(i) - groups[-1][-1] <= EDGE_GAP:
+            groups[-1].append(int(i))
+        else:
+            groups.append([int(i)])
+    pos = np.array([np.mean(g) for g in groups])
+    if pos.size < 3:
+        return None, 0
+    d = np.diff(pos)
+    med = float(np.median(d))
+    if med <= 0:
+        return None, 0
+    reg = np.abs(d - med) / med <= EDGE_REG_TOL
+    if int(reg.sum()) < EDGE_MIN_INT:
+        return None, int(reg.sum())
+    return float(np.mean(d[reg])), int(reg.sum())
+
+
+def resolve_unit(pitch: float, h: int) -> float | None:
+    """The tick unit (cm) for which the frame height is a plausible sector depth."""
+    ok = [u for u in EDGE_UNITS if DEPTH_OK[0] <= h / (pitch / u) <= DEPTH_OK[1]]
+    return ok[0] if len(ok) == 1 else None
+
+
+def fix_edge(rows: dict, hw: dict) -> tuple[dict, dict]:
+    """Fix C on the chrome-free 853-row frames. Returns (updated rows, summary)."""
+    names = [n for n, v in rows.items()
+             if hw[n][0] == EDGE_H and hw[n][1] in EDGE_W and v.get("method") == "video"
+             and not v.get("px_per_cm")]
+    if len(names) != N_EDGE:
+        raise SystemExit(f"scale_v3: expected {N_EDGE} chrome-free {EDGE_H}-row frames without scale, matched {len(names)}")
+    reads = {n: edge_pitch(n) for n in names}
+    strong = [p for p, k in reads.values() if p and k >= EDGE_STRONG_INT]
+    if len(strong) < EDGE_MIN_INT:
+        raise SystemExit(f"scale_v3: only {len(strong)} strong bottom combs; fix C cannot run")
+    fam = float(np.median(strong))
+    spread = max(abs(p - fam) / fam for p in strong)
+    if spread > PITCH_TOL:
+        raise SystemExit(f"scale_v3: strong bottom-comb pitches disagree by {spread:.1%} (> {PITCH_TOL:.0%}); fix C cannot run")
+    # a weak read (2-3 regular intervals) is trusted only when it agrees with the strong family
+    direct = {n: p for n, (p, k) in reads.items() if p and abs(p - fam) / fam <= PITCH_TOL}
+    unit = resolve_unit(fam, EDGE_H)
+    if unit is None:
+        raise SystemExit(f"scale_v3: no unique tick unit puts {EDGE_H} rows / {fam:.1f} px in {DEPTH_OK} cm")
+    n_direct = n_cons = 0
+    for n in names:
+        v = dict(rows[n])
+        p = direct.get(n)
+        v["px_v2"] = rows[n].get("px_per_cm")
+        if p is not None:
+            v["px_per_cm"], v["source"] = p / unit, f"edge-comb(unit={unit:g}cm)"
+            v["pitch_px"] = p
+            n_direct += 1
+        else:
+            v["px_per_cm"], v["source"] = fam / unit, f"edge-comb-consensus(unit={unit:g}cm)"
+            n_cons += 1
+        v["flags"] = list(rows[n].get("flags") or []) + [f"L6g-C: {rows[n].get('source')} -> {v['source']}"]
+        rows[n] = v
+    return rows, dict(n=len(names), family_median=fam, unit_cm=unit, px_per_cm=fam / unit,
+                      depth_cm=EDGE_H / (fam / unit), direct=n_direct, consensus=n_cons,
+                      pitch_min=min(direct.values()), pitch_max=max(direct.values()))
+
+
 def validate(rows: dict) -> None:
     if len(rows) != N_TEST:
         raise SystemExit(f"scale_v3: expected {N_TEST} rows, got {len(rows)}")
@@ -126,8 +230,8 @@ def validate(rows: dict) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variant", choices=["a", "b"], required=True,
-                    help="a = chrome-71 footprint only; b = a + native 644x1088 ruler")
+    ap.add_argument("--variant", choices=["a", "b", "c"], required=True,
+                    help="a = chrome-71 footprint only; b = a + native 644x1088 ruler; c = b + bottom-edge comb on the 853-row frames")
     ap.add_argument("--src", default=str(SRC))
     ap.add_argument("--out", default="", help="default reports/scale_v3<variant>.json")
     ap.add_argument("--dry-run", action="store_true", help="print the summary, write nothing")
@@ -159,8 +263,8 @@ def main() -> int:
         raise SystemExit("scale_v3: fix A matched no chrome-71/72 rows; wrong source file?")
 
     # fix B
-    summary_b = None
-    if a.variant == "b":
+    summary_b = summary_c = None
+    if a.variant in ("b", "c"):
         try:
             hw = {n: image_hw(n) for n in rows}
         except (OSError, ValueError) as e:
@@ -169,6 +273,15 @@ def main() -> int:
         print(f"fix B native {NATIVE_H}x{NATIVE_W} (rows x cols): {summary_b['n']} rows, direct comb {summary_b['direct']}, "
               f"consensus {summary_b['consensus']}, family median {summary_b['family_median']:.1f} px/cm "
               f"(pitch {summary_b['pitch_min']:.1f}-{summary_b['pitch_max']:.1f})")
+    if a.variant == "c":
+        try:
+            rows, summary_c = fix_edge(rows, hw)
+        except (OSError, ValueError) as e:
+            raise SystemExit(f"scale_v3: cannot read a chrome-free frame for fix C: {e}")
+        print(f"fix C bottom-edge comb on {EDGE_H}-row frames: {summary_c['n']} rows, direct {summary_c['direct']}, "
+              f"consensus {summary_c['consensus']}, pitch median {summary_c['family_median']:.1f} px "
+              f"(range {summary_c['pitch_min']:.1f}-{summary_c['pitch_max']:.1f}), unit {summary_c['unit_cm']:g} cm "
+              f"-> {summary_c['px_per_cm']:.1f} px/cm, depth {summary_c['depth_cm']:.2f} cm")
 
     validate(rows)
     have_old = sum(1 for v in base.values() if v.get("px_per_cm"))

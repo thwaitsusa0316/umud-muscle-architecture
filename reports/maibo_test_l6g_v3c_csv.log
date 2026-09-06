@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "engine": "local",
+  "verdict": "PASS",
+  "errors": [],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/5aebd044803cfadb.json",
+  "sha256": {
+    "outputs/sub_L6g_isolate_mt_v3c.csv": "27a8958b0b5cca498f1519ec55b77ecd05b5eceb3cba43bf9d713fa39c23cec0"
+  }
+}

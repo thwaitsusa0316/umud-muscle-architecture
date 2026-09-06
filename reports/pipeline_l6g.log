@@ -1,0 +1,22 @@
+=== v3c start Sun Sep  6 14:37:47 UTC 2026
+  24/309
+  48/309
+  72/309
+  96/309
+  120/309
+  144/309
+  168/309
+  192/309
+  216/309
+  240/309
+  264/309
+  288/309
+  309/309
+
+PA measured on 297/309; FL measured on 291/309; scale on 301/309; MT raw on 301, shipped after gate [8, 35] mm on 292 (gated out 9)
+  pa_deg   median   13.29  (probed 16.42)
+  fl_mm    median   92.85  (probed 81.5)
+  mt_mm    median   21.92  (probed 20.7)
+
+wrote outputs/sub_pipeline_a1_scalev3c.csv
+=== v3c exit 0 Sun Sep  6 14:43:50 UTC 2026

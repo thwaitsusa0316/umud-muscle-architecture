@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_scale_v3.py",
+      "line": "43",
+      "sev": "critical",
+      "desc": "The strip slice misses row h-1 (the last row of the comb) due to an off-by-one in python slicing.",
+      "fix": "change EDGE_STRIP = (5, 1) to EDGE_STRIP = (5, 0)"
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The `EDGE_STRIP` slice `a[h-5 : h-1]` stops at `h-2` and silently drops row `h-1` from the column-wise MIN, violating the requirement to cover all 5 rows `h-5..h-1`.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c \"import numpy as np; h=853; a=np.arange(h); strip=a[h-5 : h-1]; print(f'Rows included: {len(strip)}, Last row: {strip[-1]}')\"`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `Rows included: 4, Last row: 851`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `Rows included: 5, Last row: 852`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 The `EDGE_STRIP` constant (line 43), the slice extraction in `edge_pitch()`, and every tick detection relying on the `prof` MIN for the 12 bottom-comb frames.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 The slice is changed to `a[h-5 : h]` (e.g., by setting `EDGE_STRIP = (5, 0)`) so the test prints 5 rows ending at 852.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/30ada3d39d8453f0.json",
+  "sha256": {
+    "scripts/scale_v3.py": "805eddaf073c30049d45dab56167fa6b0ff09507aa149df541d10eacc575ca17"
+  }
+}

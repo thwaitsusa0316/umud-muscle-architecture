@@ -1,0 +1,77 @@
+{
+  "set_id": "30ada3d39d8453f0",
+  "files": {
+    "scripts/scale_v3.py": "805eddaf073c30049d45dab56167fa6b0ff09507aa149df541d10eacc575ca17"
+  },
+  "engine": "antigravity",
+  "context": "L6g variant c added to scale_v3.py (fix C): px/cm for the 12 chrome-free 853-row test frames from a bottom-edge tick comb (column-wise MIN over rows h-5..h-1 > 120, clustered, regular intervals within 6% of the median; family pitch voted by reads with >= 4 regular intervals, weaker reads kept only within 4% of it, others take the family median); tick unit resolved uniquely by sector-depth plausibility [3,8] cm (166.8 px/tick -> 1 cm -> 166.8 px/cm, depth 5.11 cm). Variants a and b must be byte-identical to before; verify-cmd rebuilds variant c and asserts exactly those 12 rows change (160-170 px/cm, px_v2 None, source edge-comb*) and 297 rows stay identical to reports/scale_v3b.json. Look for: index/off-by-one on the strip, unit resolution logic, silent failure paths, anything that could alter fix A/B rows.",
+  "local_verify": {
+    "cmd": "/tmp/verify_v3c.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: 12 rows changed to 160-170 px/cm, 297 rows identical to scale_v3b.json\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_scale_v3.py",
+      "line": "43",
+      "sev": "critical",
+      "desc": "The strip slice misses row h-1 (the last row of the comb) due to an off-by-one in python slicing.",
+      "fix": "change EDGE_STRIP = (5, 1) to EDGE_STRIP = (5, 0)"
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 The `EDGE_STRIP` slice `a[h-5 : h-1]` stops at `h-2` and silently drops row `h-1` from the column-wise MIN, violating the requirement to cover all 5 rows `h-5..h-1`.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014 `python3 -c \"import numpy as np; h=853; a=np.arange(h); strip=a[h-5 : h-1]; print(f'Rows included: {len(strip)}, Last row: {strip[-1]}')\"`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014 `Rows included: 4, Last row: 851`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014 `Rows included: 5, Last row: 852`",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 The `EDGE_STRIP` constant (line 43), the slice extraction in `edge_pitch()`, and every tick detection relying on the `prof` MIN for the 12 bottom-comb frames.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 The slice is changed to `a[h-5 : h]` (e.g., by setting `EDGE_STRIP = (5, 0)`) so the test prints 5 rows ending at 852.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (176.25s)\n\nREVIEW-244c7533 VERDICT: FAIL\n- 00_scale_v3.py:43 [critical] The strip slice misses row h-1 (the last row of the comb) due to an off-by-one in python slicing. -> change EDGE_STRIP = (5, 1) to EDGE_STRIP = (5, 0)\n  - **CLAIM** \u2014 The `EDGE_STRIP` slice `a[h-5 : h-1]` stops at `h-2` and silently drops row `h-1` from the column-wise MIN, violating the requirement to cover all 5 rows `h-5..h-1`.\n  - **TEST** \u2014 `python3 -c \"import numpy as np; h=853; a=np.arange(h); strip=a[h-5 : h-1]; print(f'Rows included: {len(strip)}, Last row: {strip[-1]}')\"`\n  - **EXPECTED IF I AM RIGHT** \u2014 `Rows included: 4, Last row: 851`\n  - **EXPECTED IF I AM WRONG** \u2014 `Rows included: 5, Last row: 852`\n  - **SCOPE** \u2014 The `EDGE_STRIP` constant (line 43), the slice extraction in `edge_pitch()`, and every tick detection relying on the `prof` MIN for the 12 bottom-comb frames.\n  - **FIXED WHEN** \u2014 The slice is changed to `a[h-5 : h]` (e.g., by setting `EDGE_STRIP = (5, 0)`) so the test prints 5 rows ending at 852.\n\ncase: 20260906T143745Z_33b827_ask",
+  "nonce": "244c7533",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (176.25s)\n\nREVIEW-244c7533 VERDICT: FAIL\n- 00_scale_v3.py:43 [critical] The strip slice misses row h-1 (the last row of the comb) due to an off-by-one in python slicing"
+    }
+  ]
+}

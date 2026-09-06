@@ -1,0 +1,27 @@
+{
+  "set_id": "3d806f38feaea678",
+  "files": {
+    "scripts/scale_v3.py": "2385dfc483d7241bc90ce15e599d5cc6d210633fbf9ad91be512445b9436d4bb"
+  },
+  "engine": "antigravity",
+  "context": "Round 2 of L6g variant c (fix C) in scale_v3.py. Round 1's only critical finding was that the comb strip a[h-5:h-1] omits row h-1; that omission is INTENTIONAL (row h-1 is the frame border, uniformly bright, not part of the comb) and the docstring, the EDGE_STRIP comment, and edge_pitch's docstring now state it explicitly. Fix C: px/cm for the 12 chrome-free 853-row test frames from a bottom-edge tick comb (column-wise MIN over rows h-5..h-2 > 120, clustered within 2 px, regular intervals within 6% of the median; family pitch voted by reads with >= 4 regular intervals, weaker reads kept only within 4% of it, others take the family median); tick unit resolved uniquely by sector-depth plausibility [3,8] cm (166.8 px/tick -> 1 cm -> 166.8 px/cm, depth 5.11 cm). Variants a and b must be unchanged; the verify-cmd rebuilds variant c and asserts exactly those 12 rows change (160-170 px/cm, px_v2 None, source edge-comb*) and 297 rows stay identical to reports/scale_v3b.json. Look for real defects: unit-resolution logic, silent failure paths, cluster/regularity arithmetic, anything that could alter fix A/B rows.",
+  "local_verify": {
+    "cmd": "/tmp/verify_v3c.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: 12 rows changed to 160-170 px/cm, 297 rows identical to scale_v3b.json\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (359.27s)\n\nREVIEW-75ff06d7 VERDICT: PASS\n\ncase: 20260906T144215Z_a3fb63_ask",
+  "nonce": "75ff06d7",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (359.27s)\n\nREVIEW-75ff06d7 VERDICT: PASS\n\ncase: 20260906T144215Z_a3fb63_ask"
+    }
+  ]
+}
