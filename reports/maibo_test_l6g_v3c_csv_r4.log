@@ -1,0 +1,61 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_sub_L6g_isolate_mt_v3c.csv",
+      "line": "311",
+      "sev": "minor",
+      "desc": "The artifact ends with two newline bytes, contradicting the author's claim that the previous round's finding is disproven",
+      "fix": "Remove the extra trailing newline."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM \u2014 NOT RESOLVED: The file ends with two newline bytes (a trailing blank line), which means it contains 311 newline characters rather than the asserted 310.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST \u2014 python3 -c \"print(open('00_sub_L6g_isolate_mt_v3c.csv', 'rb').read().endswith(b'\\n\\n'))\"",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT \u2014 True",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG \u2014 False",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE \u2014 00_sub_L6g_isolate_mt_v3c.csv EOF",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN \u2014 The test prints False, leaving exactly 310 newline characters in the file.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/5aebd044803cfadb.json",
+  "sha256": {
+    "outputs/sub_L6g_isolate_mt_v3c.csv": "27a8958b0b5cca498f1519ec55b77ecd05b5eceb3cba43bf9d713fa39c23cec0"
+  }
+}

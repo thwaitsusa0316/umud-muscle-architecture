@@ -1,0 +1,63 @@
+{
+  "passed": false,
+  "engine": "antigravity",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_sub_L6g_isolate_mt_v3c.csv",
+      "line": "311",
+      "sev": "minor",
+      "desc": "Trailing blank line format trap",
+      "fix": "Remove the trailing blank line."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: The CSV file ends with an extra newline character, creating a trailing blank line that can cause parsing errors.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: python3 -c \"import sys; print(sys.stdin.read().endswith('\\n\\n'))\" < 00_sub_L6g_isolate_mt_v3c.csv",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: True",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: False",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: 00_sub_L6g_isolate_mt_v3c.csv",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: The test prints False, confirming the file ends with at most one newline.",
+      "fix": null
+    }
+  ],
+  "unsure": [
+    "The format traps and bounds were checkable from the supplied CSV. However, I must abstain on verifying uniqueness against the v3b CSV and the exactly 11 changed rows. These claims turn on a stated gap; I would need the v3b CSV and verify-cmd script to evaluate them."
+  ],
+  "record": "/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle/maibo_tests/5aebd044803cfadb.json",
+  "sha256": {
+    "outputs/sub_L6g_isolate_mt_v3c.csv": "27a8958b0b5cca498f1519ec55b77ecd05b5eceb3cba43bf9d713fa39c23cec0"
+  }
+}
