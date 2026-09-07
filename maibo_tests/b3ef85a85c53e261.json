@@ -1,0 +1,27 @@
+{
+  "set_id": "b3ef85a85c53e261",
+  "files": {
+    "scripts/scale_v3.py": "dfd00b507ee8f528f18894b1568cc449310da2da09b29b86dbd83a248aaae2eb"
+  },
+  "engine": "antigravity",
+  "context": "Round 1 of L6g-d2 in scripts/scale_v3.py: a --dash-unit {1,2} CLI override (variant d only) threaded into fix_dash(rows, hw, unit_override) so the pre-registered 2 cm tick-unit test of A20 can ship as reports/scale_v3d2.json (62.0 px/cm, depth 8.27 cm, outside DEPTH_OK on purpose). Nothing else changed: variants a, b, c and plain d must be byte-identical to reports/scale_v3c.json / scale_v3d.json (the verify-cmd rebuilds and asserts this), d2 changes exactly the 8 chrome-free 513-row RGB frames IMG_00040-46,48 to 62.0 px/cm with identical pitch reads. Default output name gains the unit suffix so scale_v3d.json is never clobbered. Judge: is the override wired correctly, does it leak into any other variant, is the argparse guard right, any error path broken?",
+  "local_verify": {
+    "cmd": "/tmp/verify_v3d2.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: variants c and d byte-identical to the shipped reports; d2 changes exactly the 8 dash-ruler rows to 62.0 px/cm (6 direct, 2 consensus), identical pitch reads, 301 rows identical to scale_v3c.json, scaled 309/309\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (186.5s)\n\nREVIEW-67ba2827 VERDICT: PASS\n\ncase: 20260907T045543Z_476ac4_ask",
+  "nonce": "67ba2827",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (186.5s)\n\nREVIEW-67ba2827 VERDICT: PASS\n\ncase: 20260907T045543Z_476ac4_ask"
+    }
+  ]
+}

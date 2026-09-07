@@ -23,6 +23,8 @@
     "falsifier": "public not < the v3c read -> 1 cm is the wrong unit or the family carries no MT skill; with d2 also not < v3c, A20 broken and MT coverage closes at 305",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6g_isolate_mt_v3d.csv -m 'L6g-d v3d MT isolation: measured MT with scale_v3d (v3c + dashed right-edge ruler 124.0 px/cm on the 8 chrome-free 513-row RGB frames), PA/FL at probed medians (baseline v3c)'"
   },
-  "status": "queued",
-  "created_utc": "2026-09-06T22:00:00Z"
+  "status": "retired",
+  "created_utc": "2026-09-06T22:00:00Z",
+  "retired_utc": "2026-09-07T05:14:00Z",
+  "retired_reason": "pre-registered order (PLAN v15): d2 (62 px/cm) read 0.82713 < v3c 0.83305, so the 124 px/cm unit is not tested; A20 verified at 2 cm"
 }

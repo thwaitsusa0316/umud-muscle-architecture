@@ -13,8 +13,20 @@
   "ground_truth_wiring": {
     "mechanism": ".venv/bin/kaggle competitions submissions -c umud-challenge-muscle-architecture-in-ultrasound-data; .venv/bin/kaggle competitions leaderboard -c umud-challenge-muscle-architecture-in-ultrasound-data --show (read each tick); write = .venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f <csv> -m <msg> (CSV upload, comma-delimited UTF-8, true per-file extensions; see src/umud/submit.py)",
     "max_staleness_days": 3,
-    "last_touch_utc": "2026-09-06T21:50:28Z",
-    "last_read": "leaderboard 2026-09-06T21:50Z: #1 0.28742 (PatrickAIForFun), #2 0.29358, #3 0.31898, #4 0.34396 (Vaibhav Patel, up from 0.35134), #5 0.35073; ours best 0.86256 (56043367); submissions today 4/5 (00:15, 00:22, 07:23, 07:28Z), latest 1.04878 (FL-v3b, fired). Kaggle token refreshed in place, expires 2026-09-07T09:50Z."
+    "last_touch_utc": "2026-09-07T05:14:00Z",
+    "last_read": {
+      "utc": "2026-09-07T05:14:00Z",
+      "top": [
+        0.28742,
+        0.29358,
+        0.31898,
+        0.34396,
+        0.35073
+      ],
+      "ours_best": 0.82713,
+      "ours_rank": 97,
+      "teams": 213
+    }
   },
   "noise_floor": {
     "measured": true,
@@ -37,27 +49,27 @@
   "pilot": {
     "profile": "competition",
     "phase": "P2",
-    "plan_version": 15,
-    "last_tick_utc": "2026-09-06T15:12:08Z",
-    "tick_open": "2026-09-06T21:49:35Z",
-    "ticks": 10,
-    "next_action": "P2 rung L6g-v3c (PLAN v14 rung 1): (1) read reports/maibo_test_l6g_v3c_csv_r5.log (grok, launched 15:08Z; falls back to antigravity ~6 min) \u2014 if 'passed': true, run .venv/bin/python /tmp/build_l6g_candidate.py (writes submit_queue/L6g-isolate-mt-v3c.json against plan v14; artifact sha 27a8958b, script record maibo_tests/3d806f38feaea678.json PASS), then pilot.py submit-gate and submit as slot 1 of 5 on 2026-09-07 after 00:00Z (do NOT spend the 09-06 reserve slot; refresh creds in place via kagglesdk first \u2014 token expires 2026-09-07T02:30Z); if the record is still FAIL on the disproven trailing-newline claim, re-run maibo_test.py --engine antigravity with the byte test output quoted (staged copy sha identical, 310 newlines, endswith b'\\n\\n' False) and never force the gate. Expected 0.86256 -> ~0.855 (11 rows x -0.00062); falsifier: not < 0.86256 -> A19 broken, L6g-d dropped. (2) After the read: L6g-d (rung 2, 0 slots to build) \u2014 the 8 chrome-free 513-row RGB frames IMG_00040-46, 48 with the dim slanted right-edge dashed ruler (~123 px major pitch by eye -> 1 cm, depth 4.2 cm): fit the dash line from its ~6.5 px dot period along the fitted column rather than a brightness threshold, then read the major ticks; ship as variant d only if >= 4 frames read within 4 %. (3) Slots 2-5 on 09-07: L4d bracketing probes (PA {0,200}, FL {0,400}, MT {0,200}; shares must sum to 1.03662 +- 0.002 or A5 is broken). (4) 0 slots: L6t label-free evidence (fascicle-mask density and orientation coherence on the 309 test vs 300 train frames per chrome family); L6t self-training compute stays parked behind human gate 3 (A18: Stephen reads the Rules page in a browser). Score trend 0.88251 -> 0.86256 -> 0.92204 (L6m probe; composed best 0.86256, rank 95/212, #1 0.28742, #3 0.31898). Committed bcb1c19.",
+    "plan_version": 16,
+    "last_tick_utc": "2026-09-07T05:15:33Z",
+    "tick_open": null,
+    "ticks": 12,
+    "next_action": "P2 (PLAN v16) on 2026-09-07, 3 slots left (keep 1 reserve): (1) refresh Kaggle creds in place via kagglesdk (token expires 2026-09-07T16:53Z); build two L4d bracketing CSVs = the L1 floor (PA 16.42 / FL 81.5 / MT 20.7, 1.03662) with PA at 0 and at 200 on all 309 rows, maibo_test each with a byte-exact verify-cmd (309 rows, ids = reports/scale_v3c.json keys, only pa_deg differs from outputs/sub_L1 floor), queue submit_queue/L4d-pa-0.json and L4d-pa-200.json (purpose probe, plan v16, rung L4d), submit-gate + submit as slots 3-4; read: shares s_PA0 + s_PA200 must sum to 1.03662 +- 0.002 or A5 (per-target additive score) is broken -> revision v17. (2) 0 slots: L6r per-row MT residual audit on reports/pipeline_a1_scalev3d2_rows.csv (rank the 297 shipped MT rows by scale source: chrome71-footprint 51, native 44+6, edge-comb 12, dash 8, left-ruler 80, footprint 56, fused 36, run-consensus 10, depth 5) and pre-register a withholding isolation (measured MT on the top-K sources only) for slot 1 on 09-08 with falsifier not < 0.82713. (3) L6t label-free evidence stays 0-slot; self-training compute parked behind human gate 3 (A18, Stephen reads the Rules page). Human gate 2 (A6, discussion 737782) unchanged. Trend 0.86256 -> 0.83305 -> 0.82713 (composed best, rank ~97/213; #1 0.28742, #3 0.31898, #4 0.34396). Kill gate 0.45134 by 2026-10-12 unchanged; MT coverage closed so the next 0.376 must come from per-row MT error or PA/FL skill.",
     "blocked_on": null,
     "assumptions": [
       {
         "id": "A1",
         "claim": "A fascicle U-Net retrained on the competition's 2,761 pairs closes the benchmark->test transfer gap (in-muscle coverage >> 0.33; pipeline beats the constant floor)",
-        "evidence": "2026-09-03: retrain lifted val Dice 0.0047->0.6651 and median in-muscle coverage on 60 test images 0.27->0.998 (reports/coverage_new_model.csv), but sub_pipeline_a1.csv scored 1.44645 vs measured constant floor 1.03662 (L3 falsifier fired). Coverage closed; transfer gap did not. The 133 measured images are worse than the constant. | 2026-09-04 L4a: measured MT alone (no fascicles) carries +0.21802 over the floor (1.25464); the transfer failure is scale/pairing, not only the detector. | 2026-09-05 re-check: no new evidence; stays broken until L6b MT isolation reads (scale_v2 pipeline). | 2026-09-05T09:05Z: detector+geometry unbiased vs benchmark GT with the shipped pw6 ckpt (PA bias -0.20 deg, MAE 1.22, n=34); the test-side PA fault is confined to the 161 video frames (median 11.3 deg) while 148 stills sit at 15.91 (probed 16.42). Transfer gap = scale (fixed, L6b) + video-frame PA (open, L6v). Stays broken until a full pipeline beats the floor. | 2026-09-05T16:31:00Z: video-frame MT +24% (25.72 vs stills 20.68) and native 644x1088 frames mis-scaled (carry 148.1, should be ~119.2) -> pairing/detection on video frames is the open fault; stays broken. | 2026-09-05T23:49:21Z re-check: label_domain_pa (300 host frames) shows the pw6 detector unbiased in the training domain (ours-host PA median -0.27 deg); the transfer gap is test-domain (video frames + scale). Stays broken until a full pipeline beats the floor 1.03662. | 2026-09-06T07:35Z re-check: L6m 0.92204 (video MT real, stills \u22120.115 / video \u22120.059) and FL-v3b 1.04878 (fired): MT is the only target with per-image skill; PA/FL none at any scale. Transfer gap = test-domain fascicle detection (L6t). Stays broken until a full pipeline beats the floor 1.03662 (composed = 0.86256 MT-only, which already does; A1 as worded \u2014 fascicle U-Net closes the gap \u2014 is still false for PA/FL). | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: leaderboard read 21:50Z, no new score since 07:28Z (best 0.86256 MT-only); unchanged (broken as worded).",
+        "evidence": "2026-09-03: retrain lifted val Dice 0.0047->0.6651 and median in-muscle coverage on 60 test images 0.27->0.998 (reports/coverage_new_model.csv), but sub_pipeline_a1.csv scored 1.44645 vs measured constant floor 1.03662 (L3 falsifier fired). Coverage closed; transfer gap did not. The 133 measured images are worse than the constant. | 2026-09-04 L4a: measured MT alone (no fascicles) carries +0.21802 over the floor (1.25464); the transfer failure is scale/pairing, not only the detector. | 2026-09-05 re-check: no new evidence; stays broken until L6b MT isolation reads (scale_v2 pipeline). | 2026-09-05T09:05Z: detector+geometry unbiased vs benchmark GT with the shipped pw6 ckpt (PA bias -0.20 deg, MAE 1.22, n=34); the test-side PA fault is confined to the 161 video frames (median 11.3 deg) while 148 stills sit at 15.91 (probed 16.42). Transfer gap = scale (fixed, L6b) + video-frame PA (open, L6v). Stays broken until a full pipeline beats the floor. | 2026-09-05T16:31:00Z: video-frame MT +24% (25.72 vs stills 20.68) and native 644x1088 frames mis-scaled (carry 148.1, should be ~119.2) -> pairing/detection on video frames is the open fault; stays broken. | 2026-09-05T23:49:21Z re-check: label_domain_pa (300 host frames) shows the pw6 detector unbiased in the training domain (ours-host PA median -0.27 deg); the transfer gap is test-domain (video frames + scale). Stays broken until a full pipeline beats the floor 1.03662. | 2026-09-06T07:35Z re-check: L6m 0.92204 (video MT real, stills \u22120.115 / video \u22120.059) and FL-v3b 1.04878 (fired): MT is the only target with per-image skill; PA/FL none at any scale. Transfer gap = test-domain fascicle detection (L6t). Stays broken until a full pipeline beats the floor 1.03662 (composed = 0.86256 MT-only, which already does; A1 as worded \u2014 fascicle U-Net closes the gap \u2014 is still false for PA/FL). | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: leaderboard read 21:50Z, no new score since 07:28Z (best 0.86256 MT-only); unchanged (broken as worded). | 2026-09-07T05:01Z re-check: L6g-v3c 0.83305 (MT-only composed) beats the floor 1.03662 by 0.203; the fascicle U-Net still carries no PA/FL skill (FL-v3b 1.04878, L6c-pa 1.04140), so A1 as worded stays broken; MT skill is scale-driven, not detector-driven.",
         "verify_every_days": 7,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "broken"
       },
       {
         "id": "A2",
         "claim": "Local CV (35-image expert benchmark) tracks the leaderboard",
-        "evidence": "BROKEN for the DL_Track-weights pipeline: benchmark 0.3349 vs public 1.46532. Benchmark is valid for conventions/geometry only; only leaderboard-probed medians span the test distribution | 2026-09-04: benchmark kept only for unit/convention/scale checks with real GT (L6). | 2026-09-05 re-check: unchanged; benchmark used only for convention/unit checks. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: unchanged; benchmark used for convention/unit checks only. | 2026-09-06T07:35Z re-check: unchanged; benchmark used for convention/unit checks only. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: unchanged; benchmark used for convention/unit checks only.",
+        "evidence": "BROKEN for the DL_Track-weights pipeline: benchmark 0.3349 vs public 1.46532. Benchmark is valid for conventions/geometry only; only leaderboard-probed medians span the test distribution | 2026-09-04: benchmark kept only for unit/convention/scale checks with real GT (L6). | 2026-09-05 re-check: unchanged; benchmark used only for convention/unit checks. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: unchanged; benchmark used for convention/unit checks only. | 2026-09-06T07:35Z re-check: unchanged; benchmark used for convention/unit checks only. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: unchanged; benchmark used for convention/unit checks only. | 2026-09-07T05:01Z re-check: unchanged; benchmark used for convention/unit checks only (the 853-row family had no benchmark analogue and was resolved on the leaderboard).",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "broken"
       },
       {
@@ -71,9 +83,9 @@
       {
         "id": "A4",
         "claim": "Public LB tracks private LB (33/67 split of one 309-image set)",
-        "evidence": "not measurable before the private board (2026-11-14); delta_transfer = 0.10 (2 SE); delta_public = 0 (deterministic, paired deltas exact). Reassess at L9. | 2026-09-05 re-check: still not measurable before 2026-11-14; no action. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: not measurable before 2026-11-14; unchanged. | 2026-09-06T07:35Z re-check: not measurable before 2026-11-14; unchanged. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: not measurable before 2026-11-14; unchanged.",
+        "evidence": "not measurable before the private board (2026-11-14); delta_transfer = 0.10 (2 SE); delta_public = 0 (deterministic, paired deltas exact). Reassess at L9. | 2026-09-05 re-check: still not measurable before 2026-11-14; no action. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: not measurable before 2026-11-14; unchanged. | 2026-09-06T07:35Z re-check: not measurable before 2026-11-14; unchanged. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: not measurable before 2026-11-14; unchanged. | 2026-09-07T05:01Z re-check: not measurable before 2026-11-14; unchanged.",
         "verify_every_days": 70,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "unverified"
       },
       {
@@ -87,9 +99,9 @@
       {
         "id": "A6",
         "claim": "The OSF expert benchmark is permissible external data for a prize-eligible GPL-3.0 submission",
-        "evidence": "CC BY 4.0 node bundling a non-commercial DL_Track Data Usage Policy; discussion 737782 unreadable headlessly (client-rendered) on 2026-09-04; needs a browser read by Stephen; benchmark confined to development-only until resolved | 2026-09-05 re-check: still unreadable headlessly; owner Stephen, human gate 2 open. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged. | 2026-09-06T07:35Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged. | 2026-09-06T14:40Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); the rules page is also client-rendered (WebFetch returns the title only), so A18 shares the same gate. | 2026-09-06T21:55Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged.",
+        "evidence": "CC BY 4.0 node bundling a non-commercial DL_Track Data Usage Policy; discussion 737782 unreadable headlessly (client-rendered) on 2026-09-04; needs a browser read by Stephen; benchmark confined to development-only until resolved | 2026-09-05 re-check: still unreadable headlessly; owner Stephen, human gate 2 open. | 2026-09-05T16:31:00Z re-check: unchanged. | 2026-09-05T23:49:21Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged. | 2026-09-06T07:35Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged. | 2026-09-06T14:40Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); the rules page is also client-rendered (WebFetch returns the title only), so A18 shares the same gate. | 2026-09-06T21:55Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged. | 2026-09-07T05:01Z re-check: discussion 737782 still unread (human gate 2, owner Stephen); unchanged.",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "unverified"
       },
       {
@@ -144,17 +156,17 @@
       {
         "id": "A13",
         "claim": "Still-frame PA measured by the scale_v2 pipeline is unbiased on the test set (148 stills median 15.91 deg vs probed 16.42); the -21% offset is the 161 video frames (median 11.3 deg on 800x1200 and on the native 644x1088 grid), not an aspect stretch",
-        "evidence": "label-free split of reports/pipeline_a1_scalev2_rows.csv by reports/scale_v2.json method, 2026-09-05T08:57Z; benchmark GT bias -0.20 deg with pw6; host 800x1200 training frames are anisotropic re-exports (stretch 0.84-1.26 by native mask grid) but test frames chrome-match no training source (NN cosine median 0.50). Verified only by the L6c-pa leaderboard read (falsifier public not < 1.01662). | 2026-09-05T09:09Z L6c-pa read: 1.04140 vs floor 1.03662, delta +0.005 (undiluted +0.010) -> BROKEN: still-frame PA unbiased but no per-image skill; PA branch retired. | 2026-09-05T16:31:00Z re-check: unchanged (broken by the L6c-pa read). | 2026-09-05T23:49:21Z re-check: label_domain_pa confirms in-domain PA unbiased (-0.27 deg vs host); still broken (no per-image skill on test, L6c-pa 1.04140). | 2026-09-06T07:35Z re-check: unchanged (broken); FL-v3b 1.04878 confirms no per-image FL skill either. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: no new PA read; unchanged (broken).",
+        "evidence": "label-free split of reports/pipeline_a1_scalev2_rows.csv by reports/scale_v2.json method, 2026-09-05T08:57Z; benchmark GT bias -0.20 deg with pw6; host 800x1200 training frames are anisotropic re-exports (stretch 0.84-1.26 by native mask grid) but test frames chrome-match no training source (NN cosine median 0.50). Verified only by the L6c-pa leaderboard read (falsifier public not < 1.01662). | 2026-09-05T09:09Z L6c-pa read: 1.04140 vs floor 1.03662, delta +0.005 (undiluted +0.010) -> BROKEN: still-frame PA unbiased but no per-image skill; PA branch retired. | 2026-09-05T16:31:00Z re-check: unchanged (broken by the L6c-pa read). | 2026-09-05T23:49:21Z re-check: label_domain_pa confirms in-domain PA unbiased (-0.27 deg vs host); still broken (no per-image skill on test, L6c-pa 1.04140). | 2026-09-06T07:35Z re-check: unchanged (broken); FL-v3b 1.04878 confirms no per-image FL skill either. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: no new PA read; unchanged (broken). | 2026-09-07T05:01Z re-check: no new PA read; unchanged (broken).",
         "verify_every_days": 14,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "broken"
       },
       {
         "id": "A14",
         "claim": "A per-image HORIZONTAL stretch (source-dependent re-export of native grids to 800x1200; 0.84-1.26 in the host's training frames) is what destroys per-image PA and FL skill on test while MT (vertical, read against the depth ruler) survives",
-        "evidence": "2026-09-05T09:12Z: test isolations MT -0.121 / FL +0.002 / PA +0.005 vs benchmark-GT skill PA Spearman 0.88 (MAE 1.16 vs 2.75 constant), FL 0.71, MT 0.70 with the same geometry and pw6 detector; training mask-grid census (800x1200 images with native masks 556x996/864x1152/556x660/644x1088/810x1340/768x1196/688x1234). Not yet a measurement on test: L6s must recover h px/cm per frame and read a PA isolation < 1.01662. | 2026-09-05T16:31:00Z L6s zero-slot test: Siemens tif stills footprint 5.745 cm MAD 0.24% (n=33) -> no per-image stretch on the family where PA skill is absent; chrome-71 PNG height variation is bottom cropping (ruler 172.4 constant across h 530-604); video 800x1200 is a uniform 0.888 re-export of 644x1088. BROKEN: stretch is not the mechanism. | 2026-09-06T07:35Z re-check: unchanged (broken); L6m shows the video MT block is real, consistent with no stretch. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: unchanged (broken); fix D finds no horizontal stretch signature either (the dashed ruler sits at the same rows 122/246/370 on all 8 frames).",
+        "evidence": "2026-09-05T09:12Z: test isolations MT -0.121 / FL +0.002 / PA +0.005 vs benchmark-GT skill PA Spearman 0.88 (MAE 1.16 vs 2.75 constant), FL 0.71, MT 0.70 with the same geometry and pw6 detector; training mask-grid census (800x1200 images with native masks 556x996/864x1152/556x660/644x1088/810x1340/768x1196/688x1234). Not yet a measurement on test: L6s must recover h px/cm per frame and read a PA isolation < 1.01662. | 2026-09-05T16:31:00Z L6s zero-slot test: Siemens tif stills footprint 5.745 cm MAD 0.24% (n=33) -> no per-image stretch on the family where PA skill is absent; chrome-71 PNG height variation is bottom cropping (ruler 172.4 constant across h 530-604); video 800x1200 is a uniform 0.888 re-export of 644x1088. BROKEN: stretch is not the mechanism. | 2026-09-06T07:35Z re-check: unchanged (broken); L6m shows the video MT block is real, consistent with no stretch. | 2026-09-06T14:40Z re-check: no new leaderboard read since 07:28Z; unchanged. | 2026-09-06T21:55Z re-check: unchanged (broken); fix D finds no horizontal stretch signature either (the dashed ruler sits at the same rows 122/246/370 on all 8 frames). | 2026-09-07T05:01Z re-check: unchanged (broken); the v3c fall (-0.0295 on 12 rows at a single vertical scale) is again consistent with MT being read against depth with no horizontal stretch.",
         "verify_every_days": 7,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "broken"
       },
       {
@@ -184,26 +196,26 @@
       {
         "id": "A18",
         "claim": "Pseudo-label self-training of the fascicle detector on the 309 unlabelled test images is permitted by the rules for a prize-eligible submission (test images are provided data; no external labels)",
-        "evidence": "not yet checked against Rules s2 (2026-09-06); needed before L6t spends compute. Note: manual test annotation is in the killed list for reproducibility reasons, self-training is automatic and reproducible. | 2026-09-06T14:35Z: WebFetch of https://www.kaggle.com/competitions/umud-challenge-muscle-architecture-in-ultrasound-data/rules returns the page title only (client-rendered, same as discussion 737782). The only rules text on file (BRIEF.md, read in a browser 2026-09-03) is Foundational Rule 4.b forbidding hand labeling / human prediction of test records, which self-training is not; Rules s2.6 permits external data and pretrained models. Not a verification: owner Stephen (human gate 3) must read the Rules page for any clause on training with the test images. L6t self-training compute stays parked; L6t label-free evidence may proceed. | 2026-09-06T21:55Z re-check: Rules page still unread (human gate 3, owner Stephen); L6t self-training compute stays parked; unchanged.",
+        "evidence": "not yet checked against Rules s2 (2026-09-06); needed before L6t spends compute. Note: manual test annotation is in the killed list for reproducibility reasons, self-training is automatic and reproducible. | 2026-09-06T14:35Z: WebFetch of https://www.kaggle.com/competitions/umud-challenge-muscle-architecture-in-ultrasound-data/rules returns the page title only (client-rendered, same as discussion 737782). The only rules text on file (BRIEF.md, read in a browser 2026-09-03) is Foundational Rule 4.b forbidding hand labeling / human prediction of test records, which self-training is not; Rules s2.6 permits external data and pretrained models. Not a verification: owner Stephen (human gate 3) must read the Rules page for any clause on training with the test images. L6t self-training compute stays parked; L6t label-free evidence may proceed. | 2026-09-06T21:55Z re-check: Rules page still unread (human gate 3, owner Stephen); L6t self-training compute stays parked; unchanged. | 2026-09-07T05:01Z re-check: Rules page still unread (human gate 3, owner Stephen); L6t self-training compute stays parked; unchanged.",
         "verify_every_days": 7,
-        "last_verified_utc": "2026-09-06T21:55:00Z",
+        "last_verified_utc": "2026-09-07T05:01:00Z",
         "status": "unverified"
       },
       {
         "id": "A19",
         "claim": "The 12 chrome-free 853-row test frames (IMG_00036-39, 47, 49-55; 1069 or 959 columns, grayscale) carry a 1 cm tick comb along the bottom edge at 166.8 px per tick, so their scale is 166.8 px/cm (sector depth 5.11 cm) and their measured MT carries the same per-row skill as the other measured rows",
-        "evidence": "2026-09-06T14:37Z label-free: column-wise MIN over rows h-5..h-1 finds ticks at identical columns 100/266/434/600/766/934 on every 1069-wide frame (44..878 on the 959-wide one); 7 of 12 read the pitch directly (164.8-166.8 px, >= 2 regular intervals), 5 take the family median; unit resolved uniquely by depth plausibility [3, 8] cm (1 cm -> 5.11 cm; 0.5 cm -> 2.6; 2 cm -> 10.2). Shipped as scripts/scale_v3.py --variant c -> reports/scale_v3c.json (12 rows changed, 297 byte-identical to v3b). Leaderboard test = L6g v3c MT isolation: falsifier public not < 0.86256. | 2026-09-06T21:55Z: candidate submit_queue/L6g-isolate-mt-v3c.json queued (gate ok), held for slot 1 after 2026-09-07T00:00Z by the reserve policy; verification = that leaderboard read.",
+        "evidence": "2026-09-06T14:37Z label-free: column-wise MIN over rows h-5..h-1 finds ticks at identical columns 100/266/434/600/766/934 on every 1069-wide frame (44..878 on the 959-wide one); 7 of 12 read the pitch directly (164.8-166.8 px, >= 2 regular intervals), 5 take the family median; unit resolved uniquely by depth plausibility [3, 8] cm (1 cm -> 5.11 cm; 0.5 cm -> 2.6; 2 cm -> 10.2). Shipped as scripts/scale_v3.py --variant c -> reports/scale_v3c.json (12 rows changed, 297 byte-identical to v3b). Leaderboard test = L6g v3c MT isolation: falsifier public not < 0.86256. | 2026-09-06T21:55Z: candidate submit_queue/L6g-isolate-mt-v3c.json queued (gate ok), held for slot 1 after 2026-09-07T00:00Z by the reserve policy; verification = that leaderboard read. | 2026-09-07T04:54Z VERIFIED by the leaderboard: L6g v3c MT isolation 0.83305 vs v3b 0.86256 (delta -0.0295, 12 rows -> -0.00246/row, 4x the expected -0.00062/row). The 853-row family carries per-row MT skill at 166.8 px/cm; unit 1 cm confirmed by the size of the fall.",
         "verify_every_days": 7,
-        "last_verified_utc": null,
-        "status": "unverified"
+        "last_verified_utc": "2026-09-07T04:54:00Z",
+        "status": "verified"
       },
       {
         "id": "A20",
-        "claim": "The 8 chrome-free 512-513-row RGB test frames (IMG_00040-46, 48; 461-466 columns) carry a slanted dashed right-edge ruler with major ticks (horizontal bars at rows 122/246/370) 124.0 px apart; the tick unit is 1 cm (124 px/cm, depth 4.14 cm) OR 2 cm (62 px/cm, depth 8.27 cm) -- the pipeline's family medians (MT 10.0 / FL 33.9 at 124 vs 22.7 / 94.5 elsewhere) favour 2 cm; either way the measured MT carries per-row skill",
-        "evidence": "2026-09-06T21:55Z label-free: scripts/scale_v3.py --variant d (dash_pitch: horizontal top-hat, shear search over 97 slopes, major-tick mass left of the line) reads slope +0.040 px/row, line column 448-452, dash period 6 px, ticks at rows 122/246/370 on 6 of 8 frames (pitch 124.0 px exactly, spread 0 %), 2 frames (IMG_00045, 48) take the family consensus; unit resolved uniquely by depth plausibility [3, 8] cm (1 cm -> 4.14 cm; 0.5 cm -> 2.07; 2 cm -> 8.27). Verify: variant c byte-identical, exactly 8 rows changed, scaled 309/309 (/tmp/verify_v3d.sh). Leaderboard test = L6g-d v3d MT isolation vs the v3c read: falsifier public not < the v3c score. | 2026-09-06T22:12Z after the v3d pipeline: at 124 px/cm family medians MT 10.0 (n=6) FL 33.9 (n=6) vs 22.7 / 94.5 on the other 281 measured rows (both ~0.4x, isotropic); 62 px/cm gives 20.0 / 67.9. Footprint prior favours 1 cm (3.75 vs 7.5 cm wide). Pre-registered: d2 (62 px/cm) ships first as slot 2 on 09-07 if built+tested; v3d(124) queued as slot 3 fallback. Family C (v3c) at 166.8 px/cm plausible (MT 17.5 / FL 60.5), slot 1 stands.",
+        "claim": "The 8 chrome-free 512-513-row RGB test frames (IMG_00040-46, 48) carry a slanted dashed right-edge ruler with major ticks 124.0 px apart; the tick unit is 2 cm (62.0 px/cm, depth 8.27 cm) and the measured MT carries per-row skill",
+        "evidence": "2026-09-06T21:55Z label-free: scripts/scale_v3.py --variant d (dash_pitch: horizontal top-hat, shear search over 97 slopes, major-tick mass left of the line) reads slope +0.040 px/row, line column 448-452, dash period 6 px, ticks at rows 122/246/370 on 6 of 8 frames (pitch 124.0 px exactly, spread 0 %), 2 frames (IMG_00045, 48) take the family consensus; unit resolved uniquely by depth plausibility [3, 8] cm (1 cm -> 4.14 cm; 0.5 cm -> 2.07; 2 cm -> 8.27). Verify: variant c byte-identical, exactly 8 rows changed, scaled 309/309 (/tmp/verify_v3d.sh). Leaderboard test = L6g-d v3d MT isolation vs the v3c read: falsifier public not < the v3c score. | 2026-09-06T22:12Z after the v3d pipeline: at 124 px/cm family medians MT 10.0 (n=6) FL 33.9 (n=6) vs 22.7 / 94.5 on the other 281 measured rows (both ~0.4x, isotropic); 62 px/cm gives 20.0 / 67.9. Footprint prior favours 1 cm (3.75 vs 7.5 cm wide). Pre-registered: d2 (62 px/cm) ships first as slot 2 on 09-07 if built+tested; v3d(124) queued as slot 3 fallback. Family C (v3c) at 166.8 px/cm plausible (MT 17.5 / FL 60.5), slot 1 stands. | 2026-09-07T05:14Z VERIFIED by the leaderboard: L6g-d2 MT isolation (scale_v3d2, 62.0 px/cm, 5 rows changed) 0.82713 vs v3c 0.83305 (delta -0.00592, -0.00118/row, exact). The depth prior DEPTH_OK [3,8] cm excluded the right answer (8.27 cm); the family-median prior chose it. v3d (124 px/cm) retired unsubmitted per the pre-registered order.",
         "verify_every_days": 7,
-        "last_verified_utc": null,
-        "status": "unverified"
+        "last_verified_utc": "2026-09-07T05:14:00Z",
+        "status": "verified"
       }
     ],
     "submission": {
@@ -222,13 +234,13 @@
         "notes": "Rules s2.2.a 5/day, s2.2.b 2 finals; team size 10; total only binds mergers (5 x days running). CSV upload, no kernel time limit. gpu_hours_per_week is Helm's Kaggle quota allocation; this engagement runs all compute locally on the M3 Max and does not draw on it."
       },
       "used": {
-        "today": 4,
-        "week": 25,
-        "total": 25,
-        "as_of_utc": "2026-09-06T22:13:38Z",
+        "today": 1,
+        "week": 26,
+        "total": 26,
+        "as_of_utc": "2026-09-07T05:13:33Z",
         "note": "13 submissions 2026-08-31..09-03 (12 COMPLETE, 1 ERROR semicolon/BOM). today = 2 on 2026-09-03 (16:30, 16:41 UTC)."
       },
-      "last_submitted_utc": "2026-09-06T07:28:30Z",
+      "last_submitted_utc": "2026-09-07T05:15:05Z",
       "queue_dir": "submit_queue",
       "auto_allowed_set_utc": "2026-09-03T20:09:57Z"
     },
@@ -244,7 +256,7 @@
       "gpu_hours_this_week": 0.0,
       "weight": 0.0,
       "basis": "registry gpu_share",
-      "set_utc": "2026-09-06T21:49:14Z"
+      "set_utc": "2026-09-07T04:41:55Z"
     },
     "position": {
       "public_rank": 121,

@@ -35,6 +35,7 @@
     scale_v3.py --variant b   -> reports/scale_v3b.json   (A + B)
     scale_v3.py --variant c   -> reports/scale_v3c.json   (A + B + C)
     scale_v3.py --variant d   -> reports/scale_v3d.json   (A + B + C + D)
+    scale_v3.py --variant d --dash-unit 2 -> reports/scale_v3d2.json (D with the 2 cm tick unit, 62.0 px/cm)
 
 Each variant is one leaderboard variable (v3a = A15 falsifier, v3b = A16 falsifier,
 v3c = A19 falsifier: the 12 rows must move the MT isolation below 0.86256).
@@ -285,8 +286,12 @@ def dash_pitch(name: str) -> dict:
     return out
 
 
-def fix_dash(rows: dict, hw: dict) -> tuple[dict, dict]:
-    """Fix D on the chrome-free 513-row RGB frames. Returns (updated rows, summary)."""
+def fix_dash(rows: dict, hw: dict, unit_override: float | None = None) -> tuple[dict, dict]:
+    """Fix D on the chrome-free 513-row RGB frames. Returns (updated rows, summary).
+
+    unit_override (cm) replaces resolve_unit() for the pre-registered d2 test of the tick unit
+    (2 cm -> 62.0 px/cm, depth 8.27 cm, outside DEPTH_OK on purpose); the pitch reads are unchanged.
+    """
     names = [n for n, v in rows.items()
              if DASH_H_RANGE[0] <= hw[n][0] <= DASH_H_RANGE[1] and DASH_W[0] <= hw[n][1] <= DASH_W[1] and v.get("method") == "video"
              and not v.get("px_per_cm")]
@@ -301,7 +306,7 @@ def fix_dash(rows: dict, hw: dict) -> tuple[dict, dict]:
     if spread > PITCH_TOL:
         raise SystemExit(f"scale_v3: dashed-ruler pitches disagree by {spread:.1%} (> {PITCH_TOL:.0%}); fix D cannot run")
     direct = {n: r["pitch"] for n, r in reads.items() if r["pitch"] and abs(r["pitch"] - fam) / fam <= PITCH_TOL}
-    unit = resolve_unit(fam, DASH_H)
+    unit = unit_override if unit_override is not None else resolve_unit(fam, DASH_H)
     if unit is None:
         raise SystemExit(f"scale_v3: no unique tick unit puts {DASH_H} rows / {fam:.1f} px in {DEPTH_OK} cm")
     n_direct = n_cons = 0
@@ -342,7 +347,12 @@ def main() -> int:
     ap.add_argument("--src", default=str(SRC))
     ap.add_argument("--out", default="", help="default reports/scale_v3<variant>.json")
     ap.add_argument("--dry-run", action="store_true", help="print the summary, write nothing")
+    ap.add_argument("--dash-unit", type=float, choices=[1.0, 2.0], default=None,
+                    help="variant d only: force the dashed-ruler tick unit (cm) instead of resolve_unit(); "
+                         "2 -> 62.0 px/cm (d2). Default output becomes reports/scale_v3d<unit>.json")
     a = ap.parse_args()
+    if a.dash_unit is not None and a.variant != "d":
+        ap.error("--dash-unit applies to --variant d only")
 
     try:
         base = json.loads(pathlib.Path(a.src).read_text())
@@ -391,7 +401,7 @@ def main() -> int:
               f"-> {summary_c['px_per_cm']:.1f} px/cm, depth {summary_c['depth_cm']:.2f} cm")
     if a.variant == "d":
         try:
-            rows, summary_d = fix_dash(rows, hw)
+            rows, summary_d = fix_dash(rows, hw, a.dash_unit)
         except (OSError, ValueError) as e:
             raise SystemExit(f"scale_v3: cannot read a chrome-free frame for fix D: {e}")
         print(f"fix D dashed right-edge ruler on {DASH_H}-row frames: {summary_d['n']} rows, direct {summary_d['direct']}, "
@@ -411,7 +421,8 @@ def main() -> int:
 
     if a.dry_run:
         return 0
-    out = pathlib.Path(a.out) if a.out else ROOT / "reports" / f"scale_v3{a.variant}.json"
+    suffix = f"{a.variant}{a.dash_unit:g}" if a.dash_unit is not None else a.variant
+    out = pathlib.Path(a.out) if a.out else ROOT / "reports" / f"scale_v3{suffix}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(rows, indent=1, default=lambda o: o.tolist() if hasattr(o, "tolist") else str(o)))
     back = json.loads(out.read_text())
