@@ -1,0 +1,28 @@
+{
+  "set_id": "7440055524a7a9cf",
+  "files": {
+    "outputs/sub_L4d_mt0.csv": "1a95904cf990181ce7e31ea386804d7a239c10d740c5c3d7aad80d77e110638e",
+    "outputs/sub_L4d_mt200.csv": "866ed4fd651ea25d22ba177b7ca2f6c094929893b07f8fa801aa0b47ec46a4a7"
+  },
+  "engine": "antigravity",
+  "context": "L4d bracketing probes, MT pair (PLAN v17 rung 1, for slots 1-2 on 2026-09-08). Same construction as the PA pair that scored 1.82322 / 11.05376 today and verified A5: scripts/make_constant.py --set mt_mm=0 / --set mt_mm=200 (script PASS maibo_tests/2c70f299631d5fe5.json). Each file is the L1 floor outputs/sub_L1_probed_median.csv with ONLY mt_mm replaced by 0.0000 or 200.0000 on all 309 rows; PA 16.4200 and FL 81.5000 unchanged. Metric (MAE_PA/6 + MAE_FL/12 + MAE_MT/3)/3 is plain absolute error (src/umud/metric.py line 48, np.abs), no wrap. The verify-cmd (exit 0) asserts byte-level format, 309 ids = scale manifest and floor file in order, only column 4 differs line by line, and raw measured test MT strictly inside (0, 100) mm so 0 is below and 200 above every truth value. Judge only whether these two files are correct bracketing probes for the grader.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l4d_mt_csvs.sh",
+    "exit": 0,
+    "tail": "raw measured MT on 297 test rows spans 12.65..34.12 mm: 0 is below and 200 above every value\nVERIFY OK: both CSVs = the L1 floor with only mt_mm replaced (0.0000 / 200.0000) on all 309 rows; PA 16.4200 / FL 81.5000 kept; ids = scale manifest, 251 .tif + 58 .png, sample order, comma, no BOM, 310 lines + trailing newline\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (23.95s)\n\nREVIEW-e4e0f0ea VERDICT: PASS\n\ncase: 20260907T120658Z_711cdb_ask",
+  "nonce": "e4e0f0ea",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (23.95s)\n\nREVIEW-e4e0f0ea VERDICT: PASS\n\ncase: 20260907T120658Z_711cdb_ask"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "L4d-pa-0",
+  "artifact": "outputs/sub_L4d_pa0.csv",
+  "sha256": "e705a3403990c8556fd17dc0af9366d053ab240a72a682deddce74e5d88aff1a",
+  "generator": "scripts/make_constant.py --set pa_deg=0 --out outputs/sub_L4d_pa0.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "e705a3403990c8556fd17dc0af9366d053ab240a72a682deddce74e5d88aff1a",
+    "record": "maibo_tests/7e9317fc15c6c16e.json",
+    "generator_record": "maibo_tests/2c70f299631d5fe5.json",
+    "generator_records": [
+      "maibo_tests/2c70f299631d5fe5.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 16,
+    "rung": "L4d",
+    "purpose": "probe",
+    "why_now": "PLAN v16 (2026-09-07T05:15Z) rung 1: L4d bracketing PA {0, 200} as slots 3-4 of 5 on 2026-09-07 UTC (2 used, 1 kept in reserve). Both files are the L1 floor (1.03662, submission 2026-09-04) with ONLY pa_deg replaced on all 309 rows; FL 81.5 / MT 20.7 unchanged; measured test PA spans 5.33..30.12 deg so 0 is below and 200 above every truth value. 0 compute; exact (deterministic grader). Pre-registered algebra, corrected from the v16 wording BEFORE any read: with score = (MAE_PA/6 + MAE_FL/12 + MAE_MT/3)/3, s0 = M/18 + R and s200 = (200 - M)/18 + R where M = public mean PA and R = share_FL + share_MT of the floor. So M = 100 + 9*(s0 - s200), R = (s0 + s200 - 11.1111)/2, share_PA = 1.03662 - R = MAE_PA(16.42)/18.",
+    "expected_benefit": "Exact per-target split of the constant floor (share_PA and share_FL + share_MT) and the public mean PA: converts every later paired delta into per-row error and fixes the coverage-ceiling arithmetic (A12) that decides whether MT alone can reach the 0.45134 kill gate; MT {0, 200} on 2026-09-08 completes the three shares.",
+    "expected_score_delta": "s0 = M/18 + R: expected ~0.93 + 0.90 = ~1.8 to 1.9 (M ~ 16-18 deg, R = 1.03662 - share_PA with placeholder share_PA ~ 0.16); exact",
+    "falsifier": "Read as a PAIR after both scores land: (a) M = 100 + 9*(s0 - s200) must lie in [13, 22] deg (probed median 16.42; pipeline mean on 297 rows ~16-17); (b) share_PA = 1.03662 - (s0 + s200 - 11.1111)/2 must satisfy |M - 16.42| <= 18*share_PA <= M; (c) s0 < s200. Any failure -> A5 (exact separable MAE scorer, no angle wrap) broken -> revision v17 stops all per-target arithmetic until explained. NOTE: the v16 wording 'shares sum to 1.03662 +- 0.002' is the 6-slot identity (share_PA + share_FL + share_MT = floor) and is only testable after the MT and FL pairs; it is not the check for this pair.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4d_pa0.csv -m 'L4d bracketing probe PA=0: L1 floor (FL 81.5 / MT 20.7 on all 309 rows) with pa_deg=0 below every truth value; pair with PA=200 recovers the exact PA share of the 1.03662 floor and the public mean PA (A5)'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-07T12:05:00Z",
+  "submitted_utc": "2026-09-07T12:06:28Z",
+  "submission_id": "56076422"
+}

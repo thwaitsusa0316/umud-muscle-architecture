@@ -1,0 +1,27 @@
+{
+  "set_id": "2c70f299631d5fe5",
+  "files": {
+    "scripts/make_constant.py": "226e0c3afc49470f4c0b5d6107ab1941b9db2e468db40d60f4af87c3dac74d7a"
+  },
+  "engine": "antigravity",
+  "context": "L4d bracketing (PLAN v16). Change: a repeatable --set KEY=VALUE override (pa_deg|fl_mm|mt_mm, finite, >= 0; 0 is legal because the bracketing probe sets a target to 0) applied after load_medians; no-override behaviour must be byte-identical to the shipped L1 floor outputs/sub_L1_probed_median.csv. The verify-cmd (exit 0 before you were asked) asserts: base output cmp-identical to the floor file; --set pa_deg=0 and =200 change only the pa_deg column on all 309 rows; -1, unknown key and nan are rejected without writing. Judge whether the code does what the docstring says and whether any input could silently produce a wrong CSV. Cite line numbers that exist (the file is ~80 lines).",
+  "local_verify": {
+    "cmd": "/tmp/verify_make_constant_set.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: no-override output byte-identical to sub_L1_probed_median.csv; --set pa_deg=0/200 change only pa_deg on all 309 rows (FL 81.5 / MT 20.7 kept, 251 .tif + 58 .png, comma, no BOM); -1, unknown key and nan rejected without writing a file\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (350.67s)\n\nREVIEW-d1d48d18 VERDICT: PASS\n\ncase: 20260907T115153Z_7988d8_ask",
+  "nonce": "d1d48d18",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (350.67s)\n\nREVIEW-d1d48d18 VERDICT: PASS\n\ncase: 20260907T115153Z_7988d8_ask"
+    }
+  ]
+}

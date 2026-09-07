@@ -1,0 +1,30 @@
+{
+  "id": "L4d-mt-200",
+  "artifact": "outputs/sub_L4d_mt200.csv",
+  "sha256": "866ed4fd651ea25d22ba177b7ca2f6c094929893b07f8fa801aa0b47ec46a4a7",
+  "generator": "scripts/make_constant.py --set mt_mm=200 --out outputs/sub_L4d_mt200.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "866ed4fd651ea25d22ba177b7ca2f6c094929893b07f8fa801aa0b47ec46a4a7",
+    "record": "maibo_tests/7440055524a7a9cf.json",
+    "generator_record": "maibo_tests/2c70f299631d5fe5.json",
+    "generator_records": [
+      "maibo_tests/2c70f299631d5fe5.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 17,
+    "rung": "L4d",
+    "purpose": "probe",
+    "why_now": "PLAN v17 (2026-09-07T12:10Z) rung 1: L4d MT bracketing pair {0, 200} for slots 1-2 on 2026-09-08 UTC after 00:00Z (held: 4/5 slots used on 09-07, slot 5 is the reserve). Same construction as the PA pair that read 1.82322 / 11.05376 on 09-07 and verified A5. Both files are the L1 floor (1.03662) with ONLY mt_mm replaced on all 309 rows; PA 16.42 / FL 81.5 unchanged; raw measured test MT spans 12.65..34.12 mm so 0 is below and 200 above every truth value. 0 compute; exact. Pre-registered algebra: s0 = M_MT/9 + R', s200 = (200 - M_MT)/9 + R', R' = share_PA + share_FL; so M_MT = 100 + 4.5*(s0 - s200), share_MT = 1.03662 - (s0 + s200 - 22.2222)/2, share_FL = 0.88293 - share_MT.",
+    "expected_benefit": "share_MT of the floor exactly -> MT-only ceiling S = 1.03662 - share_MT, which decides arithmetically whether the 0.45134 kill gate (2026-10-12) is reachable by MT alone (needs share_MT >= 0.58528, MAE_MT(20.7) >= 5.27 mm) or whether PA/FL skill is mandatory; share_FL follows from the identity so the FL pair is not needed. Also the measured-MT MAE on the 297 shipped rows = 9*share_MT - 1.885 mm.",
+    "expected_score_delta": "s200 = (200 - M_MT)/9 + R': expected ~19.8 + 0.70 = ~20.4 to 20.7; exact; a large public score is intended and does not touch the banked best 0.82713",
+    "falsifier": "Read as a PAIR: (a) M_MT = 100 + 4.5*(s0 - s200) in [15, 30] mm (median 20.7; pipeline raw median ~22.7); (b) share_MT = 1.03662 - (s0 + s200 - 22.2222)/2 must satisfy |M_MT - 20.7| <= 9*share_MT <= M_MT and share_MT >= 0.20949 (MT skill already removed that much); (c) s0 < s200; (d) share_FL = 0.88293 - share_MT in (0, 0.88293). Any failure -> A5 broken -> revision. Decision: if 1.03662 - share_MT > 0.45134, log A12 as 'MT alone cannot reach the kill gate' and PLAN v18 must put PA/FL skill (L6t) ahead of further MT work.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4d_mt200.csv -m 'L4d bracketing probe MT=200: L1 floor (PA 16.42 / FL 81.5 on all 309 rows) with mt_mm=200 above every truth value; pair with MT=0 recovers the exact MT share of the 1.03662 floor and the public mean MT (A5, A12)'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-07T12:12:00Z",
+  "hold_until_utc": "2026-09-08T00:00:00Z",
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-07; slot 5 stays in reserve"
+}
