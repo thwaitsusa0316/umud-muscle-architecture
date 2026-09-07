@@ -1,0 +1,72 @@
+{
+  "set_id": "d3d08cb144ff54a3",
+  "files": {
+    "scripts/make_run_median.py": "fe172ca2276ea495c81533a4541139c59b118bf3500986b2b7214168b4643bf9"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v17 rung 2 (L6r): within-run MT median smoothing on the shipped MT isolation outputs/sub_L6g_isolate_mt_v3d2.csv (public 0.82713). Run id comes from the 'run' field of reports/scale_v3d2.json (a dict image_id -> {run, method, px_per_cm, ...}); reports/groups.json uses a DIFFERENT numbering and must be refused (no 'run' key). 'Shipped' = mt_mm != probed median 20.7 (reports/public_medians.json). For each run with >= --min-frames (3) shipped rows, rel_range = (max-min)/median; if > --threshold (0.25) every shipped row in that run is set to the run median of its shipped rows. FACTS asserted by the verify script: at 0.25 exactly runs 55/68/70, 15 rows set (12 numerically differ at 4 dp because rows already at the median do not move); at 0.15 runs 53/55/68/70/93/139, 28 rows; PA/FL byte-identical; unshipped rows never change; a manifest without 'run', out==source, and a threshold that smooths nothing are refused. src/umud/submit.py write_submission writes commas, no BOM, float_format %.4f, 309 rows. Review the CODE for errors that would make the CSV wrong or the invariants lie; do not re-derive the leaderboard numbers.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6r_script.sh",
+    "exit": 0,
+    "tail": "/tmp/l6r_t25.csv: thr 0.25 -> runs [55, 68, 70], rows set 15, numerically changed 12\n/tmp/l6r_t15.csv: thr 0.15 -> runs [53, 55, 68, 70, 93, 139], rows set 28, numerically changed 22\nVERIFY OK\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_run_median.py",
+      "line": "109",
+      "sev": "critical",
+      "desc": "The invariant checks use `.round(4)` (round-to-even) to compare against values serialized with `%.4f` (round-away-from-zero).",
+      "fix": "Compare absolute differences directly with a safe tolerance."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM \u2014 The invariant checks mix `%.4f` string formatting with Python's `.round(4)`, causing a spurious difference of ~0.0001000000000014 mm in IEEE-754 representation when values end in a halfway decimal, triggering false invariant failures.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE \u2014 The definition of `changed` (`back.mt_mm.round(4) != base.mt_mm.round(4)`), the `got` assertion (`abs(got - round(mt, 4)) > 1e-4`), and the PA/FL invariant checks.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN \u2014 The script compares absolute differences with a safe tolerance (e.g., `<= 1.01e-4`) instead of applying `.round(4)` before the equality or difference check.",
+      "fix": null
+    }
+  ],
+  "unsure": [
+    "If `image_id`s in the CSV contain only digits, `pd.read_csv` will infer them as integers, but `runs` has string keys (from JSON). This would cause `i not in runs` to always be True, crashing the script. Consider casting to string: `[str(i) for i in source.image_id]`."
+  ],
+  "raw": "[antigravity / google / mid] ok (376.94s)\n\nREVIEW-6543eae0 VERDICT: FAIL\n- 00_make_run_median.py:109 [critical] The invariant checks use `.round(4)` (round-to-even) to compare against values serialized with `%.4f` (round-away-from-zero). -> Compare absolute differences directly with a safe tolerance.\n\n- CLAIM \u2014 The invariant checks mix `%.4f` string formatting with Python's `.round(4)`, causing a spurious difference of ~0.0001000000000014 mm in IEEE-754 representation when values end in a halfway decimal, triggering false invariant failures.\n- TEST \u2014\n```python\nmt = 20.12345\ngot_from_csv = float(f\"{mt:.4f}\")\ndiff = abs(got_from_csv - round(mt, 4))\nprint(f\"Failed invariant: {diff > 1e-4}\")\n```\n- EXPECTED IF I AM RIGHT \u2014\nFailed invariant: True\n- EXPECTED IF I AM WRONG \u2014\nFailed invariant: False\n- SCOPE \u2014 The definition of `changed` (`back.mt_mm.round(4) != base.mt_mm.round(4)`), the `got` assertion (`abs(got - round(mt, 4)) > 1e-4`), and the PA/FL invariant checks.\n- FIXED WHEN \u2014 The script compares absolute differences with a safe tolerance (e.g., `<= 1.01e-4`) instead of applying `.round(4)` before the equality or difference check.\n\nUNSURE: If `image_id`s in the CSV contain only digits, `pd.read_csv` will infer them as integers, but `runs` has string keys (from JSON). This would cause `i not in runs` to always be True, crashing the script. Consider casting to string: `[str(i) for i in source.image_id]`.\n\ncase: 20260907T184335Z_811925_ask",
+  "nonce": "6543eae0",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (376.94s)\n\nREVIEW-6543eae0 VERDICT: FAIL\n- 00_make_run_median.py:109 [critical] The invariant checks use `.round(4)` (round-to-even) to compare against values serialize"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "set_id": "8e4fa8faeb96f7f9",
+  "files": {
+    "scripts/make_run_median.py": "bf7f96271bcdf747c6f29a5dbf64ff447a08cbba680cbcb26db21b1e76f4da20"
+  },
+  "engine": "antigravity",
+  "context": "Round 2 of the L6r script. Round 1 FAIL (record maibo_tests/d3d08cb144ff54a3.json) was the mix of %.4f serialization and .round(4) in the read-back invariants; FIXED: base and out are both %.4f files and are now compared by exact parsed equality, the run-median check uses float(f'{mt:.4f}') (same path as write_submission), image_id is cast to str, and read-backs use dtype={'image_id': str}. Purpose (PLAN v17 rung 2): within-run MT median smoothing on the shipped MT isolation outputs/sub_L6g_isolate_mt_v3d2.csv (public 0.82713). Run id = the 'run' field of reports/scale_v3d2.json (dict image_id -> {run, method, px_per_cm, ...}); reports/groups.json uses a different numbering and must be refused (no 'run' key). 'Shipped' = mt_mm != probed median 20.7 (reports/public_medians.json). For each run with >= --min-frames (3) shipped rows, rel_range = (max-min)/median; if > --threshold (0.25) every shipped row in that run is set to the median of its shipped rows. FACTS asserted by the verify script: at 0.25 exactly runs 55/68/70, 15 rows set (12 numerically differ at 4 dp); at 0.15 runs 53/55/68/70/93/139, 28 rows; PA/FL identical; unshipped rows never change; a manifest without 'run', out==source, and a threshold that smooths nothing are refused. write_submission writes commas, no BOM, float_format %.4f, 309 rows. Review the CODE for errors that would make the CSV wrong or the invariants lie; do not re-derive leaderboard numbers.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6r_script.sh",
+    "exit": 0,
+    "tail": "/tmp/l6r_t25.csv: thr 0.25 -> runs [55, 68, 70], rows set 15, numerically changed 12\n/tmp/l6r_t15.csv: thr 0.15 -> runs [53, 55, 68, 70, 93, 139], rows set 28, numerically changed 22\nVERIFY OK\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_run_median.py",
+      "line": "109",
+      "sev": "critical",
+      "desc": "The initial `pd.read_csv(a.source)` lacks `dtype={\"image_id\": str}`, causing numeric IDs to be parsed as integers. Since `plan()` copies and casts its version to strings but `main()` passes the un-cast original to `build()`, `to_set.get()` fails to match integer IDs against string keys, silently dropping updates and crashing the invariant check",
+      "fix": "Pass `dtype={\"image_id\": str}` to `pd.read_csv(a.source)`."
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (238.01s)\n\nREVIEW-57d254f3 VERDICT: FAIL\n- 00_make_run_median.py:109 [critical] The initial `pd.read_csv(a.source)` lacks `dtype={\"image_id\": str}`, causing numeric IDs to be parsed as integers. Since `plan()` copies and casts its version to strings but `main()` passes the un-cast original to `build()`, `to_set.get()` fails to match integer IDs against string keys, silently dropping updates and crashing the invariant check -> Pass `dtype={\"image_id\": str}` to `pd.read_csv(a.source)`.\n\nCLAIM \u2014 The initial `pd.read_csv` call drops the `dtype={\"image_id\": str}` argument used elsewhere, causing a type mismatch in `build()` that silently ignores updates for numeric IDs and triggers a crash during invariant verification.\nTEST \u2014\n```python\nimport pandas as pd, tempfile\nfrom importlib.machinery import SourceFileLoader\n\nmodule = SourceFileLoader(\"make_run_median\", \"00_make_run_median.py\").load_module()\n\nwith tempfile.NamedTemporaryFile(suffix=\".csv\", mode=\"w\", delete=False) as f:\n    f.write(\"image_id,mt_mm\\n123,10.0\\n\")\n\n# Replicate main() reading without dtype\nsource = pd.read_csv(f.name)\nto_set = {\"123\": 99.9} # plan() casts image_id to str, producing string keys\n\nout = module.build(source, to_set)\nprint(out[\"mt_mm\"].tolist())\n```\nEXPECTED IF I AM RIGHT \u2014\n[10.0]\nEXPECTED IF I AM WRONG \u2014\n[99.9]\nSCOPE \u2014 `main()` reading `source` (line 109) and `build()` iterating over `out.image_id` (line 89).\nFIXED WHEN \u2014 The test prints `[99.9]`, confirming that the dictionary lookup matches numeric IDs correctly.\n\ncase: 20260907T185041Z_c11a36_ask",
+  "nonce": "57d254f3",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (238.01s)\n\nREVIEW-57d254f3 VERDICT: FAIL\n- 00_make_run_median.py:109 [critical] The initial `pd.read_csv(a.source)` lacks `dtype={\"image_id\": str}`, causing numeric IDs"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "set_id": "aafe5c2ffeb5e075",
+  "files": {
+    "outputs/sub_L6r_run_median_v3d2.csv": "c41901db0d3de31cafd60bb94606ed289bdb248e561911cc37f7cc15402e552a"
+  },
+  "engine": "antigravity",
+  "context": "ARTIFACT test of a Kaggle submission CSV (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension). It is the L6r run-median MT isolation (PLAN v17 rung 2) produced by scripts/make_run_median.py (PASS antigravity round 3, maibo_tests/e73ac81349796934.json) from the shipped baseline outputs/sub_L6g_isolate_mt_v3d2.csv (public 0.82713). FACTS, all asserted by the verify command: PA 16.4200 and FL 81.5000 on all 309 rows (probed medians); exactly 15 rows (video runs 55, 68, 70 of reports/scale_v3d2.json, 5 frames each) are set to their run's median MT (30.0207 / 14.0388 / 18.8672 mm), of which 12 differ numerically from the baseline and 3 already sat at the median; the other 294 rows are byte-identical to the baseline; all MT in [8,35]. This is a deliberately SMALL change (12 values); a candidate that changed more rows would be wrong. Check format traps and the invariants; do not invent values not in the file.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6r_csv.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: 309 rows, id order = sample, PA/FL at probed medians, 15 rows set to their run median (runs 55/68/70), 12 rows numerically differ from sub_L6g_isolate_mt_v3d2.csv, 294 rows identical, all MT in [8,35]\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [
+    "The evidence given does not settle whether the 294 unmodified rows are byte-identical to the omitted baseline outputs/sub_L6g_isolate_mt_v3d2.csv, nor whether video runs 55, 68, and 70 in the omitted reports/scale_v3d2.json actually map to the modified rows 81-85, 146-150, and 156-160; I must abstain on these uncheckable claims, and access to those files would change my mind. The checkable claims (exactly 15 rows set to the three stated medians, all MT in [8,35], exactly 309 data rows, and uniform PA/FL) hold true in the supplied CSV."
+  ],
+  "raw": "[antigravity / google / mid] ok (221.91s)\n\nREVIEW-10321b31 VERDICT: PASS\nUNSURE: The evidence given does not settle whether the 294 unmodified rows are byte-identical to the omitted baseline outputs/sub_L6g_isolate_mt_v3d2.csv, nor whether video runs 55, 68, and 70 in the omitted reports/scale_v3d2.json actually map to the modified rows 81-85, 146-150, and 156-160; I must abstain on these uncheckable claims, and access to those files would change my mind. The checkable claims (exactly 15 rows set to the three stated medians, all MT in [8,35], exactly 309 data rows, and uniform PA/FL) hold true in the supplied CSV.\n\ncase: 20260907T190119Z_b8c841_ask",
+  "nonce": "10321b31",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (221.91s)\n\nREVIEW-10321b31 VERDICT: PASS\nUNSURE: The evidence given does not settle whether the 294 unmodified rows are byte-identical to the omitted baseline outputs/s"
+    }
+  ]
+}
