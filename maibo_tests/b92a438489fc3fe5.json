@@ -1,0 +1,45 @@
+{
+  "set_id": "b92a438489fc3fe5",
+  "files": {
+    "outputs/sub_L6z_pa_level_v3d2.csv": "8f5daaf095ae5e95ea5bdaff8a443202b9ea2ae8affb44c690957dadc12829b3"
+  },
+  "engine": "local",
+  "context": "ARTIFACT test of a Kaggle submission CSV (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension as they appear in the file). It is L6z-pa, a level-matched PA isolation produced by scripts/make_level_matched.py from the composed best outputs/sub_L6r_run_median_v3d2.csv (public 0.82175). FACTS, all asserted by the verify command that has already run and passed: FL 81.5000 on all 309 rows; mt_mm byte-identical to the source; pa_deg on the 297 measured rows equals the pipeline PA plus one shift of +3.3922 deg, 296 differ numerically from 16.42 and one lands on it; the 12 unmeasured rows stay at 16.4200; shipped PA range 8.72-33.52 deg, median 16.42. This is deliberately a ONE-scalar change. Judge only the file's content against these facts and the format traps; a claim about the script or the verify command is out of scope.",
+  "local_verify": {
+    "cmd": "cd '/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle' && .venv/bin/python /tmp/l6z_csv_verify.py pa",
+    "exit": 0,
+    "tail": "L6z-pa verify OK scalar 3.3922\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[local / open-weights / light] ok (2.51s)\n\nREVIEW-0a69cd10 VERDICT: PASS\n\ncase: 20260908T132302Z_78e7ed_ask",
+  "nonce": "0a69cd10",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (14.38s)\n\nI'll verify the CSV against the stated format and numeric facts with an executable check, then return the required review verdict.\n\ncase: 20260908T132111Z_599747_a"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[antigravity / google / mid] empty (96.52s)\n\n\n\ncase: 20260908T132126Z_6e3e2c_ask"
+    },
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (2.51s)\n\nREVIEW-0a69cd10 VERDICT: PASS\n\ncase: 20260908T132302Z_78e7ed_ask"
+    }
+  ]
+}

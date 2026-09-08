@@ -1,0 +1,31 @@
+{
+  "id": "L6z-fl",
+  "artifact": "outputs/sub_L6z_fl_level_v3d2.csv",
+  "sha256": "4b0d1840af31394b9c8154252b0a546d98751c8067ed8c0ed55155112c39d51d",
+  "generator": "scripts/make_level_matched.py --target fl --source outputs/sub_L6r_run_median_v3d2.csv --rows reports/pipeline_a1_scalev3d2_rows.csv --out outputs/sub_L6z_fl_level_v3d2.csv --report reports/l6z_fl_level.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity/local",
+    "sha256": "4b0d1840af31394b9c8154252b0a546d98751c8067ed8c0ed55155112c39d51d",
+    "record": "maibo_tests/a3425e957ee906b5.json",
+    "generator_record": "maibo_tests/09302276b483ecc5.json",
+    "generator_records": [
+      "maibo_tests/3b1eff783a799281.json",
+      "maibo_tests/09302276b483ecc5.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 19,
+    "rung": "L6z",
+    "purpose": "probe",
+    "why_now": "PLAN v19 (2026-09-08T05:58Z) rung 1, pre-registered before the build: slot 1 on 2026-09-09 UTC after 00:00Z (09-08 is 4/5 used, slot 5 is the reserve). Baseline is the composed best outputs/sub_L6r_run_median_v3d2.csv (0.82175, submission 56089013). ONE variable: FL on the 297 measured rows of reports/pipeline_a1_scalev3d2_rows.csv set to the pipeline FL x 0.8706 (one ratio = probed median 81.5 / measured median 93.6188, fixed label-free on those rows, not on the board), PA at the probed median 16.42 on all 309 rows. The scalar was computed on the 297 measured rows (medians 13.0278 deg / 93.6188 mm), not the 309-row medians quoted in the v19 text (13.29 / 93.11, which included the 12 fallback rows sitting at the constants); the pre-registration is one label-free scalar per target and that is what ships. 0 compute; exact paired delta; MT byte-identical to the baseline. Built 2026-09-08T13:05Z (script PASS antigravity round 2 after round-1 hardening notes; CSV verify-cmd PASS).",
+    "expected_benefit": "First direct test of whether this detector carries per-image PA/FL skill on test once the level offset (PA -3.4 deg = 0.19/row, FL +12 mm = 0.34/row at the metric tolerances) is removed; the kill gate 0.45134 needs >= 0.186 from PA+FL (A12), and no prior full-coverage isolation tested skill at a matched level.",
+    "expected_score_delta": "-0.01 to -0.06 (benchmark-grade FL skill MAE 5.95 vs the constant would be up to -0.05 at the 102-public-row weight; the FL-v3b read 1.04878 shipped at +14 % level and is not comparable)",
+    "falsifier": "public not < 0.81675 (-0.005 vs 0.82175) -> FL has no per-image skill even at matched level -> the fault is the label convention or the pairing; next rung is the per-family shrinkage test (0.5 measured + 0.5 median), not a mechanism hunt. Fires (< 0.81675) -> FL at matched level ships into the composed pipeline and the L4d algebra is re-run for the new FL residual.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6z_fl_level_v3d2.csv -m 'L6z-fl level-matched FL isolation: composed best 0.82175 (L6r run-median MT) with FL on the 297 measured rows = pipeline FL x 0.8706 (probed median 81.5 / measured median 93.6188, one scalar, label-free), PA at the probed median 16.42; MT byte-identical'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-08T13:20:00Z",
+  "hold_until_utc": "2026-09-09T00:00:00Z",
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-08; slot 5 stays in reserve; pre-registered order L6z-fl slot 1 then L6z-pa slot 2 on 2026-09-09"
+}

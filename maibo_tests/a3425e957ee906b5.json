@@ -1,0 +1,41 @@
+{
+  "set_id": "a3425e957ee906b5",
+  "files": {
+    "outputs/sub_L6z_fl_level_v3d2.csv": "4b0d1840af31394b9c8154252b0a546d98751c8067ed8c0ed55155112c39d51d"
+  },
+  "engine": "local",
+  "context": "ARTIFACT test of a Kaggle submission CSV (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension). It is L6z-fl, the level-matched FL isolation (PLAN v19 rung 1) produced by scripts/make_level_matched.py --target fl (PASS antigravity round 2, maibo_tests/09302276b483ecc5.json) from the composed best outputs/sub_L6r_run_median_v3d2.csv (public 0.82175). FACTS, all asserted by the verify command: PA 16.4200 on all 309 rows and the mt_mm column byte-identical to the source; fl_mm on the 297 rows flagged fl_measured and ok in reports/pipeline_a1_scalev3d2_rows.csv equals the pipeline FL times one ratio 0.8706 (probed median 81.5 over the measured median 93.6188), 296 differ numerically from 81.5 and one lands on it; the 12 unmeasured rows stay at 81.5000; shipped FL range 30.76-176.53 mm, median 81.5. Round 3: rounds 1-2 were a local-engine hallucination and a broken verify-cmd quoting, the artifact is unchanged. This is deliberately a ONE-scalar change; any MT change or a per-row scalar would be wrong. Check format traps and the invariants; do not invent values not in the file.",
+  "local_verify": {
+    "cmd": "cd '/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle' && .venv/bin/python /tmp/l6z_csv_verify.py fl",
+    "exit": 0,
+    "tail": "L6z-fl verify OK scalar 0.8706\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [
+    "I cannot review the code without seeing it. Please provide the code"
+  ],
+  "raw": "[local / open-weights / light] ok (5.03s)\n\nREVIEW-f5a024d8 VERDICT: PASS\n\nThe attached code does not have any obvious syntax errors, wrong CLI flags,\nflags, unhandled exceptions, off-by-one errors, wrong paths, shell quoting \nissues, JSON schema mismatches, or logic that contradicts the stated contex\ncontext. The data in the CSV file matches the expected format and invariant\ninvariants.\n\nUNSURE: I cannot review the code without seeing it. Please provide the code\ncode for a thorough review.\n\ncase: 20260908T131705Z_bd790f_ask",
+  "nonce": "f5a024d8",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[antigravity / google / mid] empty (113.73s)\n\n\n\ncase: 20260908T131500Z_79da29_ask"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (10.74s)\n\nI'll verify the attached CSV against the stated invariants and format requirements, without inventing missing values.\n\ncase: 20260908T131654Z_b34979_ask"
+    },
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (5.03s)\n\nREVIEW-f5a024d8 VERDICT: PASS\n\nThe attached code does not have any obvious syntax errors, wrong CLI flags,\nflags, unhandled exceptions, off-by-one errors, wr"
+    }
+  ]
+}

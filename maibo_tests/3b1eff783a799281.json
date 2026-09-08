@@ -1,0 +1,43 @@
+{
+  "set_id": "3b1eff783a799281",
+  "files": {
+    "scripts/make_level_matched.py": "f68dc2fe775089d22c58bc266dd6d9c92fcf765eb7c9f6b7cfd20626154b7480"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v19 rung 1 (L6z): level-matched PA or FL isolation. Source outputs/sub_L6r_run_median_v3d2.csv is the composed best (309 rows, %.4f, PA constant 16.42, FL constant 81.5, MT shipped); rows file reports/pipeline_a1_scalev3d2_rows.csv has pa_deg/fl_mm plus pa_measured/fl_measured/ok bool flags (297 True). One scalar per target fixed label-free from the measured rows: PA shift +3.3922 deg (probed 16.42 - measured median 13.0278), FL ratio x0.8706 (81.5/93.6188). The two untouched columns, MT above all, must read back byte-identical so the paired leaderboard delta is the level-matched target alone. Judge correctness of the plan/build/read-back invariants and error handling, not style. The verify-cmd builds both files to /tmp and checks byte-identity of MT and the other column, the 12 unmeasured rows at the median, the shipped median == probed, single shift/ratio, and that a non-median source is refused.",
+  "local_verify": {
+    "cmd": "/tmp/l6z_verify.sh",
+    "exit": 0,
+    "tail": "pa: measured rows 297, measured median 13.0278, probed 16.42, shift scalar +3.3922\nwrote /tmp/l6z_verify_pa.csv  rows=309  pa_deg rows set=297  numerically changed=296  shipped median=16.4200  report=/tmp/l6z_verify_pa_rep.csv\nfl: measured rows 297, measured median 93.6188, probed 81.5, ratio scalar x0.8706\nwrote /tmp/l6z_verify_fl.csv  rows=309  fl_mm rows set=297  numerically changed=296  shipped median=81.5000  report=/tmp/l6z_verify_fl_rep.csv\npa OK rows 297 scalar 3.3922 min 8.719 max 33.517\nfl OK rows 297 scalar 0.8706 min 30.761 max 176.525\nrefusal OK\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [
+    "The script hardcodes `if len(back) != 309`. While this strictly matches the 309-row source CSV described in the context, it will silently crash if this script is ever reused on a file with a different number of rows (e.g. a different pipeline rung).",
+    "The final report generation `pd.DataFrame(...).to_csv(rp)` is not wrapped in a `try/except` block, unlike all other file I/O in the script. It will raise an unhandled `OSError`/`PermissionError` if the directory cannot be created.",
+    "`astype(bool)` on the `flag` and `ok` columns will evaluate missing `NaN` values to `True` if the column was parsed as an object or float dtype, silently including rows that are missing their boolean flags."
+  ],
+  "raw": "[antigravity / google / mid] ok (400.88s)\n\nREVIEW-f974315f VERDICT: PASS\n\nUNSURE: The script hardcodes `if len(back) != 309`. While this strictly matches the 309-row source CSV described in the context, it will silently crash if this script is ever reused on a file with a different number of rows (e.g. a different pipeline rung).\nUNSURE: The final report generation `pd.DataFrame(...).to_csv(rp)` is not wrapped in a `try/except` block, unlike all other file I/O in the script. It will raise an unhandled `OSError`/`PermissionError` if the directory cannot be created.\nUNSURE: `astype(bool)` on the `flag` and `ok` columns will evaluate missing `NaN` values to `True` if the column was parsed as an object or float dtype, silently including rows that are missing their boolean flags.\n\ncase: 20260908T124925Z_b17488_ask",
+  "nonce": "f974315f",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (25.41s)\n\nI'll review the script for real coding errors against the stated invariants, starting with syntax, the print/ternary, and how `submit.write_submission` serializes "
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (400.88s)\n\nREVIEW-f974315f VERDICT: PASS\n\nUNSURE: The script hardcodes `if len(back) != 309`. While this strictly matches the 309-row source CSV described in the contex"
+    }
+  ]
+}
