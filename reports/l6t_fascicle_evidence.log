@@ -1,0 +1,59 @@
+test frames 309, train frames 300, thr 0.9, device mps
+  test 16/309
+  test 32/309
+  test 48/309
+  test 64/309
+  test 80/309
+  test 96/309
+  test 112/309
+  test 128/309
+  test 144/309
+  test 160/309
+  test 176/309
+  test 192/309
+  test 208/309
+  test 224/309
+  test 240/309
+  test 256/309
+  test 272/309
+  test 288/309
+  test 304/309
+  test 309/309
+  train 16/300
+  train 32/300
+  train 48/300
+  train 64/300
+  train 80/300
+  train 96/300
+  train 112/300
+  train 128/300
+  train 144/300
+  train 160/300
+  train 176/300
+  train 192/300
+  train 208/300
+  train 224/300
+  train 240/300
+  train 256/300
+  train 272/300
+  train 288/300
+  train 300/300
+
+per-family medians (test) vs training reference:
+            family   n  frac_all  frac_band  n_comp  ang_med  ang_mad  len_mean_px  pa_ours  n_ours  ratio_frac_band  ratio_n_comp  under_fires
+still:png:800x1200  58     0.009      0.017    15.0   12.472    1.804       85.171   19.217    15.0            0.707         0.769        False
+still:tif:800x1200  90     0.014      0.027    25.0   10.307    1.502      103.329   14.774    25.5            1.091         1.282        False
+ video:tif:512x465   2     0.033      0.063    29.5    6.763    1.834       54.638   12.864    11.0            2.574         1.513        False
+ video:tif:513x461   1     0.010      0.013    11.0   14.542    0.901       45.872   20.675    11.0            0.534         0.564        False
+ video:tif:513x463   1     0.029      0.080    31.0    9.346    1.334       55.856   22.683    30.0            3.243         1.590        False
+ video:tif:513x464   1     0.039      0.025    33.0    7.499    1.853       62.527      NaN     0.0            1.005         1.692        False
+ video:tif:513x465   2     0.011      0.014    16.5    9.147    1.749       44.680   17.919    16.5            0.586         0.846        False
+ video:tif:513x466   1     0.023      0.031    19.0    6.489    1.932       68.193   14.380    19.0            1.281         0.974        False
+video:tif:644x1088  50     0.017      0.021    26.0  -13.375    1.545       97.808   11.305    24.0            0.836         1.333        False
+video:tif:800x1200  91     0.011      0.017    18.0   -9.937    1.511      108.372   11.389    17.0            0.686         0.923        False
+video:tif:853x1069  11     0.014      0.021    19.0   10.260    1.567       98.971   18.467    15.0            0.866         0.974        False
+ video:tif:853x959   1     0.005      0.007    10.0    9.299    1.076       80.966   15.558    10.0            0.283         0.513         True
+ TRAIN (reference) 300     0.014      0.025    19.5  -13.374    1.273      105.042   17.170    19.0            1.000         1.000        False
+
+verdict: UNDER-FIRES on video:tif:853x959
+wrote reports/l6t_fascicle_evidence.csv and reports/l6t_fascicle_evidence_summary.csv

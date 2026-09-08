@@ -1,0 +1,39 @@
+{
+  "set_id": "f5e305328583808e",
+  "files": {
+    "scripts/l6o_flip_audit.py": "5342762c25da71af7cf4a32ecf2e46a4daa91d2ea1c5f955aa73e109e6f3c7e8"
+  },
+  "engine": "antigravity",
+  "context": "Round 2 after fixing round 1 (spearmanr .statistic -> [0]). PLAN v19 rung 1 label-free audit: unchanged benchmark pipeline (V.load 35 expert frames, S.predict_batch apo masks, predict_ours pw6 fascicle U-Net at production thr 0.9, Gm.analyse) on each frame as delivered and mirrored left-right; PA/FL/MT are mirror-invariant so the same GT applies. mask_stats imported from scripts/l6t_fascicle_evidence.py (PASSed). Check: both masks are predicted FROM the flipped image (never flipped after prediction); NaN handling in summary; verdict logic matches the docstring thresholds.",
+  "local_verify": {
+    "cmd": "cd '/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle' && .venv/bin/python scripts/l6o_flip_audit.py --limit 3 --out /tmp/l6o_smoke.csv && .venv/bin/python -c \"import pandas as pd; d=pd.read_csv('/tmp/l6o_smoke.csv'); assert len(d)==3 and {'pa_deg_orig','pa_deg_flip','ang_med_flip','pa_deg_true'}<=set(d.columns), d.columns; print('smoke ok', d[['image_id','pa_deg_true','pa_deg_orig','pa_deg_flip','ang_med_orig','ang_med_flip']].to_string())\"",
+    "exit": 0,
+    "tail": "  1/3 im_01_arch: PA 28.48947206396071 -> 23.78085910314859 (GT 27.49); ang -17.064693230783895 -> 14.565835791875791\n  2/3 im_02_arch: PA 15.979673415246696 -> 16.251291085647008 (GT 16.08); ang -8.206750751295665 -> 7.383547549734322\n  3/3 im_03_arch: PA 25.056004572982694 -> 20.326409529380047 (GT 23.81); ang -14.199763970213823 -> 13.57654101531307\n\nper-target vs expert consensus (n = rows the pipeline measured):\nvariant        orig   flip\npa_deg_n      3.000  3.000\npa_deg_mae    0.783  2.454\npa_deg_bias   0.716 -2.339\npa_deg_rho    1.000  1.000\nfl_mm_n       3.000  3.000\nfl_mm_mae    13.765  5.393\nfl_mm_bias  -11.965 -1.618\nfl_mm_rho    -0.500  1.000\nmt_mm_n       3.000  3.000\nmt_mm_mae     4.273  1.389\nmt_mm_bias   -3.732 -1.174\nmt_mm_rho    -0.500  1.000\n\nfascicle slope sign: as delivered 3/3 negative (training-like); flipped 0/3 negative\npaired PA flip-orig on 3 rows: median -4.71 deg, median |d| 4.71\n\nverdict: ORIENTATION-DEPENDENT (pre-registered threshold met)  [flip PA MAE 2.454, rho 1.000, usable drop 0]\nwrote /tmp/l6o_smoke.csv\nsmoke ok      image_id  pa_deg_true  pa_deg_orig  pa_deg_flip  ang_med_orig  ang_med_flip\n0  im_01_arch    27.487619    28.489472    23.780859    -17.064693     14.565836\n1  im_02_arch    16.079571    15.979673    16.251291     -8.206751      7.383548\n2  im_03_arch    23.808667    25.056005    20.326410    -14.199764     13.576541\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (331.03s)\n\nREVIEW-5de3e47b VERDICT: PASS\n\ncase: 20260908T054528Z_e5b9a6_ask",
+  "nonce": "5de3e47b",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (44.11s)\n\nI'll review the flip-audit script against the real pipeline APIs and the stated pre-registered thresholds, not against assumed behavior.Checking which checkpoint p"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (331.03s)\n\nREVIEW-5de3e47b VERDICT: PASS\n\ncase: 20260908T054528Z_e5b9a6_ask"
+    }
+  ]
+}
