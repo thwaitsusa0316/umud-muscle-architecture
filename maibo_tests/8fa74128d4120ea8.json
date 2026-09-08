@@ -1,0 +1,187 @@
+{
+  "set_id": "8fa74128d4120ea8",
+  "files": {
+    "scripts/make_submission.py": "65103b0557bc909d595b5783e92340ccfd60e6e809d11055b4ecdfd873230214"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v19 rung 2 (L6o-b): new --flip-positive flag mirrors the 113 positive-slope test frames (reports/l6t_fascicle_evidence.csv, split==test, ang_med>0) left-right with cv2.flip(gray,1) BEFORE the aponeurosis and fascicle models, same convention as scripts/l6o_flip_audit.py; PA/FL/MT are mirror-invariant so outputs are not un-flipped; report gains a 'flipped' column; without the flag the behaviour must be byte-identical to before. Judge correctness of the diff only.",
+  "local_verify": {
+    "cmd": "cd '/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle' && .venv/bin/python /tmp/l6ob_verify.py",
+    "exit": 0,
+    "tail": "verify ok: 113 flip ids, flag present, flip applied before S.predict_batch\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_submission.py",
+      "line": "98",
+      "sev": "major",
+      "desc": "The `flipped` key is unconditionally added to the DataFrame rows, meaning the `--report` CSV output will always contain the new column even when `--flip-positive` is omitted. This directly contradicts the requirement that \"without the flag the behaviour must be byte-identical to before.\"",
+      "fix": "Conditionally add the `flipped` key only if `flip_ids` is truthy, or drop the column before writing the report if the flag was omitted."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: The script unconditionally adds a `flipped` column to the report DataFrame even when the flag is omitted, breaking byte-identical behavior.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: I need the test images and `SCALE_JSON` to execute `build()`. If provided, I would run `python3 00_make_submission.py --report out.csv` without the flip flag and inspect the headers of `out.csv`.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: `out.csv` contains a `flipped` column.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: `out.csv` has exactly the same columns as it did before this diff.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: `build` function dictionary creation and `main` function CSV writing.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: The output report CSV contains no `flipped` column when the script is run without `--flip-positive`.",
+      "fix": null
+    },
+    {
+      "file": "00_make_submission.py",
+      "line": "38",
+      "sev": "major",
+      "desc": "`load_flip_ids` calls `pd.read_csv(path)` without handling `FileNotFoundError` or `EmptyDataError`, violating the instruction to handle unhandled exceptions on obvious failure paths (missing file, empty input).",
+      "fix": "Check `path.exists()` and exit cleanly with an error message before reading."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: `load_flip_ids` does not handle missing files, resulting in an unhandled traceback.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: I need the `umud` module to run the script. If present, I would run `python3 00_make_submission.py --flip-positive missing.csv`.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: A raw `FileNotFoundError` traceback from pandas.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: A clean program exit with a descriptive error message.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: `load_flip_ids` function.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: Passing a non-existent file to `--flip-positive` results in a clean `sys.exit()` rather than a traceback.",
+      "fix": null
+    },
+    {
+      "file": "00_make_submission.py",
+      "line": "134",
+      "sev": "major",
+      "desc": "The validation check that all `flip_ids` exist in the test set is performed *after* the expensive `build()` inference loop finishes, meaning an invalid ID in the CSV will waste the entire compute run before failing.",
+      "fix": "Move the missing IDs check to run before the inference loop starts (e.g., inside `build()` immediately after `names` is populated)."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "CLAIM: The `missing` frames check runs after inference, wasting compute on an inevitable failure.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "TEST: I need the test images and `umud` module. If present, I would supply a `--flip-positive` CSV containing an `image_id` not in the test folder.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM RIGHT: The script processes all batches (printing progress) and only then exits with the missing frames error.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "EXPECTED IF I AM WRONG: The script validates the list against the directory contents and exits immediately before processing any batches.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "SCOPE: `main` function (L134) and `build` function.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "FIXED WHEN: An invalid `image_id` in the flip list causes the script to exit before the first inference batch begins.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (274.03s)\n\nREVIEW-2507ee24 VERDICT: FAIL\n- 00_make_submission.py:98 [major] The `flipped` key is unconditionally added to the DataFrame rows, meaning the `--report` CSV output will always contain the new column even when `--flip-positive` is omitted. This directly contradicts the requirement that \"without the flag the behaviour must be byte-identical to before.\" -> Conditionally add the `flipped` key only if `flip_ids` is truthy, or drop the column before writing the report if the flag was omitted.\n- CLAIM: The script unconditionally adds a `flipped` column to the report DataFrame even when the flag is omitted, breaking byte-identical behavior.\n- TEST: I need the test images and `SCALE_JSON` to execute `build()`. If provided, I would run `python3 00_make_submission.py --report out.csv` without the flip flag and inspect the headers of `out.csv`.\n- EXPECTED IF I AM RIGHT: `out.csv` contains a `flipped` column.\n- EXPECTED IF I AM WRONG: `out.csv` has exactly the same columns as it did before this diff.\n- SCOPE: `build` function dictionary creation and `main` function CSV writing.\n- FIXED WHEN: The output report CSV contains no `flipped` column when the script is run without `--flip-positive`.\n\n- 00_make_submission.py:38 [major] `load_flip_ids` calls `pd.read_csv(path)` without handling `FileNotFoundError` or `EmptyDataError`, violating the instruction to handle unhandled exceptions on obvious failure paths (missing file, empty input). -> Check `path.exists()` and exit cleanly with an error message before reading.\n- CLAIM: `load_flip_ids` does not handle missing files, resulting in an unhandled traceback.\n- TEST: I need the `umud` module to run the script. If present, I would run `python3 00_make_submission.py --flip-positive missing.csv`.\n- EXPECTED IF I AM RIGHT: A raw `FileNotFoundError` traceback from pandas.\n- EXPECTED IF I AM WRONG: A clean program exit with a descriptive error message.\n- SCOPE: `load_flip_ids` function.\n- FIXED WHEN: Passing a non-existent file to `--flip-positive` results in a clean `sys.exit()` rather than a traceback.\n\n- 00_make_submission.py:134 [major] The validation check that all `flip_ids` exist in the test set is performed *after* the expensive `build()` inference loop finishes, meaning an invalid ID in the CSV will waste the entire compute run before failing. -> Move the missing IDs check to run before the inference loop starts (e.g., inside `build()` immediately after `names` is populated).\n- CLAIM: The `missing` frames check runs after inference, wasting compute on an inevitable failure.\n- TEST: I need the test images and `umud` module. If present, I would supply a `--flip-positive` CSV containing an `image_id` not in the test folder.\n- EXPECTED IF I AM RIGHT: The script processes all batches (printing progress) and only then exits with the missing frames error.\n- EXPECTED IF I AM WRONG: The script validates the list against the directory contents and exits immediately before processing any batches.\n- SCOPE: `main` function (L134) and `build` function.\n- FIXED WHEN: An invalid `image_id` in the flip list causes the script to exit before the first inference batch begins.\n\ncase: 20260908T213951Z_1d9f2e_ask",
+  "nonce": "2507ee24",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (21.91s)\n\nI'll review the attached submission script against the stated L6o-b flip behavior, and check related paths/APIs in the repo where they exist.Checking flip conventi"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (274.03s)\n\nREVIEW-2507ee24 VERDICT: FAIL\n- 00_make_submission.py:98 [major] The `flipped` key is unconditionally added to the DataFrame rows, meaning the `--report` CSV"
+    }
+  ]
+}

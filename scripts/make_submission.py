@@ -41,6 +41,8 @@ MT_GATE = (8.0, 35.0)
 
 
 def load_scale(path: pathlib.Path = SCALE_JSON) -> dict:
+    if not path.is_file():
+        raise FileNotFoundError(f"--scale: {path} does not exist")
     scale = json.loads(path.read_text())
     if not isinstance(scale, dict) or len(scale) != 309:
         raise ValueError(f"{path}: expected a dict of 309 test images, got "
@@ -50,6 +52,34 @@ def load_scale(path: pathlib.Path = SCALE_JSON) -> dict:
     if bad:
         raise ValueError(f"{path}: implausible px_per_cm on {bad[:3]}")
     return scale
+
+
+EVIDENCE_CSV = ROOT / "reports" / "l6t_fascicle_evidence.csv"
+
+
+def load_flip_ids(path: pathlib.Path = EVIDENCE_CSV) -> set[str]:
+    """L6o-b (PLAN v19 rung 2): test frames whose fascicles slope the *opposite* way to the
+    single-orientation training set (299/300 host frames negative signed angle). They are
+    mirrored left-right before inference so every frame meets the detector in the
+    orientation it was trained on. Source: reports/l6t_fascicle_evidence.csv (label-free,
+    ang_med = signed median fascicle angle from the pw6 mask). Expected 113/309."""
+    if not path.is_file():
+        raise FileNotFoundError(f"--flip-positive: {path} does not exist")
+    try:
+        d = pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        raise ValueError(f"--flip-positive: {path} is empty") from None
+    need = {"image_id", "split", "ang_med"}
+    if not need <= set(d.columns):
+        raise ValueError(f"{path}: missing columns {sorted(need - set(d.columns))}")
+    t = d[d.split == "test"]
+    if t.ang_med.isna().any():
+        raise ValueError(f"{path}: {int(t.ang_med.isna().sum())} test rows have NaN ang_med")
+    ids = set(t.loc[t.ang_med > 0, "image_id"].astype(str))
+    if not ids or len(ids) == len(t):
+        raise ValueError(f"{path}: {len(ids)}/{len(t)} positive-slope frames; refusing a "
+                         "flip list that is empty or total")
+    return ids
 
 
 def _finite(x) -> bool:
@@ -69,8 +99,13 @@ def gate_mt(mt, lo: float = MT_GATE[0], hi: float = MT_GATE[1]) -> tuple[float, 
 
 def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
           fasc_thr: float = 0.9, scale_path: pathlib.Path = SCALE_JSON,
-          mt_gate: tuple[float, float] = MT_GATE) -> pd.DataFrame:
+          mt_gate: tuple[float, float] = MT_GATE,
+          flip_ids: set[str] | None = None) -> pd.DataFrame:
+    """flip_ids: image names mirrored left-right (cv2.flip(gray, 1)) BEFORE both the
+    aponeurosis and the fascicle model, as in scripts/l6o_flip_audit.py. PA, FL and MT
+    are mirror-invariant physical quantities, so no un-flipping of the outputs is needed."""
     ours = None
+    flip_ids = set(flip_ids or ())
     if fasc_ckpt:
         from eval_new_fascicle import load_model, predict_ours
         ours = load_model("unet", fasc_ckpt)
@@ -79,10 +114,15 @@ def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
                     if p.suffix.lower() in {".tif", ".png"}), key=G._index)
     if not names:
         raise FileNotFoundError(f"no .tif/.png test images under {TEST}")
+    missing = flip_ids - set(names)
+    if missing:   # validate BEFORE any inference so a bad list cannot waste the run
+        raise ValueError(f"flip_ids: {len(missing)} listed frames not under {TEST}, "
+                         f"e.g. {sorted(missing)[:3]}")
     rows = []
     for i in range(0, len(names), batch):
         chunk = names[i:i + batch]
         grays = [G.to_gray(cv2.imread(str(TEST / n), cv2.IMREAD_UNCHANGED)) for n in chunk]
+        grays = [cv2.flip(g, 1) if n in flip_ids else g for n, g in zip(chunk, grays)]
         masks = S.predict_batch(grays, thr_apo=0.35, thr_fasc=0.10)
         for n, g, (am, fm) in zip(chunk, grays, masks):
             if ours is not None:
@@ -98,13 +138,16 @@ def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
             mt, mt_measured = gate_mt(r.mt_mm if px else None, *mt_gate)
             pa_measured = _finite(r.pa_deg)
             fl_measured = bool(px) and _finite(r.fl_mm)
-            rows.append(dict(image_id=n,
-                             pa_deg=(float(r.pa_deg) if pa_measured else MED["pa_deg"]),
-                             fl_mm=(float(r.fl_mm) if fl_measured else MED["fl_mm"]),
-                             pa_measured=pa_measured, fl_measured=fl_measured,
-                             mt_mm=mt, mt_measured=mt_measured,
-                             mt_raw=(float(r.mt_mm) if (px and _finite(r.mt_mm)) else None),
-                             measured_scale=bool(px), ok=r.ok))
+            row = dict(image_id=n,
+                       pa_deg=(float(r.pa_deg) if pa_measured else MED["pa_deg"]),
+                       fl_mm=(float(r.fl_mm) if fl_measured else MED["fl_mm"]),
+                       pa_measured=pa_measured, fl_measured=fl_measured,
+                       mt_mm=mt, mt_measured=mt_measured,
+                       mt_raw=(float(r.mt_mm) if (px and _finite(r.mt_mm)) else None),
+                       measured_scale=bool(px), ok=r.ok)
+            if flip_ids:   # column only when the flag is used: unflagged runs stay byte-identical
+                row["flipped"] = n in flip_ids
+            rows.append(row)
         print(f"  {min(i+batch, len(names))}/{len(names)}", flush=True)
     return pd.DataFrame(rows)
 
@@ -121,13 +164,30 @@ def main() -> None:
                     metavar=("LO", "HI"), help="MT plausibility band in mm; else median")
     ap.add_argument("--out", default="", help="output CSV (default outputs/sub_pipeline_a<aspect>.csv)")
     ap.add_argument("--report", default="", help="optional per-image CSV with raw MT and gate flags")
+    ap.add_argument("--flip-positive", nargs="?", const=str(EVIDENCE_CSV), default=None,
+                    metavar="EVIDENCE_CSV",
+                    help="L6o-b: mirror the positive-slope test frames listed in the L6t "
+                         "evidence CSV before inference (default reports/l6t_fascicle_evidence.csv)")
     a = ap.parse_args()
     lo, hi = a.mt_gate
     if not (0 < lo < hi):
         sys.exit(f"--mt-gate must satisfy 0 < LO < HI, got {lo} {hi}")
 
-    df = build(aspect=a.aspect, fasc_ckpt=a.fasc_ckpt, fasc_thr=a.fasc_thr,
-               scale_path=pathlib.Path(a.scale), mt_gate=(lo, hi))
+    flip_ids: set[str] = set()
+    if a.flip_positive:
+        try:
+            flip_ids = load_flip_ids(pathlib.Path(a.flip_positive))
+        except (FileNotFoundError, ValueError) as e:
+            sys.exit(str(e))
+        print(f"L6o-b: mirroring {len(flip_ids)} positive-slope frames from {a.flip_positive}")
+
+    try:
+        df = build(aspect=a.aspect, fasc_ckpt=a.fasc_ckpt, fasc_thr=a.fasc_thr,
+                   scale_path=pathlib.Path(a.scale), mt_gate=(lo, hi), flip_ids=flip_ids)
+    except (FileNotFoundError, ValueError) as e:   # missing scale JSON / test dir, bad flip list
+        sys.exit(str(e))
+    if flip_ids:
+        print(f"  flipped {int(df.flipped.sum())}/{len(df)} frames")
     n_scale = int(df.measured_scale.sum())
     n_mt_raw = int(df.mt_raw.notna().sum())
     n_mt = int(df.mt_measured.sum())
