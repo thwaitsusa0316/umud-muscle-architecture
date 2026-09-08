@@ -1,0 +1,77 @@
+{
+  "set_id": "6fdcce8f4f164c66",
+  "files": {
+    "scripts/l6t_fascicle_evidence.py": "e077a44f1f7cbe4757363cf1d1a441acfea891659e4e0b349a0cbd45965bdda4"
+  },
+  "engine": "antigravity",
+  "context": "SCRIPT test (PLAN v18 rung 1, L6t label-free evidence). Purpose: run the DL_Track aponeurosis model (umud.segment.predict_batch, existing) and our pw6 fascicle U-Net (scripts/eval_new_fascicle.load_model/predict_ours, existing, thr 0.9 as in scripts/label_domain_pa.py) on the 309 test frames (data/raw/test_images_v2/test_set_v2) and 300 training frames (800x1200, selected by label_domain_pa.select with the same seed/val split), and write label-free per-image statistics of the fascicle mask: frac_all (mask fraction of the frame), frac_band (fraction inside the rows spanned by the apo mask, band_ok False -> full frame), n_comp (8-connected components with area >= 30 px), ang_med/ang_mad (deg from horizontal via cv2.fitLine, abs), len_mean_px (minAreaRect long side), plus pa_ours/n_ours from umud.geometry.analyse at a dummy scale (PA is scale-free). Family tag = method (still/video from the scale manifest reports/scale_v3d2.json, 'train' for training frames) : extension : HxW. Summary per test family vs the training median with ratio_frac_band, ratio_n_comp and under_fires = either ratio < 0.5 (pre-registered read). The verify command is a 6+6-frame smoke run asserting columns, bounds, family regex, and the reference row; it passed locally (14-18 s on MPS). FACTS: cv2.fitLine returns a (4,1) array (handled by ravel); no labels are used anywhere (label-free by design; the training MASKS are deliberately not read). Check: correctness of the statistics, any silent failure mode (empty masks, no apo band, unreadable frames), and that nothing in the script touches test labels (there are none) or writes outside --out. Do not invent values not in the file.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6t.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: smoke run 6 test + 6 train frames, 12 rows, stats bounded, families label-free, summary has the training reference row\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_l6t_fascicle_evidence.py",
+      "line": "53",
+      "sev": "critical",
+      "desc": "abs(np.degrees(np.arctan2(vy, vx))) assigns completely different angles to parallel lines depending on the arbitrary sign of the vector returned by cv2.fitLine",
+      "fix": "map the angle to be invariant to vector sign, e.g. modulo 180."
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**CLAIM** \u2014 Taking the absolute value of arctan2 assigns completely different angles (e.g. 5.7\u00b0 vs 174.3\u00b0) to identical parallel lines depending on the arbitrary sign of the vector returned by `cv2.fitLine`, which corrupts the computed median and MAD orientation in degrees.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**TEST** \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM RIGHT** \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**EXPECTED IF I AM WRONG** \u2014",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**SCOPE** \u2014 The `angs` array, `ang_med`, and `ang_mad` calculations in `mask_stats`, which propagate to the per-family summary metrics.",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "**FIXED WHEN** \u2014 Parallel vectors with opposite signs map to the exact same numerical angle.",
+      "fix": null
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (233.16s)\n\nREVIEW-cd37f8a2 VERDICT: FAIL\n- 00_l6t_fascicle_evidence.py:53 [critical] abs(np.degrees(np.arctan2(vy, vx))) assigns completely different angles to parallel lines depending on the arbitrary sign of the vector returned by cv2.fitLine -> map the angle to be invariant to vector sign, e.g. modulo 180.\n\n- **CLAIM** \u2014 Taking the absolute value of arctan2 assigns completely different angles (e.g. 5.7\u00b0 vs 174.3\u00b0) to identical parallel lines depending on the arbitrary sign of the vector returned by `cv2.fitLine`, which corrupts the computed median and MAD orientation in degrees.\n- **TEST** \u2014\n```python\nimport numpy as np\n# Two vectors representing the exact same line, but opposite directions\nvx1, vy1 = 1.0, 0.1\nvx2, vy2 = -1.0, -0.1\nang1 = float(abs(np.degrees(np.arctan2(vy1, vx1))))\nang2 = float(abs(np.degrees(np.arctan2(vy2, vx2))))\nprint(f\"Vector 1: {ang1:.1f}\")\nprint(f\"Vector 2: {ang2:.1f}\")\n```\n- **EXPECTED IF I AM RIGHT** \u2014\nVector 1: 5.7\nVector 2: 174.3\n- **EXPECTED IF I AM WRONG** \u2014\nVector 1: 5.7\nVector 2: 5.7\n- **SCOPE** \u2014 The `angs` array, `ang_med`, and `ang_mad` calculations in `mask_stats`, which propagate to the per-family summary metrics.\n- **FIXED WHEN** \u2014 Parallel vectors with opposite signs map to the exact same numerical angle.\n\ncase: 20260908T024439Z_92aa6a_ask",
+  "nonce": "cd37f8a2",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (233.16s)\n\nREVIEW-cd37f8a2 VERDICT: FAIL\n- 00_l6t_fascicle_evidence.py:53 [critical] abs(np.degrees(np.arctan2(vy, vx))) assigns completely different angles to parallel"
+    }
+  ]
+}

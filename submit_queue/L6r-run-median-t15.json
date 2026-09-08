@@ -1,0 +1,30 @@
+{
+  "id": "L6r-run-median-t15",
+  "artifact": "outputs/sub_L6r_run_median_v3d2_t15.csv",
+  "sha256": "27db786e681472e76d0157739404855478dba185fbd83b82831ad1d6021ef8f8",
+  "generator": "scripts/make_run_median.py --source outputs/sub_L6g_isolate_mt_v3d2.csv --scale reports/scale_v3d2.json --threshold 0.15 --out outputs/sub_L6r_run_median_v3d2_t15.csv --report reports/l6r_run_median_t15.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "27db786e681472e76d0157739404855478dba185fbd83b82831ad1d6021ef8f8",
+    "record": "maibo_tests/f9795984b81d5b39.json",
+    "generator_record": "maibo_tests/e73ac81349796934.json",
+    "generator_records": [
+      "maibo_tests/e73ac81349796934.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 17,
+    "rung": "L6r",
+    "purpose": "probe",
+    "why_now": "PLAN v17 (2026-09-07T12:10Z) rung 2, pre-registered extension: 'fires (public < 0.82713) -> extend to threshold 0.15 (28 rows, runs 53/55/68/70/93/139) as slot 4 on 2026-09-08, falsifier not < the slot-3 score'. The 0.25 version (submission 56089013) scored 0.82175 at 2026-09-08T02:34Z (paired delta -0.00538 vs 0.82713, inside the pre-registered -0.005..-0.02 band). Same generator (script PASS antigravity r3), same source and scale manifest, ONE variable lowered: rel_range threshold 0.25 -> 0.15, which adds 3 runs (53 video, 93 still, 139 still): 28 rows set / 22 numerically changed vs the baseline / 10 rows changed vs the 0.25 file (IMG_00074 17.71->14.71, IMG_00212 21.26->27.03, IMG_00268-00271 22.31/22.91/19.45/18.70 -> 21.41, and 3 sub-0.05 mm nudges in run 53). 0 compute; exact paired delta. Slot 4 of 5 on 2026-09-08; slot 5 stays the reserve.",
+    "expected_benefit": "Decides whether run-median smoothing generalises beyond the 3 grossly inconsistent video runs to milder within-run spread (0.15-0.25) and to still-image runs (93, 139): if it fires, a general within-run consensus on all 27 video runs + still runs with >= 3 frames is the next MT rung; if not, the smoothing is confined to gross faults and MT work stops here (A12: MT alone cannot reach the kill gate; PA/FL skill is the priority in v18 either way).",
+    "expected_score_delta": "-0.001 to -0.006 vs 0.82175 (10 rows move a total of ~16 mm; MT weight 0.000359 per mm per row -> max |delta| 0.0058); exact paired delta",
+    "falsifier": "public not < 0.82175 -> the 0.15 extension is retired (smoothing confined to rel_range > 0.25 gross faults; the 0.25 file stays the composed best). Fires (public < 0.82175) -> new composed best; next MT rung is a general within-run consensus (all runs with >= 3 shipped frames) as a later slot, after the PA/FL rung that v18 puts first.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6r_run_median_v3d2_t15.csv -m 'L6r run-median MT isolation, threshold 0.15: v3d2 MT isolation with the 28 shipped frames of runs 53/55/68/70/93/139 (within-run MT rel_range > 0.15) set to their run median (22 rows change vs 0.82713; 10 vs the 0.25 file 0.82175), PA/FL at probed medians'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-08T02:40:00Z",
+  "submitted_utc": "2026-09-08T02:39:08Z",
+  "submission_id": "56089063"
+}

@@ -1,0 +1,27 @@
+{
+  "set_id": "e03979c96370e164",
+  "files": {
+    "scripts/l6t_fascicle_evidence.py": "4a1d3bf272f1f36901ff2f29c297a1ba26e6f501521577b199b18cc3aa93427b"
+  },
+  "engine": "antigravity",
+  "context": "SCRIPT test round 2 (PLAN v18 rung 1, L6t label-free evidence). Round 1 FAIL (maibo_tests/6fdcce8f4f164c66.json) was real: cv2.fitLine's direction sign is arbitrary, so abs(arctan2) split parallel lines into theta and 180-theta. FIXED: the vector is folded to vx >= 0 (vx == 0 -> vy >= 0) before arctan2, giving one signed angle in (-90, 90] per line; the verify command now asserts ang_med in [-90, 90] and ang_mad >= 0. Purpose: run the DL_Track aponeurosis model (umud.segment.predict_batch, existing) and our pw6 fascicle U-Net (scripts/eval_new_fascicle.load_model/predict_ours, existing, thr 0.9) on the 309 test frames and 300 training frames (800x1200, label_domain_pa.select, same seed/val split) and write label-free per-image fascicle-mask statistics: frac_all, frac_band (rows spanned by the apo mask; band_ok False -> full frame), n_comp (8-connected, area >= 30 px), ang_med/ang_mad (signed deg), len_mean_px (minAreaRect long side), pa_ours/n_ours from umud.geometry.analyse at a dummy scale (PA is scale-free). Family = method (still/video from reports/scale_v3d2.json, 'train' for training) : extension : HxW. Summary per test family vs the training median with ratio_frac_band, ratio_n_comp, under_fires = either ratio < 0.5 (pre-registered read). The verify command is a 6+6-frame smoke run (14-18 s on MPS) and passed locally. No labels are used (training masks deliberately not read). Check the statistics' correctness and silent failure modes (empty masks, no apo band, unreadable frames); do not invent values not in the file.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6t.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: smoke run 6 test + 6 train frames, 12 rows, stats bounded, families label-free, summary has the training reference row\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (354.84s)\n\nREVIEW-6c96066d VERDICT: PASS\n\ncase: 20260908T024939Z_faf0a8_ask",
+  "nonce": "6c96066d",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (354.84s)\n\nREVIEW-6c96066d VERDICT: PASS\n\ncase: 20260908T024939Z_faf0a8_ask"
+    }
+  ]
+}

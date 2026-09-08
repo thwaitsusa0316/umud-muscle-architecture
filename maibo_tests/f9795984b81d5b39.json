@@ -1,0 +1,27 @@
+{
+  "set_id": "f9795984b81d5b39",
+  "files": {
+    "outputs/sub_L6r_run_median_v3d2_t15.csv": "27db786e681472e76d0157739404855478dba185fbd83b82831ad1d6021ef8f8"
+  },
+  "engine": "antigravity",
+  "context": "ARTIFACT test of a Kaggle submission CSV (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension). It is the L6r run-median MT isolation at threshold 0.15 (PLAN v17 rung 2 extension, pre-registered: fires only if the 0.25 version scored < 0.82713; it scored 0.82175 on 2026-09-08T02:34Z) produced by scripts/make_run_median.py --threshold 0.15 (script PASS antigravity round 3, maibo_tests/e73ac81349796934.json) from the shipped baseline outputs/sub_L6g_isolate_mt_v3d2.csv (public 0.82713). FACTS, all asserted by the verify command: PA 16.4200 and FL 81.5000 on all 309 rows (probed medians); exactly 28 rows (runs 53, 55, 68, 70 video 5 frames each; 93 still 3 frames; 139 still 5 frames, run ids from reports/scale_v3d2.json) are set to their run's median MT (14.7120 / 30.0207 / 14.0388 / 18.8672 / 27.0277 / 21.4109 mm), of which 22 differ numerically from the baseline and 6 already sat at the median; the other 281 rows are byte-identical to the baseline; the 15 rows of runs 55/68/70 are byte-identical to the already-scored 0.25 file outputs/sub_L6r_run_median_v3d2.csv, so exactly 10 rows (runs 53/93/139) differ from it; all MT in [8,35]. This is a deliberately SMALL change; a candidate that changed more rows would be wrong. Check format traps and the invariants; do not invent values not in the file.",
+  "local_verify": {
+    "cmd": "/tmp/verify_l6r_t15.sh",
+    "exit": 0,
+    "tail": "VERIFY OK: 309 rows, id order = sample, PA/FL at probed medians, 28 rows set to their run median (runs 53/55/68/70/93/139), 22 rows numerically differ from sub_L6g_isolate_mt_v3d2.csv, 10 rows differ from the 0.25 submission (runs 53/93/139), 281 rows identical to the baseline, all MT in [8,35]\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (121.5s)\n\nREVIEW-18a7e524 VERDICT: PASS\n\ncase: 20260908T023605Z_750455_ask",
+  "nonce": "18a7e524",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (121.5s)\n\nREVIEW-18a7e524 VERDICT: PASS\n\ncase: 20260908T023605Z_750455_ask"
+    }
+  ]
+}

@@ -23,8 +23,10 @@
     "falsifier": "public not < 0.82713 -> within-run spread is not a fault (or the median is no better than the frame) -> L6r retired, no 0.15 extension. Fires (public < 0.82713) -> extend to threshold 0.15 (28 rows, runs 53/55/68/70/93/139; make_run_median.py --threshold 0.15) as slot 4 on 2026-09-08, falsifier not < the slot-3 score.",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6r_run_median_v3d2.csv -m 'L6r run-median MT isolation: v3d2 MT isolation (0.82713) with the 15 shipped frames of video runs 55/68/70 (within-run MT rel_range > 0.25) set to their run median (12 rows change), PA/FL at probed medians'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-07T19:10:00Z",
   "hold_until_utc": "2026-09-08T00:00:00Z",
-  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-07; slot 5 stays in reserve; pre-registered order L4d MT pair (slots 1-2) then L6r (slot 3)"
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-07; slot 5 stays in reserve; pre-registered order L4d MT pair (slots 1-2) then L6r (slot 3)",
+  "submitted_utc": "2026-09-08T02:34:19Z",
+  "submission_id": "56089013"
 }

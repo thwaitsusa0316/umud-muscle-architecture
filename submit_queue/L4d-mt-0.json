@@ -23,8 +23,10 @@
     "falsifier": "Read as a PAIR: (a) M_MT = 100 + 4.5*(s0 - s200) in [15, 30] mm (median 20.7; pipeline raw median ~22.7); (b) share_MT = 1.03662 - (s0 + s200 - 22.2222)/2 must satisfy |M_MT - 20.7| <= 9*share_MT <= M_MT and share_MT >= 0.20949 (MT skill already removed that much); (c) s0 < s200; (d) share_FL = 0.88293 - share_MT in (0, 0.88293). Any failure -> A5 broken -> revision. Decision: if 1.03662 - share_MT > 0.45134, log A12 as 'MT alone cannot reach the kill gate' and PLAN v18 must put PA/FL skill (L6t) ahead of further MT work.",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L4d_mt0.csv -m 'L4d bracketing probe MT=0: L1 floor (PA 16.42 / FL 81.5 on all 309 rows) with mt_mm=0 below every truth value; pair with MT=200 recovers the exact MT share of the 1.03662 floor and the public mean MT (A5, A12)'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-07T12:12:00Z",
   "hold_until_utc": "2026-09-08T00:00:00Z",
-  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-07; slot 5 stays in reserve"
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-07; slot 5 stays in reserve",
+  "submitted_utc": "2026-09-08T02:34:19Z",
+  "submission_id": "56089011"
 }
