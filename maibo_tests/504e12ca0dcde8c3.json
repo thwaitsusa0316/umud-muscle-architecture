@@ -1,0 +1,27 @@
+{
+  "set_id": "504e12ca0dcde8c3",
+  "files": {
+    "scripts/make_shrink.py": "f4d9ab0f58c8b663eca7d43cca517f54cba02c761a6c49c2557dd997dbd1f3c1"
+  },
+  "engine": "antigravity",
+  "context": "PLAN v20 rungs 1-3 (L7f/L7p/L7c) for a Kaggle regression competition (UMUD: 309 test rows, columns image_id,pa_deg,fl_mm,mt_mm, scored by a tolerance-based MAE per target, separable across targets). The script takes the composed best CSV (0.67241) and a pipeline rows CSV with <target>_measured/ok flags and ships ONE target changed by ONE pre-registered label-free rule: shrink (v' = alpha*v + (1-alpha)*probed_median on the 297 measured rows) or clamp (measured rows outside [lo,hi] set to the probed median, refusing if fewer than --min-rows move). Other columns must read back byte-identical. Pattern mirrors the already-passed scripts/make_level_matched.py. Check: CLI/flag handling, refusal paths, the post-write invariants, float/serialization correctness (write_submission writes %.4f), and anything that could silently change a row it should not.",
+  "local_verify": {
+    "cmd": "/tmp/l7_verify.sh",
+    "exit": 0,
+    "tail": "shrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nshrink pa: measured rows 297, rows to set 297, alpha=0.5, probed 16.42, measured median before 16.5303\nclamp fl: measured rows 297, rows to set 21, band=[30,150] min_rows=5, probed 81.5, measured median before 81.5000\nshrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nwrote /tmp/l7_fl.csv  rows=309  fl_mm rows set=297  numerically changed=296  measured median 81.5000 -> 81.5000  report=/tmp/l7_fl_rep.csv\nclamp fl: measured rows 297, rows to set 21, band=[30,150] min_rows=5, probed 81.5, measured median before 81.5000\nwrote /tmp/l7_c.csv  rows=309  fl_mm rows set=21  numerically changed=21  measured median 81.5000 -> 81.5000  report=/tmp/l7_c_rep.csv\nshrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nL7 verify OK: shrink halves distance to 81.5 on every row; clamp moves 21 rows\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (332.92s)\n\nREVIEW-7955606e VERDICT: PASS\n\ncase: 20260909T113419Z_bda21f_ask",
+  "nonce": "7955606e",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (332.92s)\n\nREVIEW-7955606e VERDICT: PASS\n\ncase: 20260909T113419Z_bda21f_ask"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "set_id": "faaf94229dc17104",
+  "files": {
+    "scripts/make_shrink.py": "f4d9ab0f58c8b663eca7d43cca517f54cba02c761a6c49c2557dd997dbd1f3c1",
+    "outputs/sub_L7f_fl_shrink05.csv": "2ac58949ed4b1b9e4c5b1ef762f80ebfb8f92d9b23019f2a5a5293428c677b2e",
+    "outputs/sub_L7p_pa_shrink05.csv": "d5ec5445fecf815bc16d544438e71878cc6725eaeb40725f2c863ee455622b6c",
+    "outputs/sub_L7c_fl_clamp.csv": "1ddf5f856a2d990f5f2a987742401d59a3cee00782b85f5939527b9647d6ded5"
+  },
+  "engine": "antigravity",
+  "context": "ARTIFACT test, round 2 (round 1 maibo_tests/3296ad7a911110ba.json failed only because the generator script was not attached; it is attached now). Three Kaggle submission CSVs (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension) produced by the attached scripts/make_shrink.py (already PASS antigravity maibo_tests/504e12ca0dcde8c3.json). Each CSV is ONE label-free change of ONE column on top of the composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241): L7f = --mode shrink --target fl --alpha 0.5 (FL halfway to the probed median 81.5 on the 297 measured rows, 296 change); L7p = --mode shrink --target pa --alpha 0.5 (PA halfway to 16.42, 297 change); L7c = --mode clamp --target fl --lo 30 --hi 150 (the 21 FL rows > 150 mm set to 81.5). The verify-cmd (already exit 0) checks each CSV's format and its rule against the base file. Review the script for anything that could silently write a wrong value into these CSVs, and the CSV facts stated here for consistency with the script.",
+  "local_verify": {
+    "cmd": "cd /Users/smt2/data/competitions/umud-muscle && .venv/bin/python /tmp/l7_csv_verify.py",
+    "exit": 0,
+    "tail": "OK outputs/sub_L7f_fl_shrink05.csv changed 296\nOK outputs/sub_L7p_pa_shrink05.csv changed 297\nOK outputs/sub_L7c_fl_clamp.csv changed 21\nL7 CSV verify OK\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_shrink.py",
+      "line": "156",
+      "sev": "critical",
+      "desc": "The strict read-back validation `float(got[iid]) != float(f\"{v:.4f}\")` uses Python's float string formatting (half-to-even) which disagrees with the actual rounding present in the supplied CSVs, causing a deterministic crash.",
+      "fix": "Use `abs(float(got[iid]) - v) <= 0.0001` to allow for varying serializer float rounding."
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (344.64s)\n\nREVIEW-d8c4b0f5 VERDICT: FAIL\n- 00_make_shrink.py:156 [critical] The strict read-back validation `float(got[iid]) != float(f\"{v:.4f}\")` uses Python's float string formatting (half-to-even) which disagrees with the actual rounding present in the supplied CSVs, causing a deterministic crash. -> Use `abs(float(got[iid]) - v) <= 0.0001` to allow for varying serializer float rounding.\n\nCLAIM: The script's read-back validation computes expected values using Python's `f\"{v:.4f}\"` (which evaluates to 95.8044 for the shrunk FL of IMG_00004.tif), but the corresponding value in the supplied CSV is 95.8045, causing the script to deterministically crash with `sys.exit` and contradicting the context's claim that it exited 0.\nTEST:\n```python\nimport pandas as pd\n\n# L7p leaves FL unchanged, providing the original base FL column\nbase = pd.read_csv('02_sub_L7p_pa_shrink05.csv')\nout = pd.read_csv('01_sub_L7f_fl_shrink05.csv')\n\nbase_fl = float(base.loc[base['image_id'] == 'IMG_00004.tif', 'fl_mm'].iloc[0])\ngot_fl = float(out.loc[out['image_id'] == 'IMG_00004.tif', 'fl_mm'].iloc[0])\n\nv = 0.5 * base_fl + 0.5 * 81.5\nexpect = float(f\"{v:.4f}\")\n\nif got_fl != expect:\n    print(f\"make_shrink: IMG_00004.tif read back {got_fl} != {expect}\")\n```\nEXPECTED IF I AM RIGHT:\nmake_shrink: IMG_00004.tif read back 95.8045 != 95.8044\nEXPECTED IF I AM WRONG:\n(no output)\nSCOPE: `00_make_shrink.py` lines 154-157, affecting any row where Python's IEEE-754 half-to-even string formatting produces a different terminal decimal digit than the underlying `write_submission` CSV serializer.\nFIXED WHEN: The validation logic is updated to tolerate a `abs(float(got[iid]) - v) <= 0.0001` precision difference, allowing the script to actually exit 0 on the supplied artifacts.\n\ncase: 20260909T115052Z_a1bf57_ask",
+  "nonce": "d8c4b0f5",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (344.64s)\n\nREVIEW-d8c4b0f5 VERDICT: FAIL\n- 00_make_shrink.py:156 [critical] The strict read-back validation `float(got[iid]) != float(f\"{v:.4f}\")` uses Python's float s"
+    }
+  ]
+}

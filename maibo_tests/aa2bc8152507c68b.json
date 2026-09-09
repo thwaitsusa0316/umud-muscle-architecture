@@ -1,0 +1,30 @@
+{
+  "set_id": "aa2bc8152507c68b",
+  "files": {
+    "scripts/make_shrink.py": "e2a73e167855f8164950362f91d0bcd8f9fc836c11c662a6d5088550fe9ddc78",
+    "outputs/sub_L7f_fl_shrink05.csv": "2ac58949ed4b1b9e4c5b1ef762f80ebfb8f92d9b23019f2a5a5293428c677b2e",
+    "outputs/sub_L7p_pa_shrink05.csv": "d5ec5445fecf815bc16d544438e71878cc6725eaeb40725f2c863ee455622b6c",
+    "outputs/sub_L7c_fl_clamp.csv": "1ddf5f856a2d990f5f2a987742401d59a3cee00782b85f5939527b9647d6ded5"
+  },
+  "engine": "antigravity",
+  "context": "Round 3 (r2 maibo_tests/faaf94229dc17104.json flagged the exact-string read-back check at line 156; now replaced by a 5e-5 tolerance check against the planned value, as the panelist proposed; the three CSVs are unchanged, same sha256, and the verify-cmd re-ran exit 0). Kaggle submission CSVs (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; comma-delimited UTF-8, no BOM, 309 rows) produced by the attached scripts/make_shrink.py from the composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241): L7f = --mode shrink --target fl --alpha 0.5 (296 rows change); L7p = --mode shrink --target pa --alpha 0.5 (297 change); L7c = --mode clamp --target fl --lo 30 --hi 150 (21 rows > 150 mm set to 81.5). write_submission uses pandas float_format='%.4f'. Review the script for anything that could silently write a wrong value into these CSVs.",
+  "local_verify": {
+    "cmd": "cd /Users/smt2/data/competitions/umud-muscle && /tmp/l7_verify.sh && .venv/bin/python /tmp/l7_csv_verify.py",
+    "exit": 0,
+    "tail": "shrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nshrink pa: measured rows 297, rows to set 297, alpha=0.5, probed 16.42, measured median before 16.5303\nclamp fl: measured rows 297, rows to set 21, band=[30,150] min_rows=5, probed 81.5, measured median before 81.5000\nshrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nwrote /tmp/l7_fl.csv  rows=309  fl_mm rows set=297  numerically changed=296  measured median 81.5000 -> 81.5000  report=/tmp/l7_fl_rep.csv\nclamp fl: measured rows 297, rows to set 21, band=[30,150] min_rows=5, probed 81.5, measured median before 81.5000\nwrote /tmp/l7_c.csv  rows=309  fl_mm rows set=21  numerically changed=21  measured median 81.5000 -> 81.5000  report=/tmp/l7_c_rep.csv\nshrink fl: measured rows 297, rows to set 297, alpha=0.5, probed 81.5, measured median before 81.5000\nL7 verify OK: shrink halves distance to 81.5 on every row; clamp moves 21 rows\nOK outputs/sub_L7f_fl_shrink05.csv changed 296\nOK outputs/sub_L7p_pa_shrink05.csv changed 297\nOK outputs/sub_L7c_fl_clamp.csv changed 21\nL7 CSV verify OK\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (513.9s)\n\nREVIEW-7f99f66d VERDICT: PASS\n\ncase: 20260909T115717Z_573ee5_ask",
+  "nonce": "7f99f66d",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (513.9s)\n\nREVIEW-7f99f66d VERDICT: PASS\n\ncase: 20260909T115717Z_573ee5_ask"
+    }
+  ]
+}

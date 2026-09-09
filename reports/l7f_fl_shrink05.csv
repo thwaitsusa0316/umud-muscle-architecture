@@ -1,0 +1,2 @@
+mode,target,column,rule,alpha,lo,hi,min_rows,probed_median,measured_rows,rows_set,rows_changed,measured_median_before,measured_median_after,min_after,max_after,source,rows_file
+shrink,fl,fl_mm,alpha=0.5,0.5,,,5,81.5,297,297,296,81.5,81.5,56.1306,137.4511,outputs/sub_L6ob_flip_level_v3d2.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv

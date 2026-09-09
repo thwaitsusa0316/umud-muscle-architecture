@@ -1,0 +1,2 @@
+mode,target,column,rule,alpha,lo,hi,min_rows,probed_median,measured_rows,rows_set,rows_changed,measured_median_before,measured_median_after,min_after,max_after,source,rows_file
+clamp,fl,fl_mm,"band=[30,150] min_rows=5",,30.0,150.0,5,81.5,297,21,21,81.5,81.5,30.7612,133.6203,outputs/sub_L6ob_flip_level_v3d2.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv

@@ -1,0 +1,32 @@
+{
+  "id": "L7p",
+  "artifact": "outputs/sub_L7p_pa_shrink05.csv",
+  "sha256": "d5ec5445fecf815bc16d544438e71878cc6725eaeb40725f2c863ee455622b6c",
+  "generator": "scripts/make_shrink.py --mode shrink --target pa --alpha 0.5 --source outputs/sub_L6ob_flip_level_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L7p_pa_shrink05.csv --report reports/l7p_pa_shrink05.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "d5ec5445fecf815bc16d544438e71878cc6725eaeb40725f2c863ee455622b6c",
+    "record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json"
+    ],
+    "note": "r2 maibo_tests/faaf94229dc17104.json FAIL (exact-string read-back check) fixed by a 5e-5 tolerance check; r1 maibo_tests/3296ad7a911110ba.json FAIL was a framing complaint (script not attached)"
+  },
+  "justification": {
+    "plan_version": 21,
+    "purpose": "probe",
+    "rung": "L7p",
+    "why_now": "PLAN v20 rung 2 (pre-registered 2026-09-09T04:20Z, before the build), carried into v21 unchanged: slot 2 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: PA on the 297 measured rows shrunk halfway to the probed median, pa' = 0.5*pa + 0.5*16.42; 297 rows change, mean |d| 1.65 deg, measured median 16.53 -> 16.48; FL and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json).",
+    "expected_benefit": "PA residual MAE 2.12 deg (term 0.11790) vs benchmark-grade 1.37 and constant 2.77: less headroom than FL, but the same over-dispersion question; a PA read separates dispersion from level (L6z-pa already matched the level).",
+    "expected_score_delta": "-0.005 to -0.02",
+    "falsifier": "public not < 0.66741 (-0.005 vs 0.67241) -> PA is not over-dispersed at alpha 0.5; shrinkage retired for PA. Fires -> PA shrinkage composes with the other firing rungs (separable metric, L6z-both proof).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L7p_pa_shrink05.csv -m 'L7p PA shrinkage alpha 0.5: composed best 0.67241 (L6o-b) with PA on the 297 measured rows = 0.5*pa + 0.5*16.42 (probed median), 297 rows change; FL and MT byte-identical'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-09T12:05:00Z",
+  "hold_until_utc": "2026-09-10T00:00:00Z",
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-09; slot 5 stays in reserve; pre-registered order L7f slot 1, L7p slot 2, L7c slot 3, L7r slot 4 on 2026-09-10 (slot 2)"
+}

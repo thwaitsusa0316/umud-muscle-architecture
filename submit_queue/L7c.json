@@ -1,0 +1,32 @@
+{
+  "id": "L7c",
+  "artifact": "outputs/sub_L7c_fl_clamp.csv",
+  "sha256": "1ddf5f856a2d990f5f2a987742401d59a3cee00782b85f5939527b9647d6ded5",
+  "generator": "scripts/make_shrink.py --mode clamp --target fl --lo 30 --hi 150 --min-rows 5 --source outputs/sub_L6ob_flip_level_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L7c_fl_clamp.csv --report reports/l7c_fl_clamp.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "1ddf5f856a2d990f5f2a987742401d59a3cee00782b85f5939527b9647d6ded5",
+    "record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json"
+    ],
+    "note": "r2 maibo_tests/faaf94229dc17104.json FAIL (exact-string read-back check) fixed by a 5e-5 tolerance check; r1 maibo_tests/3296ad7a911110ba.json FAIL was a framing complaint (script not attached)"
+  },
+  "justification": {
+    "plan_version": 21,
+    "purpose": "probe",
+    "rung": "L7c",
+    "why_now": "PLAN v20 rung 3 (pre-registered 2026-09-09T04:20Z with the ship condition >= 5 rows outside [30,150] mm), promoted to a live rung in v21 (2026-09-09T11:55Z) after the label-free count found 21 measured FL rows > 150 mm (max 193.4; none < 30): slot 3 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: those 21 rows set to the probed median 81.5 (mean |d| 85.2 mm); the other 276 measured FL rows, PA and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json).",
+    "expected_benefit": "Fascicle lengths above 150 mm are outside the plausible range for these muscles (probed public median 81.5, training median ~93); if the 21 rows are gross detector faults each costs the full FL tolerance term, and replacing them with the constant recovers up to 21/309 of that term. Distinguishes gross faults from over-dispersion (L7f) on the same rows.",
+    "expected_score_delta": "-0.01 to -0.03 (21 rows, ~7 of them public at x3 weight)",
+    "falsifier": "public not < 0.66741 (-0.005 vs 0.67241) -> the >150 mm rows are not gross faults; clamp retired. Fires -> clamp ships into the composed file (applied before any shrinkage, composition rule pre-registered in v21).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L7c_fl_clamp.csv -m 'L7c FL plausibility clamp: composed best 0.67241 (L6o-b) with the 21 measured FL rows > 150 mm set to the probed median 81.5; the other 288 FL rows, PA and MT byte-identical'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-09T12:05:00Z",
+  "hold_until_utc": "2026-09-10T00:00:00Z",
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-09; slot 5 stays in reserve; pre-registered order L7f slot 1, L7p slot 2, L7c slot 3, L7r slot 4 on 2026-09-10 (slot 3)"
+}
