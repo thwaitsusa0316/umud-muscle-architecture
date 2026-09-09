@@ -16,10 +16,10 @@
     "note": "r2 maibo_tests/faaf94229dc17104.json FAIL (exact-string read-back check) fixed by a 5e-5 tolerance check; r1 maibo_tests/3296ad7a911110ba.json FAIL was a framing complaint (script not attached)"
   },
   "justification": {
-    "plan_version": 21,
+    "plan_version": 22,
     "purpose": "probe",
     "rung": "L7c",
-    "why_now": "PLAN v20 rung 3 (pre-registered 2026-09-09T04:20Z with the ship condition >= 5 rows outside [30,150] mm), promoted to a live rung in v21 (2026-09-09T11:55Z) after the label-free count found 21 measured FL rows > 150 mm (max 193.4; none < 30): slot 3 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: those 21 rows set to the probed median 81.5 (mean |d| 85.2 mm); the other 276 measured FL rows, PA and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json).",
+    "why_now": "PLAN v20 rung 3 (pre-registered 2026-09-09T04:20Z with the ship condition >= 5 rows outside [30,150] mm), promoted to a live rung in v21 (2026-09-09T11:55Z) after the label-free count found 21 measured FL rows > 150 mm (max 193.4; none < 30): slot 3 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: those 21 rows set to the probed median 81.5 (mean |d| 85.2 mm); the other 276 measured FL rows, PA and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json). Re-justified under PLAN v22 (2026-09-09T19:15Z): rung, slot order, baseline 0.67241 and falsifier unchanged; L7r added as slot 4 with the composition order clamp -> run-median -> shrink.",
     "expected_benefit": "Fascicle lengths above 150 mm are outside the plausible range for these muscles (probed public median 81.5, training median ~93); if the 21 rows are gross detector faults each costs the full FL tolerance term, and replacing them with the constant recovers up to 21/309 of that term. Distinguishes gross faults from over-dispersion (L7f) on the same rows.",
     "expected_score_delta": "-0.01 to -0.03 (21 rows, ~7 of them public at x3 weight)",
     "falsifier": "public not < 0.66741 (-0.005 vs 0.67241) -> the >150 mm rows are not gross faults; clamp retired. Fires -> clamp ships into the composed file (applied before any shrinkage, composition rule pre-registered in v21).",

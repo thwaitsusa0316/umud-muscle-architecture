@@ -1,0 +1,27 @@
+{
+  "set_id": "f3601946021f615f",
+  "files": {
+    "scripts/make_run_median_pafl.py": "c66c6f3ea3557292893fbdc83116bc07c0906bbbd139778ba9ad18c4572f5cb0"
+  },
+  "engine": "antigravity",
+  "context": "L7r (PLAN v21 rung 4) label-free isolation builder for a Kaggle muscle-ultrasound competition. Input: composed best submission CSV (309 rows: image_id,pa_deg,fl_mm,mt_mm, %.4f), a pipeline rows CSV with pa_measured/fl_measured/mt_measured/ok boolean flags, a scale manifest JSON {image_id: {run:int, method:'video'|'still', ...}}, and reports/public_medians.json. Rule: for each target (default pa,fl), on video runs with >= 3 measured frames whose rel_range=(max-min)/median > 0.25, set every measured frame of that target to the run median of the measured frames. Non-measured rows must already sit at the probed median and are never touched; untouched columns must read back byte-identical. Writes via src/umud/submit.write_submission (float_format %.4f, 309-row id check). Refuses non-zero on bad inputs. The expected result on the real files: pa 1 run / 5 rows (run 53), fl 3 runs / 15 rows (runs 53,55,56). Review for correctness bugs, silent wrong output, and refusal gaps; the local verify command exercises dry-run, four refusal paths and a real write with invariants.",
+  "local_verify": {
+    "cmd": "/tmp/l7r_verify.sh",
+    "exit": 0,
+    "tail": "verify ok: pa rows 5 fl rows 15\nVERIFY_PASS\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (299.09s)\n\nREVIEW-48830334 VERDICT: PASS\n\ncase: 20260909T185629Z_95936a_ask",
+  "nonce": "48830334",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (299.09s)\n\nREVIEW-48830334 VERDICT: PASS\n\ncase: 20260909T185629Z_95936a_ask"
+    }
+  ]
+}

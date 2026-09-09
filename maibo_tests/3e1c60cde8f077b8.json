@@ -1,0 +1,29 @@
+{
+  "set_id": "3e1c60cde8f077b8",
+  "files": {
+    "scripts/make_run_median_pafl.py": "c66c6f3ea3557292893fbdc83116bc07c0906bbbd139778ba9ad18c4572f5cb0",
+    "outputs/sub_L7r_run_median_pafl.csv": "3642067ed9f34a87b80736a8539a1ea7aeede6eceb1442c8a82359a3c63858f8",
+    "reports/l7r_run_median_pafl.csv": "8181152e8c9d55e190d99713337a2be15e9076ffbcfc9a55be2315431a934fc8"
+  },
+  "engine": "antigravity",
+  "context": "Artifact test for L7r (PLAN v21 rung 4). The script (already PASS r1, maibo_tests/f3601946021f615f.json) was run as: make_run_median_pafl.py --targets pa,fl --threshold 0.25 --min-frames 3 --source outputs/sub_L6ob_flip_level_v3d2.csv (composed best, public 0.67241) --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json. Check the CSV (309 rows, columns image_id,pa_deg,fl_mm,mt_mm, %.4f) is a valid Kaggle submission consistent with the report: PA run 53 (5 rows -> 8.9392), FL runs 53/55/56 (15 rows -> 90.6752/162.5490/85.4697); 20 rows set, 16 numerically changed; MT byte-identical to the source; every other row unchanged. The local verify command re-derives these invariants from the source file. Flag anything that would make the file score wrongly or differ from the stated rule.",
+  "local_verify": {
+    "cmd": "/tmp/l7r_artifact_verify.sh",
+    "exit": 0,
+    "tail": "artifact verify ok\nVERIFY_PASS\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (438.14s)\n\nREVIEW-0e04b228 VERDICT: PASS\n\ncase: 20260909T190223Z_a31a65_ask",
+  "nonce": "0e04b228",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (438.14s)\n\nREVIEW-0e04b228 VERDICT: PASS\n\ncase: 20260909T190223Z_a31a65_ask"
+    }
+  ]
+}

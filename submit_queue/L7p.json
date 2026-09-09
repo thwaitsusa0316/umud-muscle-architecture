@@ -16,10 +16,10 @@
     "note": "r2 maibo_tests/faaf94229dc17104.json FAIL (exact-string read-back check) fixed by a 5e-5 tolerance check; r1 maibo_tests/3296ad7a911110ba.json FAIL was a framing complaint (script not attached)"
   },
   "justification": {
-    "plan_version": 21,
+    "plan_version": 22,
     "purpose": "probe",
     "rung": "L7p",
-    "why_now": "PLAN v20 rung 2 (pre-registered 2026-09-09T04:20Z, before the build), carried into v21 unchanged: slot 2 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: PA on the 297 measured rows shrunk halfway to the probed median, pa' = 0.5*pa + 0.5*16.42; 297 rows change, mean |d| 1.65 deg, measured median 16.53 -> 16.48; FL and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json).",
+    "why_now": "PLAN v20 rung 2 (pre-registered 2026-09-09T04:20Z, before the build), carried into v21 unchanged: slot 2 on 2026-09-10 UTC after 00:00Z. Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: PA on the 297 measured rows shrunk halfway to the probed median, pa' = 0.5*pa + 0.5*16.42; 297 rows change, mean |d| 1.65 deg, measured median 16.53 -> 16.48; FL and MT byte-identical. 0 compute; exact paired delta. Built 2026-09-09T11:40Z (script PASS antigravity maibo_tests/504e12ca0dcde8c3.json and maibo_tests/aa2bc8152507c68b.json). Re-justified under PLAN v22 (2026-09-09T19:15Z): rung, slot order, baseline 0.67241 and falsifier unchanged; L7r added as slot 4 with the composition order clamp -> run-median -> shrink.",
     "expected_benefit": "PA residual MAE 2.12 deg (term 0.11790) vs benchmark-grade 1.37 and constant 2.77: less headroom than FL, but the same over-dispersion question; a PA read separates dispersion from level (L6z-pa already matched the level).",
     "expected_score_delta": "-0.005 to -0.02",
     "falsifier": "public not < 0.66741 (-0.005 vs 0.67241) -> PA is not over-dispersed at alpha 0.5; shrinkage retired for PA. Fires -> PA shrinkage composes with the other firing rungs (separable metric, L6z-both proof).",
