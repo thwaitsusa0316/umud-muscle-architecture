@@ -1,0 +1,2 @@
+target,column,kind,scalar,scalar_how,measured_median,probed_median,rows_set,rows_changed,shipped_median,min,max,source,rows_file
+fl,fl_mm,ratio,0.8705521018792615,pinned,93.61875047348217,81.5,297,296,81.5,30.76118688012913,193.40225219790472,outputs/sub_L6r_run_median_v3d2.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv

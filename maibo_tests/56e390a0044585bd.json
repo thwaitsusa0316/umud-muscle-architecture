@@ -1,0 +1,45 @@
+{
+  "set_id": "56e390a0044585bd",
+  "files": {
+    "outputs/sub_L6ob_flip_level_v3d2.csv": "fdfeb72874f1fb58a1232fd3197b0bf578eb74f60c26c18abaf2c60d0f62dc1e"
+  },
+  "engine": "local",
+  "context": "ARTIFACT test of a Kaggle submission CSV (UMUD, columns image_id,pa_deg,fl_mm,mt_mm; grader wants comma-delimited UTF-8, no BOM, 309 rows, ids with the true .tif/.png extension). It is L6o-b (PLAN v19 rung 2): the composed best L6z-both (outputs/sub_L6z_both_level_v3d2.csv, PASS maibo_tests/e9955362a2cf7e59.json) with PA/FL on the 113 mirrored test frames taken from the flipped pipeline rerun (reports/pipeline_a1_scalev3d2_flip_rows.csv) at the SAME pinned level scalars (fl x0.8705521018792615, pa +3.3922419702826065) via scripts/make_level_matched.py --scalar (PASS antigravity maibo_tests/f019ada149170298.json). Invariants: MT byte-identical to L6z-both; every row that differs from L6z-both is in the flipped set (111 of 113); no NaN; %.4f. The verify-cmd checks all of these.",
+  "local_verify": {
+    "cmd": "cd '/Users/smt2/data/bounty-hunting/kaggle/UMUD Muscle' && .venv/bin/python /tmp/l6ob_verify.py",
+    "exit": 0,
+    "tail": "L6o-b verify OK: 111 rows differ from L6z-both, all flipped; MT byte-identical; sha fdfeb728\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[local / open-weights / light] ok (42.44s)\n\nREVIEW-83ec1209 VERDICT: PASS\n\ncase: 20260909T041403Z_b84f79_ask",
+  "nonce": "83ec1209",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (17.3s)\n\nI'll treat this as an artifact review against the stated invariants and check the CSV and any referenced verification code in the workspace.Next I'll pull the L6o-b"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[antigravity / google / mid] empty (134.1s)\n\n\n\ncase: 20260909T041149Z_ca20d8_ask"
+    },
+    {
+      "engine": "local",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[local / open-weights / light] ok (42.44s)\n\nREVIEW-83ec1209 VERDICT: PASS\n\ncase: 20260909T041403Z_b84f79_ask"
+    }
+  ]
+}

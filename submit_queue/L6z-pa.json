@@ -24,8 +24,10 @@
     "falsifier": "public not < 0.81675 (-0.005 vs 0.82175) -> PA has no per-image skill even at matched level -> the fault is the label convention or the pairing; next rung is the per-family shrinkage test (0.5 measured + 0.5 median), not a mechanism hunt. Fires (< 0.81675) -> PA at matched level ships into the composed pipeline and the L4d algebra is re-run for the new PA residual.",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6z_pa_level_v3d2.csv -m 'L6z-pa level-matched PA isolation: composed best 0.82175 (L6r run-median MT) with PA on the 297 measured rows = pipeline PA + 3.3922 deg (probed median 16.42 - measured median 13.0278, one scalar, label-free), FL at the probed median 81.5; MT byte-identical'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-08T13:20:00Z",
   "hold_until_utc": "2026-09-09T00:00:00Z",
-  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-08; slot 5 stays in reserve; pre-registered order L6z-fl slot 1 then L6z-pa slot 2 on 2026-09-09"
+  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-08; slot 5 stays in reserve; pre-registered order L6z-fl slot 1 then L6z-pa slot 2 on 2026-09-09",
+  "submitted_utc": "2026-09-09T04:02:35Z",
+  "submission_id": "56113064"
 }

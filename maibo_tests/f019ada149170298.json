@@ -1,0 +1,39 @@
+{
+  "set_id": "f019ada149170298",
+  "files": {
+    "scripts/make_level_matched.py": "14d5d79d57b80ef00887de5f08aeb0d9064d101d37f739dc9e53288262bda26e"
+  },
+  "engine": "antigravity",
+  "context": "CHANGED script (PLAN v19 rung 2, L6o-b). make_level_matched.py previously PASSED (maibo_tests/09302276b483ecc5.json); this change adds --scalar FLOAT which PINS the level scalar (shift for pa, ratio for fl) instead of deriving it from the rows file's measured median, so a second rows file (the mirrored-frame rerun reports/pipeline_a1_scalev3d2_flip_rows.csv) ships at exactly the level already read on the leaderboard (fl x0.8705521018792615 read 0.73033, pa +3.3922419702826065 read 0.78596). With a pinned scalar the post-write shipped-median check relaxes from 0.001 to PIN_TOL (pa 1.0 deg, fl 5 mm). The verify-cmd proves the derived path still reproduces the shipped L6z-fl byte-for-byte, the pinned path with the same scalar reproduces it too, and nan / negative ratios are refused. Review the diff-relevant logic: plan() pinned branch, the tol switch, the report column, the print.",
+  "local_verify": {
+    "cmd": "bash /tmp/mlm_regress.sh",
+    "exit": 0,
+    "tail": "make_level_matched regression OK (derived==shipped, pinned==shipped, nan/negative refused)\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (179.08s)\n\nREVIEW-9ac46e71 VERDICT: PASS\n\ncase: 20260909T040651Z_ab9a92_ask",
+  "nonce": "9ac46e71",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "engine error: warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues. ERROR: {\"type\":\"error\",\"status\"",
+      "reply_head": "warning: Model metadata for `gpt-5.4` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.\nERROR: {\"type\":\"error\",\"status\":400,\"error\":{\"type\":\"invalid_request_er"
+    },
+    {
+      "engine": "grok",
+      "exit": 0,
+      "note": "reply carried no REVIEW-<nonce> VERDICT line",
+      "reply_head": "[grok / xai / flagship] ok (69.94s)\n\nI'll review the pinned-scalar path and related checks against the stated behavior, starting from the attached script and any nearby tests or helpers.\n\ncase: 202609"
+    },
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (179.08s)\n\nREVIEW-9ac46e71 VERDICT: PASS\n\ncase: 20260909T040651Z_ab9a92_ask"
+    }
+  ]
+}

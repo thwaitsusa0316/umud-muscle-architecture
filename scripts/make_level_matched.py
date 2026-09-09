@@ -22,6 +22,12 @@ pilot's job (submit_queue/ + submit-gate).
     make_level_matched.py --target pa --source outputs/sub_L6r_run_median_v3d2.csv \
         --rows reports/pipeline_a1_scalev3d2_rows.csv \
         --out outputs/sub_L6z_pa_level_v3d2.csv --report reports/l6z_pa_level.csv
+
+--scalar X (L6o-b, PLAN v19 rung 2) PINS the scalar instead of deriving it from the
+rows file, so a second rows file (e.g. the mirrored-frame rerun) can be shipped at
+exactly the level already read on the board and the paired delta is the rows-file
+change alone. With a pinned scalar the shipped median is reported, not required to
+equal the probed median; it must still sit within PIN_TOL of it (pa 1.0 deg, fl 5 mm).
 """
 from __future__ import annotations
 import sys, json, pathlib, argparse, statistics
@@ -35,6 +41,7 @@ MEDIANS = ROOT / "reports" / "public_medians.json"
 NEED = ["image_id", "pa_deg", "fl_mm", "mt_mm"]
 TARGETS = {"pa": ("pa_deg", "pa_measured", "shift", 0.0, 90.0),
            "fl": ("fl_mm", "fl_measured", "ratio", 0.0, 400.0)}
+PIN_TOL = {"pa": 1.0, "fl": 5.0}  # shipped-median band around the probed median when --scalar is pinned
 
 
 def load_medians(path: pathlib.Path) -> dict[str, float]:
@@ -61,8 +68,10 @@ def read_csv(path: str, what: str) -> pd.DataFrame:
     return df
 
 
-def plan(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: float):
-    """Return (values_to_set: {image_id: new value}, scalar, measured median). Pure."""
+def plan(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: float,
+         pinned: float | None = None):
+    """Return (values_to_set: {image_id: new value}, scalar, measured median). Pure.
+    pinned: use this scalar instead of deriving it from the measured median."""
     col, flag, kind, lo, hi = TARGETS[target]
     if list(source.columns) != NEED:
         raise ValueError(f"source columns must be {NEED}, got {list(source.columns)}")
@@ -96,12 +105,17 @@ def plan(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: float):
     med = float(statistics.median(meas[col].tolist()))
     if not med > 0:
         raise ValueError(f"measured {col} median must be positive, got {med}")
-    if kind == "shift":
+    if pinned is not None:
+        if not isinstance(pinned, float) or pinned != pinned:
+            raise ValueError(f"pinned scalar must be a finite float, got {pinned!r}")
+        if kind == "ratio" and not pinned > 0:
+            raise ValueError(f"pinned ratio must be positive, got {pinned}")
+        scalar = pinned
+    elif kind == "shift":
         scalar = probed - med
-        new = meas[col] + scalar
     else:
         scalar = probed / med
-        new = meas[col] * scalar
+    new = meas[col] + scalar if kind == "shift" else meas[col] * scalar
     if not ((new > lo) & (new < hi)).all():
         raise ValueError(f"level-matched {col} leaves ({lo}, {hi}): min {new.min():.3f} max {new.max():.3f}")
     to_set = {i: float(v) for i, v in zip(meas.image_id, new)}
@@ -128,19 +142,21 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--report", default="")
     ap.add_argument("--dry-run", action="store_true", help="print the plan, write nothing")
+    ap.add_argument("--scalar", type=float, default=None,
+                    help="pin the scalar (shift for pa, ratio for fl) instead of deriving it from --rows")
     a = ap.parse_args()
     col, flag, kind, _, _ = TARGETS[a.target]
     vals = load_medians(pathlib.Path(a.medians))
     source = read_csv(a.source, "source CSV")
     rows = read_csv(a.rows, "rows CSV")
     try:
-        to_set, scalar, med = plan(source, rows, a.target, vals[col])
+        to_set, scalar, med = plan(source, rows, a.target, vals[col], a.scalar)
     except ValueError as e:
         sys.exit(f"make_level_matched: {e}")
+    how = "pinned" if a.scalar is not None else "derived"
     print(f"{a.target}: measured rows {len(to_set)}, measured median {med:.4f}, probed {vals[col]:g}, "
-          f"{kind} scalar {scalar:+.4f}" if kind == "shift" else
-          f"{a.target}: measured rows {len(to_set)}, measured median {med:.4f}, probed {vals[col]:g}, "
-          f"{kind} scalar x{scalar:.4f}")
+          + (f"{kind} scalar {scalar:+.4f}" if kind == "shift" else f"{kind} scalar x{scalar:.4f}")
+          + f" ({how})")
     if a.dry_run:
         return 0
     out = pathlib.Path(a.out)
@@ -172,13 +188,15 @@ def main() -> int:
         if float(got[iid]) != expect:
             sys.exit(f"make_level_matched: {iid} read back {got[iid]} != {expect}")
     shipped_med = float(statistics.median([float(got[i]) for i in to_set]))
-    if abs(shipped_med - vals[col]) > 0.001:
-        sys.exit(f"make_level_matched: shipped {col} median {shipped_med:.4f} != probed {vals[col]}")
+    tol = PIN_TOL[a.target] if a.scalar is not None else 0.001
+    if abs(shipped_med - vals[col]) > tol:
+        sys.exit(f"make_level_matched: shipped {col} median {shipped_med:.4f} is more than {tol} "
+                 f"from the probed {vals[col]}" + (" (pinned scalar)" if a.scalar is not None else ""))
     if a.report:
         rp = pathlib.Path(a.report)
         try:
             rp.parent.mkdir(parents=True, exist_ok=True)
-            pd.DataFrame([{"target": a.target, "column": col, "kind": kind, "scalar": scalar,
+            pd.DataFrame([{"target": a.target, "column": col, "kind": kind, "scalar": scalar, "scalar_how": how,
                            "measured_median": med, "probed_median": vals[col], "rows_set": len(to_set),
                            "rows_changed": len(changed), "shipped_median": shipped_med,
                            "min": min(to_set.values()), "max": max(to_set.values()),

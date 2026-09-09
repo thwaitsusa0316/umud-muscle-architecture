@@ -1,0 +1,27 @@
+{
+  "id": "L6z-both",
+  "artifact": "outputs/sub_L6z_both_level_v3d2.csv",
+  "sha256": "37d9747394badaa634bf971508e80a569e855a556aecd3b8a91c33c8f0db5eb7",
+  "generator": "scripts/make_level_matched.py --target pa --source outputs/sub_L6z_fl_level_v3d2.csv --rows reports/pipeline_a1_scalev3d2_rows.csv --out outputs/sub_L6z_both_level_v3d2.csv --report reports/l6z_both_level.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "37d9747394badaa634bf971508e80a569e855a556aecd3b8a91c33c8f0db5eb7",
+    "record": "maibo_tests/e9955362a2cf7e59.json",
+    "generator_record": "maibo_tests/09302276b483ecc5.json"
+  },
+  "justification": {
+    "plan_version": 19,
+    "rung": "L6z",
+    "purpose": "gate-closing",
+    "why_now": "Both L6z isolations read below their falsifiers on 2026-09-09 (L6z-fl 56113052 0.73033, L6z-pa 56113064 0.78596, baseline 0.82175, falsifier not < 0.81675): PA and FL carry per-image skill at matched level. This is their composition: FL column byte-identical to L6z-fl, PA column byte-identical to L6z-pa, MT byte-identical to the 0.82175 baseline (verify-cmd /tmp/l6z_both_verify.py checks all three columns byte-for-byte). The metric is separable across targets (BRIEF: (1/3)[MAE_PA/6 + MAE_FL/12 + MAE_MT/3] + 1e-6 MedAE + 1e-9 RMSE terms), so the score is predicted 0.82175 - 0.09142 - 0.03579 = 0.69454 to within the 1e-6 MedAE term. Slot 3 of 5 on 2026-09-09; it banks the composed best as a real, selectable submission and is the read baseline for L6o-b (slot 4).",
+    "expected_benefit": "New composed best ~0.69454 (from 0.82175); confirms separability on a two-target composition at 1e-4; gives L6o-b an actual read baseline rather than a predicted one.",
+    "expected_score_delta": "-0.12721 vs 0.82175 (predicted 0.69454 +/- 0.0001)",
+    "falsifier": "public not within 0.001 of 0.69454 -> the metric is not separable as mirrored in src/umud/metric.py (A-metric broken) and every paired delta on file is suspect; stop and re-derive. Within 0.001 -> composed best = 0.69454, PLAN v20 re-runs the L4d share algebra with the PA/FL residuals.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6z_both_level_v3d2.csv -m 'L6z-both: composition of the two level-matched isolations (FL x0.8706 on 297 measured rows = L6z-fl 0.73033; PA +3.3922 deg on 297 measured rows = L6z-pa 0.78596) on the L6r run-median MT (0.82175, byte-identical); predicted 0.69454 by separability'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-09T04:12:00Z",
+  "submitted_utc": "2026-09-09T04:12:04Z",
+  "submission_id": "56113211"
+}

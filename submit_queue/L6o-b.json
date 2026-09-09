@@ -1,0 +1,31 @@
+{
+  "id": "L6o-b",
+  "artifact": "outputs/sub_L6ob_flip_level_v3d2.csv",
+  "sha256": "fdfeb72874f1fb58a1232fd3197b0bf578eb74f60c26c18abaf2c60d0f62dc1e",
+  "generator": "scripts/make_level_matched.py --target fl --scalar 0.8705521018792615 --source outputs/sub_L6r_run_median_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L6ob_fl_step_v3d2.csv --report reports/l6ob_fl_level.csv && scripts/make_level_matched.py --target pa --scalar 3.3922419702826065 --source outputs/sub_L6ob_fl_step_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L6ob_flip_level_v3d2.csv --report reports/l6ob_pa_level.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "local",
+    "sha256": "fdfeb72874f1fb58a1232fd3197b0bf578eb74f60c26c18abaf2c60d0f62dc1e",
+    "record": "maibo_tests/56e390a0044585bd.json",
+    "generator_record": "maibo_tests/f019ada149170298.json",
+    "generator_records": [
+      "maibo_tests/09302276b483ecc5.json",
+      "maibo_tests/f019ada149170298.json"
+    ]
+  },
+  "justification": {
+    "plan_version": 19,
+    "rung": "L6o-b",
+    "purpose": "probe",
+    "why_now": "PLAN v19 rung 2 (pre-registered 2026-09-08T05:58Z, built 22:20Z): compose L6o-b = the L6z winner with PA/FL on the 113 mirrored test frames from the flipped-pipeline rerun at the same matched level (one scalar re-applied), MT byte-identical. Both L6z isolations won on 2026-09-09 (FL 0.73033, PA 0.78596), so the winner is L6z-both (slot 3, predicted 0.69454). ONE variable: orientation of the 113 positive-slope frames (59 tif stills, 35 png stills, 10 x 853x1069 video, 9 small-frame video) before both models, label-free; 111 rows change (PA median |d| 0.66 deg, FL median |d| 2.35 mm; max |dPA| 11.5, |dFL| 103), 0 MT rows change. Slot 4 of 5 on 2026-09-09; slot 5 reserve.",
+    "expected_benefit": "Tests whether the training-orientation mirror (train 299/300 negative slope; benchmark flip audit PA MAE 1.37 -> 1.94, bias -1.1 deg) matters on test now that PA/FL skill is visible at matched level. Expected -0.002 to -0.01 (v19: <= -0.01 on ~37 public flipped rows).",
+    "expected_score_delta": "-0.002 to -0.01 vs the L6z-both read (predicted 0.69454)",
+    "falsifier": "public not < (L6z-both read) - 0.002 -> mirroring the 113 frames does not help; orientation is retired as a mechanism (A-orient), L6z-both stays the composed best. Fires -> L6o-b becomes the composed best and the flip ships in the production pipeline (make_submission.py --flip-positive).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L6ob_flip_level_v3d2.csv -m 'L6o-b orientation: L6z-both (level-matched PA/FL on the L6r MT) with PA/FL on the 113 mirrored test frames from the flipped pipeline at the same pinned scalars (FL x0.8706, PA +3.3922); 111 rows change, MT byte-identical'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-09T04:12:00Z",
+  "submitted_utc": "2026-09-09T04:16:04Z",
+  "submission_id": "56113269"
+}

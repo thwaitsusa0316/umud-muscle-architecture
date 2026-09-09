@@ -1,0 +1,2 @@
+target,column,kind,scalar,measured_median,probed_median,rows_set,rows_changed,shipped_median,min,max,source,rows_file
+pa,pa_deg,shift,3.3922419702826065,13.027758029717395,16.42,297,296,16.42,8.719434571723855,33.516798983481394,outputs/sub_L6z_fl_level_v3d2.csv,reports/pipeline_a1_scalev3d2_rows.csv
