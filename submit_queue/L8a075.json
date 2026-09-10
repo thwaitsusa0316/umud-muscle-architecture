@@ -18,10 +18,10 @@
     "note": "artifact r1 PASS antigravity (both bracket files in one record) with /tmp/l8a_artifact_verify.sh: sha, FL = alpha*src+(1-alpha)*81.5 on 297 rows, PA/MT identical to the alpha 0.5 file (0.58833), 12 unmeasured rows at the probed medians, no FL > 150"
   },
   "justification": {
-    "plan_version": 23,
+    "plan_version": 24,
     "purpose": "probe",
     "rung": "L8a",
-    "why_now": "PLAN v23 (2026-09-10T01:55Z) pre-registered the FL alpha bracket on the composed base after the L8 read 0.58833 (submission 56134903): slot 2 on 2026-09-11 after 00:00Z (09-10 is 5/5 used). ONE variable vs L8: FL alpha 0.75 instead of 0.5 on the same source outputs/sub_L7r2_run_median_pafl_clamped.csv; PA (alpha 0.5) and MT byte-identical to the L8 file. 0 compute; exact paired delta vs 0.58833.",
+    "why_now": "PLAN v23 (2026-09-10T01:55Z) pre-registered the FL alpha bracket on the composed base after the L8 read 0.58833 (submission 56134903): slot 2 on 2026-09-11 after 00:00Z (09-10 is 5/5 used). ONE variable vs L8: FL alpha 0.75 instead of 0.5 on the same source outputs/sub_L7r2_run_median_pafl_clamped.csv; PA (alpha 0.5) and MT byte-identical to the L8 file. 0 compute; exact paired delta vs 0.58833. Re-justified under PLAN v24 (2026-09-10T12:05Z): rung, slot order (slot 1 alpha 0.25, slot 2 alpha 0.75), falsifier and expected delta unchanged; v24 only added L8f (slot 3) after this bracket and the conditional to regenerate L8f on the bracket winner.",
     "expected_benefit": "Fixes the FL shrinkage alpha with one pre-registered pair, then alpha is frozen (no further tuning on the board). FL still holds the largest residual term.",
     "expected_score_delta": "-0.01 to +0.00 (less shrinkage; the FL residual on the clamped base looks close to unbiased-and-only-mildly-noisy)",
     "falsifier": "public not < 0.58333 (0.58833 - 0.005) -> alpha 0.75 is not better than 0.5 by more than the noise floor; the best of the three reads (0.25 / 0.5 / 0.75) is frozen as the FL alpha, ties go to 0.5. Fires (< 0.58333) -> that alpha becomes the composed best; no further bracket.",

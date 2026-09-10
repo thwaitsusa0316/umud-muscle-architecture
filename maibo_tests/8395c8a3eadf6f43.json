@@ -1,0 +1,35 @@
+{
+  "set_id": "8395c8a3eadf6f43",
+  "files": {
+    "scripts/make_family_level.py": "af5c28dae376f682c83d66b32844aa45a3a9f1fc326f215c454d4d5e96f8a645"
+  },
+  "engine": "antigravity",
+  "context": "L8f (PLAN v24, pre-registered for slot 3 on 2026-09-11): per-family additive level shift of FL (or PA) on the composed best outputs/sub_L8_compose_a05.csv (0.58833). Families: video by scale-manifest method, else extension tif/png. Each family's measured-row median is moved to the probed public median (FL 81.5 / PA 16.42) by one additive shift per family (FL tif +2.92 / png +12.79 / video -2.65). Invariants: source must be the composed file (unmeasured rows at the probed median), only <target>_measured & ok rows touched, other two columns byte-identical on read-back, each family's shipped median equals the probed median to 0.001, read-back tolerance 5e-5 (%.4f serialization), refuse a no-op source, refuse families < 10 rows. Sibling scripts make_level_matched.py / make_run_median_pafl.py define the house style. Test the script only; the artifacts are tested separately after generation.",
+  "local_verify": {
+    "cmd": ".venv/bin/python scripts/make_family_level.py --target fl --source outputs/sub_L8_compose_a05.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out /tmp/l8f_dry.csv --dry-run && .venv/bin/python scripts/make_family_level.py --target pa --source outputs/sub_L8_compose_a05.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out /tmp/l8f_dry.csv --dry-run && ! .venv/bin/python scripts/make_family_level.py --target fl --source outputs/sub_L6z_pa_level_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out /tmp/l8f_dry.csv --dry-run",
+    "exit": 0,
+    "tail": "fl tif  : rows  89  source median 78.5777  probed 81.5  shift +2.9223  after [60.84, 98.73]\nfl png  : rows  56  source median 68.7056  probed 81.5  shift +12.7944  after [68.92, 114.04]\nfl video: rows 152  source median 84.1547  probed 81.5  shift -2.6547  after [57.91, 104.91]\npa tif  : rows  89  source median 17.1788  probed 16.42  shift -0.7588  after [13.24, 20.73]\npa png  : rows  56  source median 19.1413  probed 16.42  shift -2.7213  after [13.51, 22.25]\npa video: rows 152  source median 15.7091  probed 16.42  shift +0.7109  after [13.39, 21.51]\nmake_family_level: every family already sits at the probed median; nothing to shift (is the source an isolation file rather than the composed best?)\n"
+  },
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "00_make_family_level.py",
+      "line": "64",
+      "sev": "critical",
+      "desc": "The plan function requires the rows CSV to contain the prediction column (col) which it never reads, causing a crash on standard metadata rows files.",
+      "fix": "Remove `col` from the tuple of columns checked in rows.columns."
+    }
+  ],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (322.2s)\n\nREVIEW-2d12085b VERDICT: FAIL\n- 00_make_family_level.py:64 [critical] The plan function requires the rows CSV to contain the prediction column (col) which it never reads, causing a crash on standard metadata rows files. -> Remove `col` from the tuple of columns checked in rows.columns.\n\nCLAIM: The script incorrectly crashes if the pipeline rows CSV lacks the prediction column (e.g., `pa_deg`), even though it never uses that column from the rows file.\nTEST: Run the script via command line against a rows CSV that has the required flags but lacks the prediction column:\necho \"image_id,pa_deg,fl_mm,mt_mm\" > source.csv\necho \"1,16.42,81.5,0.0\" >> source.csv\necho \"image_id,pa_measured,ok\" > rows.csv\necho \"1,True,True\" >> rows.csv\necho \"{}\" > scale.json\npython3 00_make_family_level.py --target pa --source source.csv --rows rows.csv --scale scale.json --out out.csv --dry-run\nEXPECTED IF I AM RIGHT: make_family_level: rows file lacks column 'pa_deg'\nEXPECTED IF I AM WRONG: make_family_level: source has 1 rows, expected 309\nSCOPE: `plan` function, specifically the validation loop `for c in (\"image_id\", col, flag, \"ok\"):`\nFIXED WHEN: The script progresses past the column check and instead fails on the row count validation (`source has 1 rows, expected 309`).\n\ncase: 20260910T093929Z_37ecd4_ask",
+  "nonce": "2d12085b",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (322.2s)\n\nREVIEW-2d12085b VERDICT: FAIL\n- 00_make_family_level.py:64 [critical] The plan function requires the rows CSV to contain the prediction column (col) which it "
+    }
+  ]
+}

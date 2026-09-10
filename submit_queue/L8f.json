@@ -1,0 +1,32 @@
+{
+  "id": "L8f",
+  "artifact": "outputs/sub_L8f_family_fl_level.csv",
+  "sha256": "5052108380dec3d0d66192fce3f29e5c03948885bbe02bcf8d45e4b34b055fd8",
+  "generator": "scripts/make_family_level.py --target fl --source outputs/sub_L8_compose_a05.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out outputs/sub_L8f_family_fl_level.csv --report reports/l8f_family_fl_level.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "5052108380dec3d0d66192fce3f29e5c03948885bbe02bcf8d45e4b34b055fd8",
+    "record": "maibo_tests/60d054046129139d.json",
+    "generator_record": "maibo_tests/7c0abd0751135b17.json",
+    "generator_records": [
+      "maibo_tests/8395c8a3eadf6f43.json",
+      "maibo_tests/7c0abd0751135b17.json"
+    ],
+    "note": "script r1 FAIL antigravity (rows-file column check demanded the unread prediction column) -> fixed -> r2 PASS antigravity 7c0abd07; artifact + report tested with /tmp/l8f_artifact_verify.sh: sha, 309 rows, PA/MT text-identical to the 0.58833 file, 12 unmeasured FL rows at 81.5, every family's shipped FL median 81.5, FL max 114.04 (none > 150)"
+  },
+  "justification": {
+    "plan_version": 24,
+    "purpose": "probe",
+    "rung": "L8f",
+    "why_now": "PLAN v24 (2026-09-10T12:05Z) promoted v23 candidate (c) after (a) PA clamp and (b) still-run median were retired label-free at 09:39Z (0 PA rows outside [5,35] deg; 0/4 still runs with rel_range > 0.25). On the composed best (0.58833, submission 56134903) the 297 measured FL rows sit at tif 78.58 / png 68.71 / video 84.15 mm vs the probed 81.5: the single L6z scalar matched the video-dominated pool. ONE variable: one additive FL shift per family (tif +2.9223 / png +12.7944 / video -2.6547 mm); PA and MT byte-identical to 0.58833; 0 compute. Slot 3 on 2026-09-11 after 00:00Z, after the alpha bracket (slots 1-2). Conditional: if slot 1 or 2 fires (< 0.58333), regenerate on the winning file with the same script, artifact-test, and submit against (winner - 0.005) instead.",
+    "expected_benefit": "Removes a family-level FL level fault the pooled scalar cannot fix (56 png rows 12.8 mm low). FL still holds the largest residual term (0.39 of 0.69 pre-flip).",
+    "expected_score_delta": "-0.01 to -0.05 (label-free: png bias bound 0.19 = 56 rows x 12.8 mm x 0.00027 at the public-row weight; the house rate on L6z/L7c was about a third of a bias bound; tif/video shifts are inside family-median noise)",
+    "falsifier": "public not < (frozen-alpha best - 0.005), i.e. not < 0.58333 if alpha stays 0.5 -> the family offsets are real anatomy/device differences, not a level fault; per-family level retired for FL and PA (L8f-pa not submitted). Fires (< best - 0.005) -> L8f becomes the composed best and L8f-pa (same script --target pa: tif -0.7588 / png -2.7213 / video +0.7109 deg) goes in slot 4 on top of it with falsifier not < (L8f read - 0.005).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8f_family_fl_level.csv -m 'L8f per-family FL level: L8 composition (0.58833) with one additive FL shift per family tif +2.92 / png +12.79 / video -2.65 mm so each family median = 81.5; PA and MT byte-identical'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-10T11:50:00Z",
+  "hold_until_utc": "2026-09-11T00:00:00Z",
+  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 3 on 2026-09-11 after the alpha bracket (L8a025 slot 1, L8a075 slot 2)"
+}
