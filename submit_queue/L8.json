@@ -1,0 +1,36 @@
+{
+  "id": "L8",
+  "artifact": "outputs/sub_L8_compose_a05.csv",
+  "sha256": "7eac18f9068dc91c6b05dc9c809f6a7954564631bbc9d10a89d4ee9c7795895e",
+  "generator": "scripts/make_shrink.py --mode shrink --target fl --alpha 0.5 --source outputs/sub_L7r2_run_median_pafl_clamped.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/tmp_L8_fl05.csv --report reports/l8_step_fl05.csv && scripts/make_shrink.py --mode shrink --target pa --alpha 0.5 --source outputs/tmp_L8_fl05.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L8_compose_a05.csv --report reports/l8_step_pa05.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "7eac18f9068dc91c6b05dc9c809f6a7954564631bbc9d10a89d4ee9c7795895e",
+    "record": "maibo_tests/054d8f8e2389a9a9.json",
+    "generator_record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json",
+      "maibo_tests/10c8ae459813eb62.json",
+      "maibo_tests/054d8f8e2389a9a9.json"
+    ],
+    "note": "artifact r1 PASS antigravity with /tmp/l8_artifact_verify.sh (sha, 297 FL rows = 0.5*src+0.5*81.5, 297 PA rows = 0.5*src+0.5*16.42, 12 unmeasured rows at the probed medians, MT byte-identical to L7r2, no FL > 150); make_shrink.py unchanged since PASS 504e12ca/aa2bc815"
+  },
+  "justification": {
+    "plan_version": 23,
+    "purpose": "probe",
+    "rung": "L8",
+    "why_now": "PLAN v22 pre-registered the composition clamp -> run-median -> shrink as one candidate if L7f and L7c both fired; all four v22 rungs fired the good way on 2026-09-10 (L7f 0.62261, L7p 0.64615, L7c 0.63398, L7r 0.62061). v23 (2026-09-10T01:55Z) puts it in slot 5 today. Source = the L7r read file outputs/sub_L7r2_run_median_pafl_clamped.csv (0.62061, submission 56134764: clamp + run-median), then FL shrink alpha 0.5 (275 rows change; the 21 clamped rows stay at 81.5) then PA shrink alpha 0.5 (297 rows change); MT byte-identical to every read since 0.82175. 0 compute; paired delta vs 0.62061.",
+    "expected_benefit": "PA shrink is separable (-0.026 as an isolation); FL shrink on the clamped base is less than the raw -0.050 because the 21 gross rows are already fixed: expected FL -0.02 to -0.04. Composed 0.55-0.59 would be the best score to date and rank ~60.",
+    "expected_score_delta": "-0.04 to -0.07 vs 0.62061",
+    "falsifier": "public not < 0.61561 (min read 0.62061 - 0.005) -> the rules do not compose (interaction); fall back to the best single read 0.62061 as composed best and bracket alpha on that base. Fires (< 0.61561) -> composed best; slots 1-2 on 2026-09-11 = the same composition at FL alpha 0.25 and 0.75 (falsifier for each: not < this read - 0.005), then alpha fixed.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8_compose_a05.csv -m 'L8 composition: L7r file (clamp + run-median, 0.62061) with FL shrink alpha 0.5 (275 rows) then PA shrink alpha 0.5 (297 rows); MT byte-identical'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-10T01:55:00Z",
+  "hold_until_utc": "2026-09-10T00:00:00Z",
+  "hold_reason": "slot 5 on 2026-09-10 per v23",
+  "submitted_utc": "2026-09-10T01:56:05Z",
+  "submission_id": "56134903"
+}

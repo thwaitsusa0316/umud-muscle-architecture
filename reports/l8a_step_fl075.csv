@@ -1,0 +1,2 @@
+mode,target,column,rule,alpha,lo,hi,min_rows,probed_median,measured_rows,rows_set,rows_changed,measured_median_before,measured_median_after,min_after,max_after,source,rows_file
+shrink,fl,fl_mm,alpha=0.75,0.75,,,5,81.5,297,297,275,81.5,81.5,43.4459,120.5902,outputs/sub_L7r2_run_median_pafl_clamped.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv

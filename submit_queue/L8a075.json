@@ -1,0 +1,34 @@
+{
+  "id": "L8a075",
+  "artifact": "outputs/sub_L8a_compose_fl075.csv",
+  "sha256": "22c1d4fd6062edafd05a6eb68a81cf92227d77624e716e17bfaabd2bd96c1f57",
+  "generator": "scripts/make_shrink.py --mode shrink --target fl --alpha 0.75 --source outputs/sub_L7r2_run_median_pafl_clamped.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/tmp_L8a_fl075.csv --report reports/l8a_step_fl075.csv && scripts/make_shrink.py --mode shrink --target pa --alpha 0.5 --source outputs/tmp_L8a_fl075.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L8a_compose_fl075.csv --report reports/l8a_step_pa05_fl075.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "antigravity",
+    "sha256": "22c1d4fd6062edafd05a6eb68a81cf92227d77624e716e17bfaabd2bd96c1f57",
+    "record": "maibo_tests/d8f60e5a787dd3e8.json",
+    "generator_record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json",
+      "maibo_tests/054d8f8e2389a9a9.json",
+      "maibo_tests/d8f60e5a787dd3e8.json"
+    ],
+    "note": "artifact r1 PASS antigravity (both bracket files in one record) with /tmp/l8a_artifact_verify.sh: sha, FL = alpha*src+(1-alpha)*81.5 on 297 rows, PA/MT identical to the alpha 0.5 file (0.58833), 12 unmeasured rows at the probed medians, no FL > 150"
+  },
+  "justification": {
+    "plan_version": 23,
+    "purpose": "probe",
+    "rung": "L8a",
+    "why_now": "PLAN v23 (2026-09-10T01:55Z) pre-registered the FL alpha bracket on the composed base after the L8 read 0.58833 (submission 56134903): slot 2 on 2026-09-11 after 00:00Z (09-10 is 5/5 used). ONE variable vs L8: FL alpha 0.75 instead of 0.5 on the same source outputs/sub_L7r2_run_median_pafl_clamped.csv; PA (alpha 0.5) and MT byte-identical to the L8 file. 0 compute; exact paired delta vs 0.58833.",
+    "expected_benefit": "Fixes the FL shrinkage alpha with one pre-registered pair, then alpha is frozen (no further tuning on the board). FL still holds the largest residual term.",
+    "expected_score_delta": "-0.01 to +0.00 (less shrinkage; the FL residual on the clamped base looks close to unbiased-and-only-mildly-noisy)",
+    "falsifier": "public not < 0.58333 (0.58833 - 0.005) -> alpha 0.75 is not better than 0.5 by more than the noise floor; the best of the three reads (0.25 / 0.5 / 0.75) is frozen as the FL alpha, ties go to 0.5. Fires (< 0.58333) -> that alpha becomes the composed best; no further bracket.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8a_compose_fl075.csv -m 'L8a FL alpha 0.75 bracket: L8 composition (clamp -> run-median -> PA shrink 0.5) with FL shrink alpha 0.75 instead of 0.5; PA and MT byte-identical to 0.58833'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-10T02:02:00Z",
+  "hold_until_utc": "2026-09-11T00:00:00Z",
+  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 2 on 2026-09-11 (alpha 0.25 slot 1, 0.75 slot 2)"
+}

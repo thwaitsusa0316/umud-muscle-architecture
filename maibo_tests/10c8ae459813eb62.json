@@ -1,0 +1,29 @@
+{
+  "set_id": "10c8ae459813eb62",
+  "files": {
+    "outputs/sub_L7r2_run_median_pafl_clamped.csv": "a67ac978b3e50deac828c6d0d4bfe88cd23266b2822b5c95add84984e4973324",
+    "reports/l7r2_run_median_pafl_clamped.csv": "700a63301043fd664eeeba09c37632240d543efe52797e4ba721938f3746f515",
+    "scripts/make_run_median_pafl.py": "c66c6f3ea3557292893fbdc83116bc07c0906bbbd139778ba9ad18c4572f5cb0"
+  },
+  "engine": "antigravity",
+  "context": "L7r regenerated on the L7c-clamped composed file (PLAN v22 conditional: L7c fired at 0.63398). Generator (already PASS f3601946) run with --source outputs/sub_L7c_fl_clamp.csv --targets pa,fl --threshold 0.25 --min-frames 3 --method video. Expected: PA run 53 (5 rows) and FL runs 53/56 (10 rows) set to their run medians, run 55 no longer above threshold, MT byte-identical to the source, no FL > 150 mm. Test the ARTIFACT CSV against the report and the source; the verify-cmd already checks these invariants.",
+  "local_verify": {
+    "cmd": "bash /tmp/l7r2_artifact_verify.sh",
+    "exit": 0,
+    "tail": "artifact verify ok: 5 PA + 10 FL rows at run medians, runs 53/56, run 55 untouched, MT byte-identical to L7c\nVERIFY_PASS\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (240.83s)\n\nREVIEW-ae214334 VERDICT: PASS\n\ncase: 20260910T014253Z_1b8610_ask",
+  "nonce": "ae214334",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (240.83s)\n\nREVIEW-ae214334 VERDICT: PASS\n\ncase: 20260910T014253Z_1b8610_ask"
+    }
+  ]
+}

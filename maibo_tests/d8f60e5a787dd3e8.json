@@ -1,0 +1,31 @@
+{
+  "set_id": "d8f60e5a787dd3e8",
+  "files": {
+    "outputs/sub_L8a_compose_fl025.csv": "09b7113f5abe40356ecea92fe6a7e1273e1bd3137f8b52004194ca1c035f3910",
+    "outputs/sub_L8a_compose_fl075.csv": "22c1d4fd6062edafd05a6eb68a81cf92227d77624e716e17bfaabd2bd96c1f57",
+    "reports/l8a_step_fl025.csv": "91d6afe68c21558d2fc2b9ac8c71c27548782c53ac8711ce74ab5d5e350fb4e2",
+    "reports/l8a_step_fl075.csv": "fffc4f0ac6c581378f2d018c2cb7220383f614f1347797d3293d414cb49b4b25",
+    "scripts/make_shrink.py": "e2a73e167855f8164950362f91d0bcd8f9fc836c11c662a6d5088550fe9ddc78"
+  },
+  "engine": "antigravity",
+  "context": "L8a FL alpha bracket (PLAN v23, pre-registered for slots 1-2 on 2026-09-11): the L8 composition (clamp -> run-median -> FL shrink -> PA shrink 0.5, alpha 0.5 read 0.58833) rebuilt with FL alpha 0.25 and 0.75 on the same source outputs/sub_L7r2_run_median_pafl_clamped.csv. Expected: on the 297 measured rows fl = alpha*src + (1-alpha)*81.5, pa = 0.5*src + 0.5*16.42, 12 unmeasured rows at the probed medians, MT byte-identical, PA/MT identical to the alpha 0.5 file, no FL > 150. Test the two ARTIFACT CSVs; the verify-cmd checks these invariants.",
+  "local_verify": {
+    "cmd": "bash /tmp/l8a_artifact_verify.sh",
+    "exit": 0,
+    "tail": "alpha 0.25: ok, FL = 0.25*src+0.75*81.5 on 297 rows, PA = 0.5*src+0.5*16.42, MT byte-identical\nalpha 0.75: ok, FL = 0.75*src+0.25*81.5 on 297 rows, PA = 0.5*src+0.5*16.42, MT byte-identical\nbracket verify ok\nVERIFY_PASS\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (422.41s)\n\nREVIEW-9a439d32 VERDICT: PASS\n\ncase: 20260910T015651Z_b128c5_ask",
+  "nonce": "9a439d32",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (422.41s)\n\nREVIEW-9a439d32 VERDICT: PASS\n\ncase: 20260910T015651Z_b128c5_ask"
+    }
+  ]
+}

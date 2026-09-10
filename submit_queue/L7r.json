@@ -1,32 +1,35 @@
 {
   "id": "L7r",
-  "artifact": "outputs/sub_L7r_run_median_pafl.csv",
-  "sha256": "3642067ed9f34a87b80736a8539a1ea7aeede6eceb1442c8a82359a3c63858f8",
-  "generator": "scripts/make_run_median_pafl.py --targets pa,fl --threshold 0.25 --min-frames 3 --source outputs/sub_L6ob_flip_level_v3d2.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out outputs/sub_L7r_run_median_pafl.csv --report reports/l7r_run_median_pafl.csv",
+  "artifact": "outputs/sub_L7r2_run_median_pafl_clamped.csv",
+  "sha256": "a67ac978b3e50deac828c6d0d4bfe88cd23266b2822b5c95add84984e4973324",
+  "generator": "scripts/make_run_median_pafl.py --targets pa,fl --threshold 0.25 --min-frames 3 --method video --source outputs/sub_L7c_fl_clamp.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out outputs/sub_L7r2_run_median_pafl_clamped.csv --report reports/l7r2_run_median_pafl_clamped.csv",
   "maibo_test": {
     "passed": true,
     "engine": "antigravity",
-    "sha256": "3642067ed9f34a87b80736a8539a1ea7aeede6eceb1442c8a82359a3c63858f8",
-    "record": "maibo_tests/3e1c60cde8f077b8.json",
+    "sha256": "a67ac978b3e50deac828c6d0d4bfe88cd23266b2822b5c95add84984e4973324",
+    "record": "maibo_tests/10c8ae459813eb62.json",
     "generator_record": "maibo_tests/f3601946021f615f.json",
     "generator_records": [
       "maibo_tests/f3601946021f615f.json",
-      "maibo_tests/3e1c60cde8f077b8.json"
+      "maibo_tests/3e1c60cde8f077b8.json",
+      "maibo_tests/10c8ae459813eb62.json"
     ],
-    "note": "script r1 PASS with local verify /tmp/l7r_verify.sh (dry-run plan, 4 refusal paths, real write invariants); artifact r1 PASS with /tmp/l7r_artifact_verify.sh (sha, MT byte-identical, planned rows at run medians, no rows outside runs 53/55/56)"
+    "note": "regenerated on the L7c-clamped file per the v22 conditional (L7c read 0.63398 < 0.66741); artifact r1 PASS antigravity with /tmp/l7r2_artifact_verify.sh (sha, MT byte-identical to L7c, 5 PA + 10 FL rows at run medians, runs 53/56 only, run 55 untouched, no FL > 150). Pre-clamp file (sha 3642067e, record 3e1c60cd) superseded, kept as L7r.json.pre-clamp.bak"
   },
   "justification": {
     "plan_version": 22,
     "purpose": "probe",
     "rung": "L7r",
-    "why_now": "PLAN v21 rung 4 (pre-registered 2026-09-09T11:55Z; built 19:15Z under v22): slot 4 on 2026-09-10 UTC after 00:00Z, after L7f/L7p/L7c (slots 1-3). Baseline = composed best outputs/sub_L6ob_flip_level_v3d2.csv (0.67241). ONE variable: the L6r within-run consensus rule (rel_range > 0.25, >= 3 measured frames, video runs only) applied to PA and FL: PA run 53 (5 rows -> 8.94 deg; frame values 8.72/8.94/8.89/15.81/10.55), FL runs 53 (5 rows -> 90.68; 74.4/132.7/133.6/90.7/54.4), 55 (5 rows -> 162.55; 85.8/171.7/88.7/162.5/165.0), 56 (5 rows -> 85.47; 119.3/83.3/85.5/83.8/121.4); 20 rows set, 16 numerically changed (4 PA mean |d| 2.19 deg, 12 FL mean |d| 31.1 mm); MT and all other rows byte-identical. 0 compute; exact paired delta. PRE-REGISTERED CONDITIONAL (composition order clamp -> run-median -> shrink): if L7c (slot 3) fires (< 0.66741), regenerate with --source outputs/sub_L7c_fl_clamp.csv before slot 4 (run 55 then no longer exceeds the threshold: 10 FL + 5 PA rows), artifact maibo_test it, and submit that file instead with falsifier not < (L7c read - 0.005).",
+    "why_now": "PLAN v22 rung 4 conditional, pre-registered 2026-09-09T19:15Z before any read: L7c fired in slot 3 on 2026-09-10 (0.63398 vs 0.67241, -0.03843), so L7r is regenerated on outputs/sub_L7c_fl_clamp.csv. Baseline for this read = L7c 0.63398 (submission 56134625). ONE variable: the L6r consensus rule (rel_range > 0.25, >= 3 measured frames, video runs) applied to PA and FL on top of the clamp: PA run 53 (5 rows -> 8.94 deg) and FL runs 53/56 (10 rows -> 90.68 / 85.47 mm); run 55 drops below the threshold once its three clamped frames sit at 81.5; 15 rows set, 12 numerically changed; MT byte-identical to L7c. 0 compute; exact paired delta vs 0.63398. Slot 4 of 5 on 2026-09-10; slot 5 = the pre-registered L7f alpha bracket (0.25), not this rung.",
     "expected_benefit": "Tests whether the within-run consistency that fixed gross MT faults (L6r -0.005) also fixes gross PA/FL faults on video runs; if it fires, the consensus rule ships in the composed file and extends to a within-run consensus for the 27 video runs at the next pre-registered threshold only after a positive read.",
-    "expected_score_delta": "-0.005 to -0.03 (16 changed rows; FL weight 1/(3*12*309) = 0.0000899 per mm per row, PA 1/(3*6*309) = 0.00018 per deg per row; 309-row bound +/-0.035, x3 on the ~5 public rows among them). Risk noted label-free: run 55's median follows the 3 over-long frames (>150 mm), so 2 rows move +75 mm; the L7c conditional removes that case.",
-    "falsifier": "public not < 0.66741 (-0.005 vs 0.67241) -> within-run PA/FL spread is not a frame-level fault at this threshold (or the median is no better than the frame) -> L7r retired, no threshold extension. Fires (public < 0.66741) -> the rule ships into the composed file after the clamp and before the shrinkage.",
-    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L7r_run_median_pafl.csv -m 'L7r video-run median PA/FL isolation: composed best 0.67241 (L6o-b) with the L6r consensus rule (rel_range > 0.25, >= 3 frames) on PA (run 53, 5 rows) and FL (runs 53/55/56, 15 rows); 16 rows change, MT and all other rows byte-identical'"
+    "expected_score_delta": "-0.005 to -0.03 vs 0.63398 (12 changed rows at the ~102-public-row weight, ~4 public rows)",
+    "falsifier": "public not < 0.62898 (-0.005 vs the L7c read 0.63398) -> within-run PA/FL spread is not a frame-level fault at 0.25 (or the run median is no better than the frame) -> L7r retired, no threshold extension, composition = clamp -> shrink. Fires (< 0.62898) -> the rule ships into the composed file after the clamp and before the shrinkage (clamp -> run-median -> shrink).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L7r2_run_median_pafl_clamped.csv -m 'L7r run-median PA/FL on the L7c clamp (0.63398): L6r consensus rule rel_range > 0.25 on video runs; PA run 53 (5 rows) and FL runs 53/56 (10 rows) to their run medians, 12 rows change; MT byte-identical to L7c'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-09T19:16:00Z",
   "hold_until_utc": "2026-09-10T00:00:00Z",
-  "hold_reason": "reserve policy: 4/5 slots used on 2026-09-09; slot 5 stays in reserve; pre-registered order L7f slot 1, L7p slot 2, L7c slot 3, L7r slot 4 on 2026-09-10 (regenerate on the L7c file first if L7c fires)"
+  "hold_reason": "regenerated 2026-09-10T01:50Z on the clamped file after the L7c read; slot 4 on 2026-09-10",
+  "submitted_utc": "2026-09-10T01:48:38Z",
+  "submission_id": "56134764"
 }

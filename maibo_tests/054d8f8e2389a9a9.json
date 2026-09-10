@@ -1,0 +1,30 @@
+{
+  "set_id": "054d8f8e2389a9a9",
+  "files": {
+    "outputs/sub_L8_compose_a05.csv": "7eac18f9068dc91c6b05dc9c809f6a7954564631bbc9d10a89d4ee9c7795895e",
+    "reports/l8_step_fl05.csv": "43105a25a22876346d29ce08dbb972bdf885af52ab6c7eea173f68e105c1f841",
+    "reports/l8_step_pa05.csv": "49ddf2c99ad128eb8382db4707212450c8ba5e7b7e40741d174d671bd5c21b0c",
+    "scripts/make_shrink.py": "e2a73e167855f8164950362f91d0bcd8f9fc836c11c662a6d5088550fe9ddc78"
+  },
+  "engine": "antigravity",
+  "context": "L8 composition (PLAN v22 pre-registered order clamp -> run-median -> shrink): source outputs/sub_L7r2_run_median_pafl_clamped.csv (clamp + run-median, read 0.62061), then make_shrink.py --mode shrink --target fl --alpha 0.5, then --target pa --alpha 0.5 (both scripts already PASS 504e12ca/aa2bc815). Expected: on the 297 measured rows fl = 0.5*src + 0.5*81.5 and pa = 0.5*src + 0.5*16.42, the 12 unmeasured rows unchanged at the probed medians, MT byte-identical, no FL > 150. Test the ARTIFACT CSV; the verify-cmd checks these invariants.",
+  "local_verify": {
+    "cmd": "bash /tmp/l8_artifact_verify.sh",
+    "exit": 0,
+    "tail": "artifact verify ok: 297 FL rows = 0.5*src+0.5*81.5, 297 PA rows = 0.5*src+0.5*16.42, 12 unmeasured rows at the probed medians, MT byte-identical to L7r2\nVERIFY_PASS\n"
+  },
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "[antigravity / google / mid] ok (320.31s)\n\nREVIEW-e21dede5 VERDICT: PASS\n\ncase: 20260910T014909Z_831c56_ask",
+  "nonce": "e21dede5",
+  "tried": [
+    {
+      "engine": "antigravity",
+      "exit": 0,
+      "note": "",
+      "reply_head": "[antigravity / google / mid] ok (320.31s)\n\nREVIEW-e21dede5 VERDICT: PASS\n\ncase: 20260910T014909Z_831c56_ask"
+    }
+  ]
+}
