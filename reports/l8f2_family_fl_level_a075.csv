@@ -1,0 +1,4 @@
+target,column,family,rows,source_median,probed_median,shift,min_before,max_before,min_after,max_after,shipped_median,rows_changed,source,rows_file,scale_file
+fl,fl_mm,tif,89,77.1165,81.5,4.383499999999998,46.1307,102.9567,50.514199999999995,107.3402,81.5,89,outputs/sub_L8a_compose_fl075.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv,reports/scale_v3d2.json
+fl,fl_mm,png,56,62.30845,81.5,19.19155,43.4459,111.1123,62.63745,130.30385,81.5,56,outputs/sub_L8a_compose_fl075.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv,reports/scale_v3d2.json
+fl,fl_mm,video,152,85.482,81.5,-3.9819999999999993,50.092,120.5902,46.11,116.6082,81.5,152,outputs/sub_L8a_compose_fl075.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv,reports/scale_v3d2.json

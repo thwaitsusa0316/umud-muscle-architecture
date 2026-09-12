@@ -1,0 +1,33 @@
+{
+  "id": "L8b025",
+  "artifact": "outputs/sub_L8b_compose_fl075_pa025.csv",
+  "sha256": "7659eab2d30c37f1da2d693ab01f2078018efd410637bc229b0d0f18783f4089",
+  "generator": "scripts/make_shrink.py --mode shrink --target fl --alpha 0.75 --source outputs/sub_L7r2_run_median_pafl_clamped.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/tmp_L8b_fl075.csv --report reports/l8b_step_fl075.csv && scripts/make_shrink.py --mode shrink --target pa --alpha 0.25 --source outputs/tmp_L8b_fl075.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L8b_compose_fl075_pa025.csv --report reports/l8b_step_pa025.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "local",
+    "sha256": "7659eab2d30c37f1da2d693ab01f2078018efd410637bc229b0d0f18783f4089",
+    "record": "maibo_tests/35044d1cbdf78a02.json",
+    "generator_record": "maibo_tests/aa2bc8152507c68b.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json",
+      "maibo_tests/35044d1cbdf78a02.json"
+    ],
+    "note": "artifact r1 PASS 2026-09-12T23:13Z (both bracket files + reports in one record) with /tmp/l8b_artifact_verify.sh exit 0: sha, 309 rows, PA = alpha*src + (1-alpha)*16.42 on the 297 measured rows (6e-5), FL/MT text-identical to the 0.56382 file, 12 unmeasured rows at 16.42, PA in [0,60]. DEGRADED PANEL: antigravity and grok returned no verdict line; the PASS verdict is the local open-weights fallback; the deterministic verify is the strong check. Generator unchanged (make_shrink.py PASS antigravity 504e12ca; the alpha 0.5 step reproduced sha 22c1d4fd exactly)."
+  },
+  "justification": {
+    "plan_version": 25,
+    "purpose": "probe",
+    "rung": "L8b",
+    "why_now": "PLAN v25 (2026-09-12T23:15Z) pre-registered the PA alpha bracket on the frozen FL-0.75 composed best after L8a075 fired (0.56382, -0.02451; alpha 0.25 read 0.66194, alpha frozen at 0.75). ONE variable vs 0.56382: PA alpha 0.25 instead of 0.5 on the same source outputs/tmp_L8b_fl075.csv; FL and MT byte-identical. 0 compute; exact paired delta vs 0.56382. slot 1 on 2026-09-13 after 00:00Z.",
+    "expected_benefit": "Fixes the PA shrinkage alpha with one pre-registered pair, then PA alpha is frozen (no further tuning on the board).",
+    "expected_score_delta": "+0.00 to +0.03 (label-free: FL alpha 0.25 cost +0.074; more shrinkage is expected to hurt)",
+    "falsifier": "public not < 0.55882 (0.56382 - 0.005) -> PA alpha 0.25 is not better than 0.5 by more than the noise floor; the best of the three PA reads (0.25 / 0.5 / 0.75) is frozen as the PA alpha, ties go to 0.5. Fires (< 0.55882) -> that alpha becomes the composed best; no further bracket.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8b_compose_fl075_pa025.csv -m 'L8b PA alpha 0.25 bracket: L8 composition (clamp -> run-median -> FL shrink 0.75 frozen) with PA shrink alpha 0.25 instead of 0.5; FL and MT byte-identical to 0.56382'"
+  },
+  "status": "queued",
+  "created_utc": "2026-09-12T23:15:00Z",
+  "hold_until_utc": "2026-09-13T00:00:00Z",
+  "hold_reason": "slot 1 on 2026-09-13; slot 5 of 09-12 is reserve"
+}

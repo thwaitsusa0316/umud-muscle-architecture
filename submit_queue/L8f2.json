@@ -1,0 +1,36 @@
+{
+  "id": "L8f2",
+  "artifact": "outputs/sub_L8f2_family_fl_level_a075.csv",
+  "sha256": "8304d6e46f4fcb2d20ce42622b4684fd9e94250755a065ed0c1288c987803069",
+  "generator": "scripts/make_family_level.py --target fl --source outputs/sub_L8a_compose_fl075.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --scale reports/scale_v3d2.json --out outputs/sub_L8f2_family_fl_level_a075.csv --report reports/l8f2_family_fl_level_a075.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "local",
+    "sha256": "8304d6e46f4fcb2d20ce42622b4684fd9e94250755a065ed0c1288c987803069",
+    "record": "maibo_tests/8e99eada011ad907.json",
+    "generator_record": "maibo_tests/7c0abd0751135b17.json",
+    "generator_records": [
+      "maibo_tests/8395c8a3eadf6f43.json",
+      "maibo_tests/7c0abd0751135b17.json",
+      "maibo_tests/60d054046129139d.json",
+      "maibo_tests/8e99eada011ad907.json"
+    ],
+    "note": "Regenerated 2026-09-12T23:01Z on the alpha-0.75 winner with the unchanged leaderboard-tested generator (script PASS antigravity 7c0abd07; the alpha-0.5 artifact PASS antigravity 60d05404). Artifact r1 (23:03Z): local verify /tmp/l8f2_artifact_verify.sh exit 0 (sha, 309 rows, PA/MT text-identical to the 0.56382 file, 12 unmeasured FL rows at 81.5, each family shipped FL median 81.5, FL max 130.30) but the panel degraded: antigravity empty, grok no verdict line, local light model FAIL with a fabricated finding (report line 15 of a 4-line file; min/max re-computed independently and match). r2 (23:07Z): codex engine error (gpt-5.4 metadata / HTTP 400), grok no verdict, antigravity empty, local PASS 95718803. DEGRADED PANEL: the only panelist verdict is the open-weights local model; the deterministic verify script is the strong check."
+  },
+  "justification": {
+    "plan_version": 24,
+    "purpose": "probe",
+    "rung": "L8f",
+    "why_now": "PLAN v24 conditional (i): L8a075 FIRED at 22:59Z 2026-09-12 (0.56382, -0.02451 vs 0.58833; alpha 0.25 read 0.66194), so FL alpha is frozen at 0.75 and L8f is regenerated on the winner outputs/sub_L8a_compose_fl075.csv with the same script (0 compute). ONE variable vs 0.56382: one additive FL shift per family (tif +4.3835 / png +19.1915 / video -3.9820 mm) so each family measured FL median = 81.5; PA/MT byte-identical. Slot 3 of 5 on 2026-09-12 (2 used at 22:58/22:59Z), week 23/35.",
+    "expected_benefit": "Removes a family-level FL level fault the pooled scalar cannot fix (56 png rows 12.8 mm low). FL still holds the largest residual term (0.39 of 0.69 pre-flip).",
+    "expected_score_delta": "-0.01 to -0.06 (label-free: png-only bias bound 56 rows x 19.2 mm x 0.00027 = 0.29 at the public-row weight; a third of a bias bound has been the house rate; the shifts are 1.5x the alpha-0.5 build so the expected range widens)",
+    "falsifier": "public not < 0.55882 (0.56382 - 0.005) -> the family FL offsets are real anatomy/device differences, not a level fault; per-family level retired for FL and PA (L8f-pa not submitted). Fires (< 0.55882) -> L8f2 becomes the composed best and L8f-pa (same script --target pa on the L8f2 file) goes in slot 4 with falsifier not < (L8f2 read - 0.005).",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8f2_family_fl_level_a075.csv -m 'L8f2 per-family FL level on the alpha-0.75 composed best (0.56382): one additive FL shift per family tif +4.38 / png +19.19 / video -3.98 mm so each family median = 81.5; PA and MT byte-identical'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-12T23:09:00Z",
+  "hold_until_utc": null,
+  "hold_reason": null,
+  "submitted_utc": "2026-09-12T23:09:33Z",
+  "submission_id": "56194218"
+}

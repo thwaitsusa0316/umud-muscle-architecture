@@ -27,8 +27,10 @@
     "falsifier": "public not < 0.58333 (0.58833 - 0.005) -> alpha 0.75 is not better than 0.5 by more than the noise floor; the best of the three reads (0.25 / 0.5 / 0.75) is frozen as the FL alpha, ties go to 0.5. Fires (< 0.58333) -> that alpha becomes the composed best; no further bracket.",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8a_compose_fl075.csv -m 'L8a FL alpha 0.75 bracket: L8 composition (clamp -> run-median -> PA shrink 0.5) with FL shrink alpha 0.75 instead of 0.5; PA and MT byte-identical to 0.58833'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-10T02:02:00Z",
   "hold_until_utc": "2026-09-11T00:00:00Z",
-  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 2 on 2026-09-11 (alpha 0.25 slot 1, 0.75 slot 2)"
+  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 2 on 2026-09-11 (alpha 0.25 slot 1, 0.75 slot 2)",
+  "submitted_utc": "2026-09-12T22:59:55Z",
+  "submission_id": "56194131"
 }
