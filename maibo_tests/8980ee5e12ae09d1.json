@@ -1,0 +1,23 @@
+{
+  "set_id": "8980ee5e12ae09d1",
+  "files": {
+    "scripts/l10_gate.py": "59551e3905e08ea3b5bf6fe403ae8df3e166b0a4b282380a2c6cc3cb77f26af7"
+  },
+  "engine": "codex",
+  "context": "L10 gate (PLAN v27): reads reports/l10/bench_rows_<tag>.csv (columns image_id,pa_deg,fl_mm,mt_mm,ok,note; 35 benchmark images), reports/l10/pipeline_a1_scalev3d2_flip_pw6s*_rows.csv and reports/pipeline_a1_scalev3d2_flip_rows.csv (309 test rows; columns include image_id, fl_mm, fl_measured bool). umud.validation.load() returns a DataFrame with image_id, path, px_per_cm, pa_deg, fl_mm, mt_mm (+ _sd, dltrack_*). Computes the per-image median FL over members, MAE vs consensus (gate < 5.35 mm) and mean pairwise Spearman on commonly measured test rows (gate > 0.2), writes gate.json + ensemble_fl_rows.csv. Reviewer: python/pandas errors, index alignment bugs, NaN handling, exit codes; do not judge the modelling.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "codex\nREVIEW-b3083be1 VERDICT: PASS\ntokens used\n12,407\nREVIEW-b3083be1 VERDICT: PASS\n\ncase: 20260913T202545Z_6f9743_ask",
+  "nonce": "b3083be1",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-b3083be1 VERDICT: PASS\ntokens used\n12,407\nREVIEW-b3083be1 VERDICT: PASS\n\ncase: 20260913T202545Z_6f9743_ask"
+    }
+  ]
+}
