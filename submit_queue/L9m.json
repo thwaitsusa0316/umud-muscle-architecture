@@ -1,0 +1,35 @@
+{
+  "id": "L9m",
+  "artifact": "outputs/sub_L9m_compose_mt05.csv",
+  "sha256": "23f1ea2bdeaa6af5aa69d512b808524db8f48791963bdede7b99e0c6b07f2cbe",
+  "generator": "scripts/make_shrink.py --mode shrink --target mt --alpha 0.5 --include-filled --source outputs/sub_L8a_compose_fl075.csv --rows reports/pipeline_a1_scalev3d2_flip_rows.csv --out outputs/sub_L9m_compose_mt05.csv --report reports/l9m_step_mt05.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "23f1ea2bdeaa6af5aa69d512b808524db8f48791963bdede7b99e0c6b07f2cbe",
+    "record": "maibo_tests/d908003dba0c1a10.json",
+    "generator_record": "maibo_tests/829189c02167a050.json",
+    "generator_records": [
+      "maibo_tests/504e12ca0dcde8c3.json",
+      "maibo_tests/aa2bc8152507c68b.json",
+      "maibo_tests/829189c02167a050.json"
+    ],
+    "note": "script r1 PASS codex 829189c0 (mt target + --include-filled; verify /tmp/l9m_script_verify.sh: 300 planned rows with the flag, refusal without it, PA alpha 0.5 path reproduces sha 22c1d4fd byte-for-byte). Artifact + report r1 PASS codex d908003d with /tmp/l9m_artifact_verify.sh exit 0: sha, 309 rows, image_id/PA/FL text-identical to the 0.56382 file, MT = 0.5*src + 0.5*20.7 on every row (max dev 5e-5), 297 rows change, 12 fixed points at 20.7, MT range 16.6737-27.4118. Real vendor panelist (codex pinned to gpt-5.5 this tick), not the local fallback."
+  },
+  "justification": {
+    "plan_version": 26,
+    "purpose": "probe",
+    "rung": "L9m",
+    "why_now": "PLAN v26 (2026-09-13T06:40Z) pre-registered MT shrinkage after the PA bracket closed (L8b025 0.58765, PA alpha frozen at 0.5). Label-free on the composed best 0.56382: 300 MT rows carry a non-constant value (289 measured-and-ok + 11 L6r run-median consensus fills), measured median 22.35 / mean 22.93 mm vs the probed public median 20.7, mean |MT-20.7| 4.21 mm; MT residual term 0.18404 is unchanged since L6o-b and now 33% of the score. ONE variable vs 0.56382: mt_mm = 0.5*src + 0.5*20.7 on those rows; PA and FL text-identical. 0 compute; exact paired delta. Slot 2 on 2026-09-13.",
+    "expected_benefit": "Halves MT dispersion and the 1.65 mm level gap on the one target with proven per-image skill; decides whether the MT column carries removable noise (fires -> alpha bracket) or is already at its best (not fired -> MT frozen, MT shrinkage retired).",
+    "expected_score_delta": "-0.01 to +0.03 (label-free: MT test MAE 1.66 vs benchmark 1.17 is only 1.4x, so less noise to shrink than FL (2.4x); PA alpha 0.5 fired -0.026 on the raw base, FL alpha 0.5 was worth about 0)",
+    "falsifier": "public not < 0.55882 (0.56382 - 0.005) -> MT shrinkage retired, MT column frozen as is, no bracket. Fires (< 0.55882) -> L9m becomes the composed best and the alpha 0.25 / 0.75 bracket goes in slots 3-4 on 2026-09-13 with falsifier not < (L9m read - 0.005), best-of-three, ties to 0.5.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L9m_compose_mt05.csv -m 'L9m MT shrink alpha 0.5: L8 composition (clamp -> run-median -> FL shrink 0.75 -> PA shrink 0.5; 0.56382) with mt_mm = 0.5*measured + 0.5*20.7 on the 300 non-constant MT rows; PA and FL byte-identical'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-13T06:33:00Z",
+  "hold_until_utc": null,
+  "hold_reason": "slot 2 on 2026-09-13; slot 5 reserve",
+  "submitted_utc": "2026-09-13T06:33:45Z",
+  "submission_id": "56201029"
+}

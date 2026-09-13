@@ -1,0 +1,2 @@
+mode,target,column,rule,alpha,lo,hi,min_rows,probed_median,include_filled,measured_rows,rows_set,rows_changed,measured_median_before,measured_median_after,min_after,max_after,source,rows_file
+shrink,mt,mt_mm,alpha=0.5,0.5,,,5,20.7,True,300,300,297,22.34555,21.522750000000002,16.6737,27.4118,outputs/sub_L8a_compose_fl075.csv,reports/pipeline_a1_scalev3d2_flip_rows.csv

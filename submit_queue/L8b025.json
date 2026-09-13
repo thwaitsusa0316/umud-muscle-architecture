@@ -26,8 +26,10 @@
     "falsifier": "public not < 0.55882 (0.56382 - 0.005) -> PA alpha 0.25 is not better than 0.5 by more than the noise floor; the best of the three PA reads (0.25 / 0.5 / 0.75) is frozen as the PA alpha, ties go to 0.5. Fires (< 0.55882) -> that alpha becomes the composed best; no further bracket.",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8b_compose_fl075_pa025.csv -m 'L8b PA alpha 0.25 bracket: L8 composition (clamp -> run-median -> FL shrink 0.75 frozen) with PA shrink alpha 0.25 instead of 0.5; FL and MT byte-identical to 0.56382'"
   },
-  "status": "queued",
+  "status": "submitted",
   "created_utc": "2026-09-12T23:15:00Z",
   "hold_until_utc": "2026-09-13T00:00:00Z",
-  "hold_reason": "slot 1 on 2026-09-13; slot 5 of 09-12 is reserve"
+  "hold_reason": "slot 1 on 2026-09-13; slot 5 of 09-12 is reserve",
+  "submitted_utc": "2026-09-13T06:23:11Z",
+  "submission_id": "56200799"
 }

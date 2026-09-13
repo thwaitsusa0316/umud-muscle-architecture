@@ -36,7 +36,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 MEDIANS = ROOT / "reports" / "public_medians.json"
 NEED = ["image_id", "pa_deg", "fl_mm", "mt_mm"]
 TARGETS = {"pa": ("pa_deg", "pa_measured", 0.0, 90.0),
-           "fl": ("fl_mm", "fl_measured", 0.0, 400.0)}
+           "fl": ("fl_mm", "fl_measured", 0.0, 400.0),
+           "mt": ("mt_mm", "mt_measured", 0.0, 60.0)}
 N_ROWS = 309
 
 
@@ -64,9 +65,13 @@ def read_csv(path: str, what: str) -> pd.DataFrame:
     return df
 
 
-def measured_ids(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: float) -> list[str]:
+def measured_ids(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: float,
+                 include_filled: bool = False) -> list[str]:
     """The image_ids the rule may touch: flagged <target>_measured and ok in the rows
-    file. Validates both frames and checks every OTHER row sits at the probed median."""
+    file. Validates both frames and checks every OTHER row sits at the probed median.
+    include_filled=True (L9m, PLAN v26): rows NOT flagged measured-and-ok whose source
+    value is not the probed median are run-median consensus fills (L6r) and are
+    included too; the every-other-row invariant is then checked on the remainder."""
     col, flag, _, _ = TARGETS[target]
     if list(source.columns) != NEED:
         raise ValueError(f"source columns must be {NEED}, got {list(source.columns)}")
@@ -90,6 +95,11 @@ def measured_ids(source: pd.DataFrame, rows: pd.DataFrame, target: str, probed: 
     ids = [str(i) for i in rows.loc[flags, "image_id"]]
     if len(ids) < 30:
         raise ValueError(f"only {len(ids)} measured rows for {target}; refusing")
+    if include_filled:
+        if not isinstance(include_filled, bool):
+            raise ValueError("include_filled must be a bool")
+        filled = source.loc[~source.image_id.isin(ids) & (source[col] != float(f"{probed:.4f}")), "image_id"]
+        ids = ids + [str(i) for i in filled]
     # the source is a %.4f file: every non-measured row must sit at the probed median
     other = source.loc[~source.image_id.isin(ids), col]
     if not (other == float(f"{probed:.4f}")).all():
@@ -159,6 +169,9 @@ def main() -> int:
     ap.add_argument("--medians", default=str(MEDIANS))
     ap.add_argument("--out", required=True)
     ap.add_argument("--report", default="")
+    ap.add_argument("--include-filled", action="store_true",
+                    help="also touch rows not flagged measured-and-ok whose value is not the probed median "
+                         "(run-median consensus fills); without it such rows make the script refuse")
     ap.add_argument("--dry-run", action="store_true", help="print the plan, write nothing")
     a = ap.parse_args()
     col, _, _, _ = TARGETS[a.target]
@@ -171,7 +184,7 @@ def main() -> int:
     source = read_csv(a.source, "source CSV")
     rows = read_csv(a.rows, "rows CSV")
     try:
-        ids = measured_ids(source, rows, a.target, probed)
+        ids = measured_ids(source, rows, a.target, probed, a.include_filled)
         if a.mode == "shrink":
             to_set = plan_shrink(source, ids, a.target, probed, a.alpha)
             rule = f"alpha={a.alpha:g}"
@@ -226,7 +239,7 @@ def main() -> int:
             rp.parent.mkdir(parents=True, exist_ok=True)
             pd.DataFrame([{"mode": a.mode, "target": a.target, "column": col, "rule": rule,
                            "alpha": a.alpha, "lo": a.lo, "hi": a.hi, "min_rows": a.min_rows,
-                           "probed_median": probed, "measured_rows": len(ids), "rows_set": len(to_set),
+                           "probed_median": probed, "include_filled": a.include_filled, "measured_rows": len(ids), "rows_set": len(to_set),
                            "rows_changed": len(changed), "measured_median_before": med_before,
                            "measured_median_after": med_after,
                            "min_after": float(got[ids].min()), "max_after": float(got[ids].max()),
