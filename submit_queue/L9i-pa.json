@@ -1,0 +1,35 @@
+{
+  "id": "L9i-pa",
+  "artifact": "outputs/sub_L9i_isolate_pa_compose.csv",
+  "sha256": "b5eadf9a6dc7d30e561bbaf4a677c5a2db419fa8e34df01ac2ad70f48a93a22c",
+  "generator": "scripts/make_isolation.py --keep pa --source outputs/sub_L8a_compose_fl075.csv --out outputs/sub_L9i_isolate_pa_compose.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "b5eadf9a6dc7d30e561bbaf4a677c5a2db419fa8e34df01ac2ad70f48a93a22c",
+    "record": "maibo_tests/c9f7be500b22c368.json",
+    "generator_record": "maibo_tests/60034c2b8ac90849.json",
+    "generator_records": [
+      "maibo_tests/5caf14272d640a19.json",
+      "maibo_tests/60034c2b8ac90849.json",
+      "maibo_tests/fc49d5d4017630e2.json"
+    ],
+    "note": "artifact r1 PASS codex with /tmp/l9i_pa_verify.sh exit 0: sha b5eadf9a, 309 rows, pa_deg text-identical to the 0.56382 file (297 non-constant rows, 12.6796-24.9684 deg), fl_mm 81.5000 and mt_mm 20.7000 on every row. Generator unchanged (sha d0e1a278, prior PASS records)."
+  },
+  "justification": {
+    "plan_version": 27,
+    "purpose": "probe",
+    "rung": "L9i",
+    "why_now": "PLAN v27 (2026-09-13T13:45Z) pre-registered L9i, the paired isolation on the composed best 0.56382 (v26 item ii), after the shrinkage family closed on 09-13 (FL alpha 0.75, PA 0.5, MT 1.0). Nothing else is queued; 2/5 slots used today, week 23/35; slots 3-4 on 2026-09-13, slot 5 reserve. 0 compute; unchanged generator scripts/make_isolation.py (sha d0e1a278, PASS records 5caf1427/60034c2b/fc49d5d4/e161d51b). The split FL_term vs PA_term of the 0.37978 residual decides what the L10 fascicle-ensemble falsifier reads (FL_term >= 0.278 -> FL isolation delta, FL only; else composed score and A18 back on the critical path).",
+    "expected_benefit": "Exact PA_term of the composed best: s_PA = 0.88293 + PA_term (MAE_PA = 18*PA_term deg on the public rows), and the checksum s_FL + s_PA = 1.81531 that verifies A5 (separability) on a composed file for the first time (clamp, run-median and shrink steps were never checked for interaction).",
+    "expected_score_delta": "s_PA expected 0.98 to 1.01 (PA_term 0.10-0.13; the PA alpha bracket 0.25->0.5 was worth -0.024); informational, delta vs 0.56382 is +0.42..+0.45 by construction",
+    "falsifier": "Informational probe: no fire/not-fire on the score. Checks: PA_term = s_PA - 0.88293 in (0, 0.15369) (else the PA column is net-harmful and the L9 selection ships PA at 16.42); s_FL + s_PA = 1.81531 +- 0.002, else A5 broken on composed files, attributions suspended and the L10 falsifier must read the composed score only.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L9i_isolate_pa_compose.csv -m 'L9i-pa PA isolation on the composed best (0.56382): pa_deg text-identical (297 non-constant rows), fl_mm 81.5 and mt_mm 20.7 on all rows; s_PA = 0.88293 + PA_term; checksum with L9i-fl = 1.81531'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-13T13:48:00Z",
+  "hold_until_utc": null,
+  "hold_reason": "slot 4 on 2026-09-13; slot 5 reserve",
+  "submitted_utc": "2026-09-13T13:41:36Z",
+  "submission_id": "56208146"
+}

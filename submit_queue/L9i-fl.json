@@ -1,0 +1,35 @@
+{
+  "id": "L9i-fl",
+  "artifact": "outputs/sub_L9i_isolate_fl_compose.csv",
+  "sha256": "15da4cf559e6ba3fd7d8f9484a45ff314c86f297e4a37585ec1659225d53a20b",
+  "generator": "scripts/make_isolation.py --keep fl --source outputs/sub_L8a_compose_fl075.csv --out outputs/sub_L9i_isolate_fl_compose.csv",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "15da4cf559e6ba3fd7d8f9484a45ff314c86f297e4a37585ec1659225d53a20b",
+    "record": "maibo_tests/76449ecbb258e8a1.json",
+    "generator_record": "maibo_tests/60034c2b8ac90849.json",
+    "generator_records": [
+      "maibo_tests/5caf14272d640a19.json",
+      "maibo_tests/60034c2b8ac90849.json",
+      "maibo_tests/fc49d5d4017630e2.json"
+    ],
+    "note": "artifact r1 PASS codex 76449ecb with /tmp/l9i_fl_verify.sh exit 0: sha 15da4cf5, 309 rows, fl_mm text-identical to the 0.56382 file (275 non-constant rows, 43.4459-120.5902 mm), pa_deg 16.4200 and mt_mm 20.7000 on every row. Generator unchanged (sha d0e1a278, prior PASS records)."
+  },
+  "justification": {
+    "plan_version": 27,
+    "purpose": "probe",
+    "rung": "L9i",
+    "why_now": "PLAN v27 (2026-09-13T13:45Z) pre-registered L9i, the paired isolation on the composed best 0.56382 (v26 item ii), after the shrinkage family closed on 09-13 (FL alpha 0.75, PA 0.5, MT 1.0). Nothing else is queued; 2/5 slots used today, week 23/35; slots 3-4 on 2026-09-13, slot 5 reserve. 0 compute; unchanged generator scripts/make_isolation.py (sha d0e1a278, PASS records 5caf1427/60034c2b/fc49d5d4/e161d51b). The split FL_term vs PA_term of the 0.37978 residual decides what the L10 fascicle-ensemble falsifier reads (FL_term >= 0.278 -> FL isolation delta, FL only; else composed score and A18 back on the critical path).",
+    "expected_benefit": "Exact FL_term of the composed best: s_FL = 0.55260 + FL_term (MAE_FL = 36*FL_term mm on the public rows); with MT_term 0.18404 fixed, PA_term = 0.37978 - FL_term follows. Names which column the L10 ensemble must move and whether FL headroom alone (FL_term - 0.165) covers the -0.1125 kill gate.",
+    "expected_score_delta": "s_FL expected 0.80 to 0.86 (FL_term 0.25-0.31; the FL alpha bracket 0.25->0.75 was worth -0.098 so FL carries most of the recovered 0.258); informational, delta vs 0.56382 is +0.24..+0.30 by construction",
+    "falsifier": "Informational probe: no fire/not-fire on the score. Checks: s_FL in (0.55260, 1.03662); FL_term = s_FL - 0.55260 < 0.48402 (else the FL column is net-harmful and the L9 selection ships FL at 81.5); with L9i-pa, s_FL + s_PA = 1.81531 +- 0.002, else A5 is broken on composed files and all attributions are suspended. Decision: FL_term >= 0.278 -> L10 FL-only, falsifier on the FL isolation delta; FL_term < 0.278 -> L10 reads the composed score and A18 returns to the critical path.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L9i_isolate_fl_compose.csv -m 'L9i-fl FL isolation on the composed best (0.56382): fl_mm text-identical (275 non-constant rows), pa_deg 16.42 and mt_mm 20.7 on all rows; s_FL = 0.55260 + FL_term'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-13T13:48:00Z",
+  "hold_until_utc": null,
+  "hold_reason": "slot 3 on 2026-09-13; slot 5 reserve",
+  "submitted_utc": "2026-09-13T13:41:03Z",
+  "submission_id": "56208134"
+}

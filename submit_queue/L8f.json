@@ -25,8 +25,10 @@
     "falsifier": "public not < (frozen-alpha best - 0.005), i.e. not < 0.58333 if alpha stays 0.5 -> the family offsets are real anatomy/device differences, not a level fault; per-family level retired for FL and PA (L8f-pa not submitted). Fires (< best - 0.005) -> L8f becomes the composed best and L8f-pa (same script --target pa: tif -0.7588 / png -2.7213 / video +0.7109 deg) goes in slot 4 on top of it with falsifier not < (L8f read - 0.005).",
     "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L8f_family_fl_level.csv -m 'L8f per-family FL level: L8 composition (0.58833) with one additive FL shift per family tif +2.92 / png +12.79 / video -2.65 mm so each family median = 81.5; PA and MT byte-identical'"
   },
-  "status": "queued",
+  "status": "retired",
   "created_utc": "2026-09-10T11:50:00Z",
   "hold_until_utc": "2026-09-11T00:00:00Z",
-  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 3 on 2026-09-11 after the alpha bracket (L8a025 slot 1, L8a075 slot 2)"
+  "hold_reason": "5/5 slots used on 2026-09-10; pre-registered slot 3 on 2026-09-11 after the alpha bracket (L8a025 slot 1, L8a075 slot 2)",
+  "retired_utc": "2026-09-13T13:45:00Z",
+  "retired_reason": "superseded by L8f2 (regenerated on the alpha-0.75 winner per the v24 conditional; read 0.63362, +0.070, retired 2026-09-12T23:08Z); justification is against v24, current plan v27"
 }
