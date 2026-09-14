@@ -1,0 +1,18 @@
+{
+  "arch": "fpn",
+  "n_bench_images": 34,
+  "bench_fl_mae": 5.881890317039986,
+  "mae_max": 5.35,
+  "gate1_pass": false,
+  "fl_measured_cover": 303,
+  "n_test_rows": 309,
+  "min_cover": 280,
+  "gate2_pass": true,
+  "n_common_test_rows": 297,
+  "spearman_vs_pw6": 0.8670145129876674,
+  "rho_min": 0.2,
+  "gate3_pass": true,
+  "test_fl_median_new": 104.58135386400956,
+  "test_fl_median_pw6": 93.61875047348217,
+  "verdict": "NO-GO"
+}

@@ -27,7 +27,7 @@ if [[ ! -f "$OUT/${ARCH}.train.done" ]]; then
 fi
 if [[ $fail -eq 0 && ! -f "$OUT/${ARCH}.pred.done" ]]; then
   echo "== predict $ARCH start $(date -u +%H:%M:%SZ)"
-  "$PY" scripts/make_submission.py --aspect 1 --fasc-ckpt "$ckpt" --fasc-thr $THR \
+  "$PY" scripts/make_submission.py --aspect 1 --fasc-ckpt "$ckpt" --fasc-thr $THR --fasc-arch "$ARCH" \
       --scale reports/scale_v3d2.json --flip-positive \
       --out "outputs/sub_L11_${ARCH}_raw.csv" --report "$OUT/pipeline_a1_scalev3d2_flip_${ARCH}_rows.csv" \
       > "$OUT/pred_${ARCH}.log" 2>&1
@@ -37,7 +37,7 @@ if [[ $fail -eq 0 && ! -f "$OUT/${ARCH}.pred.done" ]]; then
 fi
 if [[ $fail -eq 0 && ! -f "$OUT/${ARCH}.bench.done" ]]; then
   echo "== bench $ARCH start $(date -u +%H:%M:%SZ)"
-  "$PY" scripts/l10_bench_rows.py --ckpt "$ckpt" --thr $THR --out "$OUT/bench_rows_${ARCH}.csv" \
+  "$PY" scripts/l10_bench_rows.py --ckpt "$ckpt" --thr $THR --arch "$ARCH" --out "$OUT/bench_rows_${ARCH}.csv" \
       > "$OUT/bench_${ARCH}.log" 2>&1
   rc=$?
   if [[ $rc -ne 0 ]]; then echo "!! bench $ARCH FAILED rc=$rc"; fail=1; fi

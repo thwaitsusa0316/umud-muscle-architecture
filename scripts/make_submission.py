@@ -100,7 +100,7 @@ def gate_mt(mt, lo: float = MT_GATE[0], hi: float = MT_GATE[1]) -> tuple[float, 
 def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
           fasc_thr: float = 0.9, scale_path: pathlib.Path = SCALE_JSON,
           mt_gate: tuple[float, float] = MT_GATE,
-          flip_ids: set[str] | None = None) -> pd.DataFrame:
+          flip_ids: set[str] | None = None, fasc_arch: str = "unet") -> pd.DataFrame:
     """flip_ids: image names mirrored left-right (cv2.flip(gray, 1)) BEFORE both the
     aponeurosis and the fascicle model, as in scripts/l6o_flip_audit.py. PA, FL and MT
     are mirror-invariant physical quantities, so no un-flipping of the outputs is needed."""
@@ -108,7 +108,7 @@ def build(aspect: float = ASPECT_RESIZED, batch: int = 24, fasc_ckpt=None,
     flip_ids = set(flip_ids or ())
     if fasc_ckpt:
         from eval_new_fascicle import load_model, predict_ours
-        ours = load_model("unet", fasc_ckpt)
+        ours = load_model(fasc_arch, fasc_ckpt)   # L11: arch must match the checkpoint
     scale = load_scale(scale_path)
     names = sorted((p.name for p in TEST.iterdir()
                     if p.suffix.lower() in {".tif", ".png"}), key=G._index)
@@ -159,6 +159,8 @@ def main() -> None:
     ap.add_argument("--message", default="")
     ap.add_argument("--fasc-ckpt", default=None, help="use our retrained fascicle model")
     ap.add_argument("--fasc-thr", type=float, default=0.9)
+    ap.add_argument("--fasc-arch", default="unet", choices=["unet", "unetpp", "fpn", "segformer"],
+                    help="smp architecture of --fasc-ckpt (default unet = the shipped pw6)")
     ap.add_argument("--scale", default=str(SCALE_JSON), help="px/cm lookup JSON")
     ap.add_argument("--mt-gate", type=float, nargs=2, default=list(MT_GATE),
                     metavar=("LO", "HI"), help="MT plausibility band in mm; else median")
@@ -183,7 +185,8 @@ def main() -> None:
 
     try:
         df = build(aspect=a.aspect, fasc_ckpt=a.fasc_ckpt, fasc_thr=a.fasc_thr,
-                   scale_path=pathlib.Path(a.scale), mt_gate=(lo, hi), flip_ids=flip_ids)
+                   scale_path=pathlib.Path(a.scale), mt_gate=(lo, hi), flip_ids=flip_ids,
+                   fasc_arch=a.fasc_arch)
     except (FileNotFoundError, ValueError) as e:   # missing scale JSON / test dir, bad flip list
         sys.exit(str(e))
     if flip_ids:

@@ -29,12 +29,14 @@ def main() -> int:
     ap.add_argument("--ckpt", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--thr", type=float, default=0.9)
+    ap.add_argument("--arch", default="unet", choices=["unet", "unetpp", "fpn", "segformer"],
+                    help="smp architecture of --ckpt (default unet)")
     a = ap.parse_args()
     ckpt = pathlib.Path(a.ckpt)
     if not ckpt.is_file():
         print(f"ERROR: checkpoint not found: {ckpt}", file=sys.stderr)
         return 2
-    model, dev = load_model("unet", str(ckpt))
+    model, dev = load_model(a.arch, str(ckpt))
     t = V.load()
     grays = []
     for p in t.path:

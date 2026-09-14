@@ -28,7 +28,8 @@ SIZE = 512
 
 
 def load_model(arch="unet", ckpt=None):
-    m = {"unet": smp.Unet, "unetpp": smp.UnetPlusPlus, "fpn": smp.FPN}[arch](
+    m = {"unet": smp.Unet, "unetpp": smp.UnetPlusPlus, "fpn": smp.FPN,
+         "segformer": smp.Segformer}[arch](   # same table as train_fascicle.build
         encoder_name="resnet34", encoder_weights=None, in_channels=3, classes=1)
     p = ckpt or (ROOT / "checkpoints" / f"fasc_{arch}_best.pt")
     m.load_state_dict(torch.load(p, map_location="cpu"))

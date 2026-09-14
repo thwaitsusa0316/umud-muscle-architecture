@@ -1,0 +1,6 @@
+L11 chain start 2026-09-14T03:25:21Z arch=fpn epochs=16 pos_weight=6 dilate=2 thr=0.9
+== train fpn start 03:25:21Z
+== train fpn done 03:56:44Z
+== predict fpn start 03:56:44Z
+!! predict fpn FAILED rc=1
+L11 fpn finished WITH FAILURES 2026-09-14T03:56:47Z

@@ -1,0 +1,4 @@
+L11 chain start 2026-09-14T12:25:44Z arch=segformer epochs=16 pos_weight=6 dilate=2 thr=0.9
+== train segformer start 12:25:44Z
+!! train segformer FAILED rc=1 (no /Users/smt2/data/competitions/umud-muscle/checkpoints/fasc_segformer_pw6_best.pt)
+L11 segformer finished WITH FAILURES 2026-09-14T12:25:47Z
