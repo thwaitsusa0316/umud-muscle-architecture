@@ -1,2 +1,8 @@
 L11 chain start 2026-09-14T12:27:43Z arch=unetpp epochs=16 pos_weight=6 dilate=2 thr=0.9
 == train unetpp start 12:27:43Z
+== train unetpp done 13:34:13Z
+== predict unetpp start 13:34:13Z
+== predict unetpp done 13:48:02Z
+== bench unetpp start 13:48:02Z
+== bench unetpp done 13:49:57Z
+L11 unetpp ALL done 2026-09-14T13:49:57Z

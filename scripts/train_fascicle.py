@@ -89,8 +89,16 @@ def dice(logits, y, eps=1.0):
 def build(arch: str):
     kw = dict(encoder_name="resnet34", encoder_weights="imagenet",
               in_channels=3, classes=1)
-    return {"unet": smp.Unet, "unetpp": smp.UnetPlusPlus,
-            "fpn": smp.FPN, "segformer": smp.Segformer}[arch](**kw)
+    model = {"unet": smp.Unet, "unetpp": smp.UnetPlusPlus,
+             "fpn": smp.FPN, "segformer": smp.Segformer}[arch](**kw)
+    if arch == "segformer":
+        # smp 0.5.0 Segformer on MPS (L11b, 2026-09-14): batch_norm backward inside decoder.fuse_stage
+        # raises "view size is not compatible with input tensor's size and stride" because the
+        # torch.cat of the MLP-stage outputs (transpose -> reshape -> interpolate) is non-contiguous.
+        # Making the fuse-stage input contiguous is the whole fix; the other archs are untouched.
+        model.decoder.fuse_stage.register_forward_pre_hook(
+            lambda mod, args: tuple(a.contiguous() if torch.is_tensor(a) else a for a in args))
+    return model
 
 
 def main() -> None:

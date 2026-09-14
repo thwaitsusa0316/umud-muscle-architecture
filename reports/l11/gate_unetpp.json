@@ -1,0 +1,18 @@
+{
+  "arch": "unetpp",
+  "n_bench_images": 34,
+  "bench_fl_mae": 5.615700775329523,
+  "mae_max": 5.35,
+  "gate1_pass": false,
+  "fl_measured_cover": 298,
+  "n_test_rows": 309,
+  "min_cover": 280,
+  "gate2_pass": true,
+  "n_common_test_rows": 293,
+  "spearman_vs_pw6": 0.9849097523903667,
+  "rho_min": 0.2,
+  "gate3_pass": true,
+  "test_fl_median_new": 93.00938228899062,
+  "test_fl_median_pw6": 93.61875047348217,
+  "verdict": "NO-GO"
+}

@@ -2,3 +2,21 @@
 /Users/smt2/data/competitions/umud-muscle/scripts/train_fascicle.py:136: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
   tot += float(loss)
+  epoch  1/16  loss 0.8081  val_dice 0.5596  265s
+  epoch  2/16  loss 0.5656  val_dice 0.5387  259s
+  epoch  3/16  loss 0.5278  val_dice 0.6247  246s
+  epoch  4/16  loss 0.5050  val_dice 0.5968  254s
+  epoch  5/16  loss 0.4967  val_dice 0.5963  246s
+  epoch  6/16  loss 0.4767  val_dice 0.6072  247s
+  epoch  7/16  loss 0.4616  val_dice 0.6286  246s
+  epoch  8/16  loss 0.4470  val_dice 0.6287  250s
+  epoch  9/16  loss 0.4268  val_dice 0.6446  247s
+  epoch 10/16  loss 0.4099  val_dice 0.6470  242s
+  epoch 11/16  loss 0.3934  val_dice 0.6337  240s
+  epoch 12/16  loss 0.3761  val_dice 0.6667  251s
+  epoch 13/16  loss 0.3625  val_dice 0.6626  245s
+  epoch 14/16  loss 0.3493  val_dice 0.6669  246s
+  epoch 15/16  loss 0.3418  val_dice 0.6611  248s
+  epoch 16/16  loss 0.3377  val_dice 0.6698  255s
+
+best val Dice 0.6698 -> /Users/smt2/data/competitions/umud-muscle/checkpoints/fasc_unetpp_pw6_best.pt
