@@ -1,0 +1,23 @@
+{
+  "set_id": "db494695b0e24a21",
+  "files": {
+    "scripts/l11_train_arch.sh": "186e7d8a5e0e8ed1031d1542fc75919e184d5c807caa07490399e8284b403152"
+  },
+  "engine": "codex",
+  "context": "zsh chain script for PLAN v29 rung L11: one architecture swap (L11_ARCH in fpn|segformer|unetpp) of the pw6 fascicle recipe; derived from the PASSed scripts/l10_train_seeds.sh (same trainer/predictor/bench CLIs: train_fascicle.py names the checkpoint checkpoints/fasc_<arch><tag>_best.pt; make_submission.py takes --fasc-ckpt --out --report; l10_bench_rows.py takes --ckpt --thr --out). Idempotent .done markers under reports/l11/. Check: ckpt path matches the trainer naming, failure handling never touches a .done marker after a failed stage, no stage runs after a failure, no clash with the unet pw6 checkpoint.",
+  "local_verify": null,
+  "verdict": "PASS",
+  "passed": true,
+  "errors": [],
+  "unsure": [],
+  "raw": "codex\nREVIEW-a501a864 VERDICT: PASS\ntokens used\n19,610\nREVIEW-a501a864 VERDICT: PASS\n\ncase: 20260914T032340Z_b436b0_ask",
+  "nonce": "a501a864",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "codex\nREVIEW-a501a864 VERDICT: PASS\ntokens used\n19,610\nREVIEW-a501a864 VERDICT: PASS\n\ncase: 20260914T032340Z_b436b0_ask"
+    }
+  ]
+}

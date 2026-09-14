@@ -1,0 +1,26 @@
+L10 chain start 2026-09-13T20:34:09Z seeds=1 2 3 4 epochs=16 pos_weight=6 dilate=2 thr=0.9
+== train pw6s1 start 20:34:09Z
+== train pw6s1 done 21:10:07Z
+== predict pw6s1 start 21:10:07Z
+== predict pw6s1 done 21:23:00Z
+== bench pw6s1 start 21:23:00Z
+== bench pw6s1 done 21:24:15Z
+== train pw6s2 start 21:24:15Z
+== train pw6s2 done 21:56:04Z
+== predict pw6s2 start 21:56:04Z
+== predict pw6s2 done 22:08:43Z
+== bench pw6s2 start 22:08:43Z
+== bench pw6s2 done 22:09:58Z
+== train pw6s3 start 22:09:58Z
+== train pw6s3 done 22:41:52Z
+== predict pw6s3 start 22:41:52Z
+== predict pw6s3 done 22:54:43Z
+== bench pw6s3 start 22:54:43Z
+== bench pw6s3 done 22:55:57Z
+== train pw6s4 start 22:55:57Z
+== train pw6s4 done 23:28:11Z
+== predict pw6s4 start 23:28:11Z
+== predict pw6s4 done 23:41:35Z
+== bench pw6s4 start 23:41:35Z
+== bench pw6s4 done 23:42:50Z
+L10 chain ALL done 2026-09-13T23:44:03Z

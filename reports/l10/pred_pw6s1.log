@@ -1,0 +1,22 @@
+L6o-b: mirroring 113 positive-slope frames from /Users/smt2/data/competitions/umud-muscle/reports/l6t_fascicle_evidence.csv
+  24/309
+  48/309
+  72/309
+  96/309
+  120/309
+  144/309
+  168/309
+  192/309
+  216/309
+  240/309
+  264/309
+  288/309
+  309/309
+  flipped 113/309 frames
+
+PA measured on 296/309; FL measured on 296/309; scale on 309/309; MT raw on 309, shipped after gate [8, 35] mm on 299 (gated out 10)
+  pa_deg   median   13.57  (probed 16.42)
+  fl_mm    median   91.57  (probed 81.5)
+  mt_mm    median   22.31  (probed 20.7)
+
+wrote outputs/sub_L10_pw6s1_raw.csv

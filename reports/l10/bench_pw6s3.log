@@ -1,0 +1,6 @@
+ckpt=fasc_unet_pw6s3_best.pt thr=0.9 usable 34/35 -> /Users/smt2/data/competitions/umud-muscle/reports/l10/bench_rows_pw6s3.csv
+UMUD = 0.3741
+target  n   mae   bias   rmse  contribution  share
+pa_deg 34 1.325 -0.383  1.657         0.074  0.197
+ fl_mm 34 6.142 -1.484 10.123         0.171  0.456
+ mt_mm 34 1.169 -0.894  3.355         0.130  0.347

@@ -1,0 +1,22 @@
+2761 pairs -> train 2430, val 331 | device mps | arch unet
+/Users/smt2/data/competitions/umud-muscle/scripts/train_fascicle.py:136: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:823.)
+  tot += float(loss)
+  epoch  1/16  loss 0.7250  val_dice 0.4735  100s
+  epoch  2/16  loss 0.5749  val_dice 0.5738  128s
+  epoch  3/16  loss 0.5363  val_dice 0.5814  144s
+  epoch  4/16  loss 0.5218  val_dice 0.5582  114s
+  epoch  5/16  loss 0.5169  val_dice 0.5664  125s
+  epoch  6/16  loss 0.4995  val_dice 0.6194  102s
+  epoch  7/16  loss 0.4805  val_dice 0.6289  140s
+  epoch  8/16  loss 0.4669  val_dice 0.6433  100s
+  epoch  9/16  loss 0.4522  val_dice 0.6121  136s
+  epoch 10/16  loss 0.4393  val_dice 0.6231  101s
+  epoch 11/16  loss 0.4223  val_dice 0.6274  137s
+  epoch 12/16  loss 0.4093  val_dice 0.6264  100s
+  epoch 13/16  loss 0.3956  val_dice 0.6319  143s
+  epoch 14/16  loss 0.3869  val_dice 0.6421  100s
+  epoch 15/16  loss 0.3802  val_dice 0.6342  133s
+  epoch 16/16  loss 0.3761  val_dice 0.6462  102s
+
+best val Dice 0.6462 -> /Users/smt2/data/competitions/umud-muscle/checkpoints/fasc_unet_pw6s2_best.pt
