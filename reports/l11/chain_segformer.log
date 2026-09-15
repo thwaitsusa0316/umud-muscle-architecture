@@ -1,0 +1,8 @@
+L11 chain start 2026-09-14T19:23:50Z arch=segformer epochs=16 pos_weight=6 dilate=2 thr=0.9
+== train segformer start 19:23:50Z
+== train segformer done 20:01:51Z
+== predict segformer start 20:01:51Z
+== predict segformer done 20:15:14Z
+== bench segformer start 20:15:14Z
+== bench segformer done 20:16:36Z
+L11 segformer ALL done 2026-09-14T20:16:36Z
