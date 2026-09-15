@@ -31,10 +31,10 @@ POS_WEIGHT = 40.0
 EXT = {".tif", ".tiff", ".png"}
 
 
-def pairs() -> list[tuple[pathlib.Path, pathlib.Path]]:
-    masks = {p.stem: p for p in MSK.iterdir() if p.suffix.lower() in EXT}
+def pairs(img_dir: pathlib.Path = IMG, msk_dir: pathlib.Path = MSK) -> list[tuple[pathlib.Path, pathlib.Path]]:
+    masks = {p.stem: p for p in msk_dir.iterdir() if p.suffix.lower() in EXT}
     out = []
-    for p in sorted(IMG.iterdir()):
+    for p in sorted(img_dir.iterdir()):
         if p.suffix.lower() in EXT and p.stem in masks:
             out.append((p, masks[p.stem]))
     return out
@@ -111,6 +111,13 @@ def main() -> None:
     ap.add_argument("--pos-weight", type=float, default=POS_WEIGHT)
     ap.add_argument("--dilate", type=int, default=DILATE)
     ap.add_argument("--tag", default="")
+    # L6t-b (PLAN v32, behind human gate 3 / A18): extra image/mask pairs (the model's own
+    # pseudo-labels on the test frames, written by scripts/l6t_make_pseudo.py under
+    # <dir>/imgs and <dir>/masks) appended to the TRAIN split only; the validation split
+    # stays the same host-labelled frames so val Dice remains comparable with pw6.
+    ap.add_argument("--pseudo-dir", default=None)
+    # optional warm start (state_dict) instead of the ImageNet encoder + random decoder
+    ap.add_argument("--init-ckpt", default=None)
     a = ap.parse_args()
 
     torch.manual_seed(a.seed); random.seed(a.seed); np.random.seed(a.seed)
@@ -119,10 +126,22 @@ def main() -> None:
     rng = random.Random(a.seed); rng.shuffle(items)
     n_val = max(40, int(0.12 * len(items)))
     val, tr = items[:n_val], items[n_val:]
-    print(f"{len(items)} pairs -> train {len(tr)}, val {len(val)} | device {dev} | arch {a.arch}",
+    n_pseudo = 0
+    if a.pseudo_dir:
+        pd_ = pathlib.Path(a.pseudo_dir)
+        extra = pairs(pd_ / "imgs", pd_ / "masks")
+        if not extra:
+            raise FileNotFoundError(f"--pseudo-dir {pd_}: no image/mask pairs under imgs/ and masks/")
+        tr = tr + extra
+        n_pseudo = len(extra)
+    extra_note = f" (pseudo {n_pseudo})" if a.pseudo_dir else ""
+    print(f"{len(items)} pairs -> train {len(tr)}{extra_note}, val {len(val)} | device {dev} | arch {a.arch}",
           flush=True)
 
     model = build(a.arch).to(dev)
+    if a.init_ckpt:
+        model.load_state_dict(torch.load(a.init_ckpt, map_location="cpu"))
+        print(f"warm start from {a.init_ckpt}", flush=True)
     opt = torch.optim.AdamW(model.parameters(), lr=a.lr)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs)
     # pos_weight counteracts the residual imbalance that dilation does not remove;
@@ -155,8 +174,11 @@ def main() -> None:
         if d > best:
             best = d
             torch.save(model.state_dict(), CKPT / f"fasc_{a.arch}{a.tag}_best.pt")
-    (ROOT / "reports" / f"train_fasc_{a.arch}{a.tag}.json").write_text(
-        json.dumps({"arch": a.arch, "best_val_dice": best, "history": hist}, indent=1))
+    report = {"arch": a.arch, "best_val_dice": best, "history": hist}
+    if a.pseudo_dir or a.init_ckpt:
+        # only L6t-style calls change the report shape; plain calls stay byte-identical
+        report.update({"n_pseudo": n_pseudo, "pseudo_dir": a.pseudo_dir, "init_ckpt": a.init_ckpt})
+    (ROOT / "reports" / f"train_fasc_{a.arch}{a.tag}.json").write_text(json.dumps(report, indent=1))
     print(f"\nbest val Dice {best:.4f} -> {CKPT / f'fasc_{a.arch}{a.tag}_best.pt'}")
 
 

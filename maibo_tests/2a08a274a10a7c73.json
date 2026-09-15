@@ -1,0 +1,76 @@
+{
+  "set_id": "2a08a274a10a7c73",
+  "files": {
+    "scripts/l6t_make_pseudo.py": "27bbe02ce6063d1de56e87f534bec75210268c6b2b185b8d5568b9deaa332f35",
+    "scripts/train_fascicle.py": "c245dcda043108d8d9cb449a11543885f0551d22b8db9c726cc42caa74e674f3",
+    "scripts/l11_gate.py": "4ab91401bb9a447d1ce1670b09d9009a9065af748036633d28ded979eef14e3a",
+    "scripts/l6t_self_train.sh": "c2207a18859517e3cc708a612a8872011f07b00f5a1774e8e8478075fe3830a0"
+  },
+  "engine": "codex",
+  "context": "PLAN v32 L6t-b (parked on human gate A18; NOT to be run this tick). Re-test r2 after fixing codex r1 (set 479272e18c252973) FAILs: (1) l6t_make_pseudo.py now clears imgs/ and masks/ PNGs under --out before writing and returns 2 if the on-disk pair count != n_kept; (2) l6t_self_train.sh now branches on the l11_gate.py exit code: 0 GO / 1 NO-GO both write ALL.done with the verdict, rc 2/other sets fail=1, no ALL.done, exit 1. l6t_make_pseudo.py pseudo-labels the 309 test frames with the shipped pw6 unet (thr 0.9), skeletonises to 1px at 512 then nearest-upsamples to native, keeps frames with skeleton fraction in [5e-4, 0.02], exit 1 if < 250 kept. train_fascicle.py gains --pseudo-dir (extra pairs appended to TRAIN split only, val untouched) and --init-ckpt; existing calls must be byte-identical in behaviour. l11_gate.py gains the 'l6t' name key. Check: mask dtype/thickness matches host labels after the trainer's dilate+resize; sys.path import of eval_new_fascicle.load_model from scripts/; zsh quoting; marker/skip logic; exit codes.",
+  "local_verify": null,
+  "verdict": "FAIL",
+  "passed": false,
+  "errors": [
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   ap.add_argument(\"--arch\", required=True, choices=[\"fpn\", \"segformer\", \"unetpp\"])",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   masks = {p.stem: p for p in MSK.iterdir() if p.suffix.lower() in EXT}",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   for p in sorted(IMG.iterdir()):",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   print(f\"{len(items)} pairs -> train {len(tr)}, val {len(val)} | device {dev} | arch {a.arch}\",",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "       json.dumps({\"arch\": a.arch, \"best_val_dice\": best, \"history\": hist}, indent=1))",
+      "fix": null
+    },
+    {
+      "file": "01_train_fascicle.py",
+      "line": "176",
+      "sev": "major",
+      "desc": "Existing no-pseudo/no-init calls are no longer byte-identical: the report JSON now adds n_pseudo/pseudo_dir/init_ckpt, and stdout at line 137 adds \"(pseudo 0)\"",
+      "fix": "preserve the old print/report shape unless --pseudo-dir or --init-ckpt is supplied."
+    },
+    {
+      "file": "01_train_fascicle.py",
+      "line": "176",
+      "sev": "major",
+      "desc": "Existing no-pseudo/no-init calls are no longer byte-identical: the report JSON now adds n_pseudo/pseudo_dir/init_ckpt, and stdout at line 137 adds \"(pseudo 0)\"",
+      "fix": "preserve the old print/report shape unless --pseudo-dir or --init-ckpt is supplied."
+    }
+  ],
+  "unsure": [],
+  "raw": "exec\n/bin/zsh -lc \"nl -ba scripts/l6t_make_pseudo.py | sed -n '1,220p'\" in /Users/smt2/data/competitions/umud-muscle\nexec\n/bin/zsh -lc \"nl -ba scripts/l11_gate.py | sed -n '1,220p'\" in /Users/smt2/data/competitions/umud-muscle\n succeeded in 0ms:\n     1\t#!/usr/bin/env python3\n     2\t\"\"\"L6t-b step 1: pseudo-label the 309 test frames with the shipped pw6 fascicle U-Net.\n     3\t\n     4\tRuns ONLY after human gate 3 (A18, PLAN v32) is answered \"permitted\": it reads the\n     5\tcompetition's own test images and writes a training-style image/mask pair per frame\n     6\tunder --out (imgs/<stem>.png, masks/<stem>.png, 0/255). No external labels, no hand\n     7\tlabelling: every mask is the model's own prediction (Foundational Rule 4.b is about\n     8\thuman labelling of the test records, which this is not).\n     9\t\n    10\tMask thickness is matched to the host labels: the host fascicle masks are 1-2 px\n    11\tlines (~0.15 % positive at native size) that train_fascicle.py dilates twice before\n    12\tthe 512 resize. A raw sigmoid > thr mask is 3-6 px wide at 512, so it is\n    13\tskeletonised to 1 px at 512 first and then upsampled (nearest) to the native grid;\n    14\tthe trainer's dilate then gives the same ~2 px line at 512 that the host labels get.\n    15\t\n    16\tFrames whose skeleton covers < --min-frac or > --max-frac of the 512 grid are\n    17\tskipped (empty or blown-out predictions teach nothing useful); the list is written\n    18\tto --summary so the count is auditable (pre-registered: >= 250 of 309 kept, else\n    19\tthe pseudo set is too thin and L6t-b is not launched).\n    20\t\"\"\"\n    21\tfrom __future__ import annotations\n    22\timport sys, os, json, pathlib, argparse\n    23\tos.environ.setdefault(\"OPENCV_LOG_LEVEL\", \"SILENT\")\n    24\tROOT = pathlib.Path(__file__).resolve().parents[1]\n    25\tsys.path.insert(0, str(ROOT / \"src\"))\n    26\tsys.path.insert(0, str(ROOT / \"scripts\"))\n    27\timport numpy as np, cv2\n    28\tfrom skimage.morphology import skeletonize\n    29\t\n    30\tTEST = ROOT / \"data\" / \"raw\" / \"test_images_v2\" / \"test_set_v2\"\n    31\tEXT = {\".tif\", \".tiff\", \".png\"}\n    32\tSIZE = 512\n    33\t\n    34\t\n    35\tdef main() -> int:\n    36\t    ap = argparse.ArgumentParser()\n    37\t    ap.add_argument(\"--ckpt\", default=str(ROOT / \"checkpoints\" / \"fasc_unet_pw6_best.pt\"))\n    38\t    ap.add_argument(\"--arch\", default=\"unet\")\n    39\t    ap.add_argument(\"--thr\", type=float, default=0.9, help=\"shipped production threshold\")\n    40\t    ap.add_argument(\"--out\", default=str(ROOT / \"data\" / \"pseudo\" / \"l6t\"))\n    41\t    ap.add_argument(\"--summary\", default=str(ROOT / \"reports\" / \"l6t\" / \"pseudo_summary.json\"))\n    42\t    ap.add_argument(\"--min-frac\", type=float, default=0.0005)\n    43\t    ap.add_argument(\"--max-frac\", type=float, default=0.02)\n    44\t    ap.add_argument(\"--min-keep\", type=int, default=250)\n    45\t    ap.add_argument(\"--test-dir\", default=str(TEST))\n    46\t    a = ap.parse_args()\n    47\t\n    48\t    from eval_new_fascicle import load_model\n    49\t    import torch\n    50\t    model, dev = load_model(a.arch, a.ckpt)\n    51\t    test_dir = pathlib.Path(a.test_dir)\n    52\t    names = sorted(p.name for p in test_dir.iterdir() if p.suffix.lower() in EXT)\n    53\t    if not names:\n    54\t        print(f\"ERROR: no test images under {test_dir}\", file=sys.stderr)\n    55\t        return 2\n    56\t    out = pathlib.Path(a.out)\n    57\t    (out / \"imgs\").mkdir(parents=True, exist_ok=True)\n    58\t    (out / \"masks\").mkdir(parents=True, exist_ok=True)\n    59\t    # A rerun must not train on stale pairs from an earlier pass (a frame kept then may be\n    60\t    # skipped now): clear both output subdirs before writing anything.\n    61\t    n_stale = 0\n    62\t    for sub in (\"imgs\", \"masks\"):\n    63\t        for old in (out / sub).glob(\"*.png\"):\n    64\t            old.unlink(); n_stale += 1\n    65\t    if n_stale:\n    66\t        print(f\"cleared {n_stale} stale files under {out}\")\n    67\t    rows, kept = [], 0\n    68\t    for n in names:\n    69\t        img = cv2.imread(str(test_dir / n), cv2.IMREAD_UNCHANGED)\n    70\t        if img is None:\n    71\t            rows.append({\"image\": n, \"kept\": False, \"reason\": \"unreadable\"}); continue\n    72\t        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) if img.ndim == 3 else img\n    73\t        if gray.dtype != np.uint8:\n    74\t            gray = cv2.normalize(gray, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)\n    75\t        h, w = gray.shape[:2]\n    76\t        x = cv2.resize(gray, (SIZE, SIZE), interpolation=cv2.INTER_LINEAR)\n    77\t        x = np.repeat((x.astype(np.float32) / 255.0)[None], 3, 0)[None]\n    78\t        with torch.no_grad():\n    79\t            p = torch.sigmoid(model(torch.from_numpy(x).to(dev)))[0, 0].cpu().numpy()\n    80\t        binm = p > a.thr\n    81\t        skel = skeletonize(binm).astype(np.uint8)\n    82\t        frac = float(skel.mean())\n    83\t        keep = a.min_frac <= frac <= a.max_frac\n    84\t        rows.append({\"image\": n, \"kept\": bool(keep), \"frac512\": round(frac, 6),\n    85\t                     \"raw_frac512\": round(float(binm.mean()), 6)})\n    86\t        if not keep:\n    87\t            continue\n    88\t        native = cv2.resize(skel * 255, (w, h), interpolation=cv2.INTER_NEAREST)\n    89\t        stem = pathlib.Path(n).stem\n    90\t        cv2.imwrite(str(out / \"imgs\" / f\"{stem}.png\"), gray)\n    91\t        cv2.imwrite(str(out / \"masks\" / f\"{stem}.png\"), native)\n    92\t        kept += 1\n    93\t    n_img = len(list((out / \"imgs\").glob(\"*.png\"))); n_msk = len(list((out / \"masks\").glob(\"*.png\")))\n    94\t    if n_img != kept or n_msk != kept:\n    95\t        print(f\"ERROR: on-disk pair count imgs={n_img} masks={n_msk} != n_kept={kept}\", file=sys.stderr)\n    96\t        return 2\n    97\t    summ = {\"ckpt\": a.ckpt, \"arch\": a.arch, \"thr\": a.thr, \"n_test\": len(names), \"n_kept\": kept,\n    98\t            \"min_keep\": a.min_keep, \"min_frac\": a.min_frac, \"max_frac\": a.max_frac,\n    99\t            \"out\": str(out), \"n_pairs_on_disk\": n_img, \"rows\": rows}\n   100\t    sp = pathlib.Path(a.summary); sp.parent.mkdir(parents=True, exist_ok=True)\n   101\t    sp.write_text(json.dumps(summ, indent=1))\n   102\t    print(f\"pseudo-labelled {kept}/{len(names)} test frames -> {out} (summary {sp})\")\n   103\t    if kept < a.min_keep:\n   104\t        print(f\"ERROR: kept {kept} < min_keep {a.min_keep}: pseudo set too thin, do not launch L6t-b\",\n   105\t              file=sys.stderr)\n   106\t        return 1\n   107\t    return 0\n   108\t\n   109\t\n   110\tif __name__ == \"__main__\":\n   111\t    sys.exit(main())\n\n succeeded in 0ms:\n     1\t#!/usr/bin/env python3\n     2\t\"\"\"L11 label-free go/no-go (PLAN v29) for ONE architecture-swapped fascicle detector.\n     3\t\n     4\tSingle-model gate (no ensemble): the new arch's checkpoint must\n     5\t  gate 1 (benchmark, real GT): per-image FL MAE on the 35-image expert benchmark\n     6\t          < --mae-max (5.35 mm; the shipped pw6 U-Net scores 5.724 on the same rows);\n     7\t  gate 2 (test frames, label-free): fl_measured coverage >= --min-cover (280 of 309);\n     8\t  gate 3 (test frames, label-free): Spearman of per-image fl_mm vs the shipped pw6 rows\n     9\t          over the commonly measured test rows > --rho-min (0.2) -- below that the new\n    10\t          detector is not measuring the same structure and the composed FL cannot be trusted.\n    11\t\n    12\tInputs (written by scripts/l11_train_arch.sh for --arch):\n    13\t  reports/l11/bench_rows_<arch>.csv                          benchmark rows (l10_bench_rows.py)\n    14\t  reports/l11/pipeline_a1_scalev3d2_flip_<arch>_rows.csv     production test rows\n    15\t  reports/pipeline_a1_scalev3d2_flip_rows.csv                the shipped pw6 rows (--base-rows)\n    16\tOutput: reports/l11/gate_<arch>.json.  Exit 0 = GO, 1 = NO-GO, 2 = inputs missing.\n    17\t\"\"\"\n    18\tfrom __future__ import annotations\n    19\timport sys, json, pathlib, argparse\n    20\timport numpy as np, pandas as pd\n    21\tfrom scipy.stats import spearmanr\n    22\t\n    23\tROOT = pathlib.Path(__file__).resolve().parents[1]\n",
+  "nonce": "8d910971",
+  "tried": [
+    {
+      "engine": "codex",
+      "exit": 0,
+      "note": "",
+      "reply_head": "exec\n/bin/zsh -lc \"nl -ba scripts/l6t_make_pseudo.py | sed -n '1,220p'\" in /Users/smt2/data/competitions/umud-muscle\nexec\n/bin/zsh -lc \"nl -ba scripts/l11_gate.py | sed -n '1,220p'\" in /Users/smt2/dat"
+    }
+  ]
+}

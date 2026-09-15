@@ -35,7 +35,8 @@ def fl_series(path: pathlib.Path, need: str | None) -> pd.Series:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--arch", required=True, choices=["fpn", "segformer", "unetpp"])
+    ap.add_argument("--arch", required=True, choices=["fpn", "segformer", "unetpp", "l6t"],
+                    help="file-name key under --l11-dir (l6t = the L6t-b self-trained unet, files under reports/l6t)")
     ap.add_argument("--l11-dir", default=str(ROOT / "reports" / "l11"))
     ap.add_argument("--base-rows", default=str(ROOT / "reports" / "pipeline_a1_scalev3d2_flip_rows.csv"))
     ap.add_argument("--mae-max", type=float, default=5.35)

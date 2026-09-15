@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "engine": "codex",
+  "verdict": "PASS",
+  "errors": [],
+  "unsure": [],
+  "record": "/Users/smt2/data/competitions/umud-muscle/maibo_tests/9fee79f59915d2b5.json",
+  "sha256": {
+    "scripts/l6t_make_pseudo.py": "27bbe02ce6063d1de56e87f534bec75210268c6b2b185b8d5568b9deaa332f35",
+    "scripts/train_fascicle.py": "0bf58346e7f86c2617a2d03630565670770fbc55b2e2163db68404d21bb4b8df",
+    "scripts/l11_gate.py": "4ab91401bb9a447d1ce1670b09d9009a9065af748036633d28ded979eef14e3a",
+    "scripts/l6t_self_train.sh": "c2207a18859517e3cc708a612a8872011f07b00f5a1774e8e8478075fe3830a0"
+  }
+}

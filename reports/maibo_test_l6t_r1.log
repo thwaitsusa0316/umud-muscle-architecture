@@ -1,0 +1,43 @@
+{
+  "passed": false,
+  "engine": "codex",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "00_l6t_make_pseudo.py",
+      "line": "78",
+      "sev": "major",
+      "desc": "skipped frames leave any existing imgs/<stem>.png and masks/<stem>.png in --out, so a rerun can train on stale pseudo-pairs that the new summary says were skipped",
+      "fix": "clear both output subdirs before writing, or unlink the current stem's old image/mask before continue and verify on-disk pair count equals n_kept."
+    },
+    {
+      "file": "03_l6t_self_train.sh",
+      "line": "64",
+      "sev": "major",
+      "desc": "l11_gate.py's exit code is ignored; even rc=2 for missing inputs still touches ALL.done and the script exits 0",
+      "fix": "branch on grc before touching ALL.done, fail on rc=2/other, and propagate or explicitly record rc=1 according to the go/no-go contract."
+    },
+    {
+      "file": "00_l6t_make_pseudo.py",
+      "line": "78",
+      "sev": "major",
+      "desc": "skipped frames leave any existing imgs/<stem>.png and masks/<stem>.png in --out, so a rerun can train on stale pseudo-pairs that the new summary says were skipped",
+      "fix": "clear both output subdirs before writing, or unlink the current stem's old image/mask before continue and verify on-disk pair count equals n_kept."
+    },
+    {
+      "file": "03_l6t_self_train.sh",
+      "line": "64",
+      "sev": "major",
+      "desc": "l11_gate.py's exit code is ignored; even rc=2 for missing inputs still touches ALL.done and the script exits 0",
+      "fix": "branch on grc before touching ALL.done, fail on rc=2/other, and propagate or explicitly record rc=1 according to the go/no-go contract."
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/competitions/umud-muscle/maibo_tests/479272e18c252973.json",
+  "sha256": {
+    "scripts/l6t_make_pseudo.py": "c6097d34bdad51bb35157983896db0d974b0ec834b7a3ba8fe39a2174b3c9e38",
+    "scripts/train_fascicle.py": "c245dcda043108d8d9cb449a11543885f0551d22b8db9c726cc42caa74e674f3",
+    "scripts/l11_gate.py": "4ab91401bb9a447d1ce1670b09d9009a9065af748036633d28ded979eef14e3a",
+    "scripts/l6t_self_train.sh": "134c244d23debbce3f79ff44ee5c192c7b113de951bfbdf3104049a19ab8a814"
+  }
+}

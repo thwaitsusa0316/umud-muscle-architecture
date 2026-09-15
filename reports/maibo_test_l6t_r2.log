@@ -1,0 +1,64 @@
+{
+  "passed": false,
+  "engine": "codex",
+  "verdict": "FAIL",
+  "errors": [
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   ap.add_argument(\"--arch\", required=True, choices=[\"fpn\", \"segformer\", \"unetpp\"])",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   masks = {p.stem: p for p in MSK.iterdir() if p.suffix.lower() in EXT}",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   for p in sorted(IMG.iterdir()):",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "   print(f\"{len(items)} pairs -> train {len(tr)}, val {len(val)} | device {dev} | arch {a.arch}\",",
+      "fix": null
+    },
+    {
+      "file": "?",
+      "line": "?",
+      "sev": "unparsed",
+      "desc": "       json.dumps({\"arch\": a.arch, \"best_val_dice\": best, \"history\": hist}, indent=1))",
+      "fix": null
+    },
+    {
+      "file": "01_train_fascicle.py",
+      "line": "176",
+      "sev": "major",
+      "desc": "Existing no-pseudo/no-init calls are no longer byte-identical: the report JSON now adds n_pseudo/pseudo_dir/init_ckpt, and stdout at line 137 adds \"(pseudo 0)\"",
+      "fix": "preserve the old print/report shape unless --pseudo-dir or --init-ckpt is supplied."
+    },
+    {
+      "file": "01_train_fascicle.py",
+      "line": "176",
+      "sev": "major",
+      "desc": "Existing no-pseudo/no-init calls are no longer byte-identical: the report JSON now adds n_pseudo/pseudo_dir/init_ckpt, and stdout at line 137 adds \"(pseudo 0)\"",
+      "fix": "preserve the old print/report shape unless --pseudo-dir or --init-ckpt is supplied."
+    }
+  ],
+  "unsure": [],
+  "record": "/Users/smt2/data/competitions/umud-muscle/maibo_tests/2a08a274a10a7c73.json",
+  "sha256": {
+    "scripts/l6t_make_pseudo.py": "27bbe02ce6063d1de56e87f534bec75210268c6b2b185b8d5568b9deaa332f35",
+    "scripts/train_fascicle.py": "c245dcda043108d8d9cb449a11543885f0551d22b8db9c726cc42caa74e674f3",
+    "scripts/l11_gate.py": "4ab91401bb9a447d1ce1670b09d9009a9065af748036633d28ded979eef14e3a",
+    "scripts/l6t_self_train.sh": "c2207a18859517e3cc708a612a8872011f07b00f5a1774e8e8478075fe3830a0"
+  }
+}
