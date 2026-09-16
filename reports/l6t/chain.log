@@ -1,0 +1,12 @@
+L6t-b chain start 2026-09-16T01:40:15Z arch=unet epochs=16 pos_weight=6 dilate=2 thr=0.9 seed=0
+== pseudo start 01:40:15Z
+== pseudo done 01:40:29Z
+== train start 01:40:29Z
+== train done 02:20:34Z
+== predict start 02:20:34Z
+== predict done 02:38:11Z
+== bench start 02:38:11Z
+== bench done 02:39:58Z
+== gate 02:39:58Z
+gate exit 1 (0 GO / 1 NO-GO / 2 inputs missing) -> /Users/smt2/data/competitions/umud-muscle/reports/l6t/gate_l6t.json
+L6t-b ALL done verdict=NO-GO 2026-09-16T02:39:59Z

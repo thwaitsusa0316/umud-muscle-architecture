@@ -77,7 +77,7 @@ Mechanism (write, when authorised): `.venv/bin/kaggle competitions submit -c umu
 - Hardware: Apple M3 Max, 64 GB, PyTorch/MPS; no hosted model anywhere in the pipeline (FAIR re-run requirement).
 - Data: 2.75 GB archive; 2,761 fascicle image/mask pairs for training; test 309 images from Siemens Acuson Juniper, Telemed ArtUS, Philips Lumify; 27 runs of exactly 5 video frames (135 images).
 - External: OSF expert benchmark (35 images, 7 raters, ground-truth px/cm) at `data/external/`; DL_Track_US pretrained U-Nets (Apache-2.0).
-- Public notebooks/models: **none** (Code and Models tabs empty). Six-team cluster at 0.45134 is almost certainly stock DL_Track.
+- Public notebooks/models: **none at 2026-09-03**; stale by 2026-09-16 — 28 public notebooks, incl. `dreaddevelopment/vera-seg-centerline-mt-correction-lb-0-45134` (2026-09-02, a hard-coded 309-row CSV that scores exactly 0.45134; 21 teams sit on it by 09-16, copy at `reference/kernels/vera_lb045134.csv`), `phuongncn/lb-0-76704-no-train-anatomy-calibrated-dltrack`, and `lamhuy8904/variational-ultrasound-kinematics-ensemble` (16 votes, GPU). The 0.45134 cluster is a shared file, not necessarily stock DL_Track.
 - Local benchmark: our geometry 0.3349, DL_Track 0.3306, mean expert 0.3032, best expert 0.2459. On the test set the same pipeline scores 1.465 — the benchmark cannot see the console-screenshot domain shift.
 
 ## Eligibility / legal

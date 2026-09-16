@@ -1,0 +1,10 @@
+decision : NO QUORUM   [ESCALATED]
+seats    : claude, codex, grok
+families : anthropic, openai, xai
+tally    : {"A: declare the kill gate decided now (numbered revision, push to Stephen): move to P4, pre-registered L9 finals = the 0.56382 pipeline + the L1 constant floor 1.03662, write CLOSEOUT and the FAIR method description; stop spending ticks on new rungs": 1}
+
+Escalation is a success state — the panel declined to settle it:
+
+sealed record: decision-e4738a8ace85.json  hash=e4738a8ace859ab1
+
+case: 20260916T081649Z_0b9ae4_decide

@@ -1,0 +1,1868 @@
+{
+ "ckpt": "/Users/smt2/data/competitions/umud-muscle/checkpoints/fasc_unet_pw6_best.pt",
+ "arch": "unet",
+ "thr": 0.9,
+ "n_test": 309,
+ "n_kept": 308,
+ "min_keep": 250,
+ "min_frac": 0.0005,
+ "max_frac": 0.02,
+ "out": "/Users/smt2/data/competitions/umud-muscle/data/pseudo/l6t",
+ "n_pairs_on_disk": 308,
+ "rows": [
+  {
+   "image": "IMG_00001.tif",
+   "kept": true,
+   "frac512": 0.005817,
+   "raw_frac512": 0.019226
+  },
+  {
+   "image": "IMG_00002.tif",
+   "kept": true,
+   "frac512": 0.003761,
+   "raw_frac512": 0.010921
+  },
+  {
+   "image": "IMG_00003.tif",
+   "kept": true,
+   "frac512": 0.005074,
+   "raw_frac512": 0.019367
+  },
+  {
+   "image": "IMG_00004.tif",
+   "kept": true,
+   "frac512": 0.005238,
+   "raw_frac512": 0.020702
+  },
+  {
+   "image": "IMG_00005.tif",
+   "kept": true,
+   "frac512": 0.003979,
+   "raw_frac512": 0.014824
+  },
+  {
+   "image": "IMG_00006.tif",
+   "kept": true,
+   "frac512": 0.00338,
+   "raw_frac512": 0.012669
+  },
+  {
+   "image": "IMG_00007.tif",
+   "kept": true,
+   "frac512": 0.0061,
+   "raw_frac512": 0.026314
+  },
+  {
+   "image": "IMG_00008.tif",
+   "kept": true,
+   "frac512": 0.005383,
+   "raw_frac512": 0.023121
+  },
+  {
+   "image": "IMG_00009.tif",
+   "kept": true,
+   "frac512": 0.006073,
+   "raw_frac512": 0.01944
+  },
+  {
+   "image": "IMG_00010.tif",
+   "kept": true,
+   "frac512": 0.00354,
+   "raw_frac512": 0.010563
+  },
+  {
+   "image": "IMG_00011.tif",
+   "kept": true,
+   "frac512": 0.006115,
+   "raw_frac512": 0.021729
+  },
+  {
+   "image": "IMG_00012.tif",
+   "kept": true,
+   "frac512": 0.00803,
+   "raw_frac512": 0.027798
+  },
+  {
+   "image": "IMG_00013.tif",
+   "kept": true,
+   "frac512": 0.002804,
+   "raw_frac512": 0.008713
+  },
+  {
+   "image": "IMG_00014.tif",
+   "kept": true,
+   "frac512": 0.002693,
+   "raw_frac512": 0.008297
+  },
+  {
+   "image": "IMG_00015.tif",
+   "kept": true,
+   "frac512": 0.002651,
+   "raw_frac512": 0.008369
+  },
+  {
+   "image": "IMG_00016.tif",
+   "kept": true,
+   "frac512": 0.00663,
+   "raw_frac512": 0.02243
+  },
+  {
+   "image": "IMG_00017.tif",
+   "kept": true,
+   "frac512": 0.004559,
+   "raw_frac512": 0.014957
+  },
+  {
+   "image": "IMG_00018.tif",
+   "kept": true,
+   "frac512": 0.002087,
+   "raw_frac512": 0.007263
+  },
+  {
+   "image": "IMG_00019.tif",
+   "kept": true,
+   "frac512": 0.00246,
+   "raw_frac512": 0.008572
+  },
+  {
+   "image": "IMG_00020.tif",
+   "kept": true,
+   "frac512": 0.005096,
+   "raw_frac512": 0.016594
+  },
+  {
+   "image": "IMG_00021.tif",
+   "kept": true,
+   "frac512": 0.004055,
+   "raw_frac512": 0.0135
+  },
+  {
+   "image": "IMG_00022.tif",
+   "kept": true,
+   "frac512": 0.001656,
+   "raw_frac512": 0.005478
+  },
+  {
+   "image": "IMG_00023.tif",
+   "kept": true,
+   "frac512": 0.003674,
+   "raw_frac512": 0.014282
+  },
+  {
+   "image": "IMG_00024.tif",
+   "kept": true,
+   "frac512": 0.007206,
+   "raw_frac512": 0.025162
+  },
+  {
+   "image": "IMG_00025.tif",
+   "kept": true,
+   "frac512": 0.003651,
+   "raw_frac512": 0.012871
+  },
+  {
+   "image": "IMG_00026.tif",
+   "kept": true,
+   "frac512": 0.007244,
+   "raw_frac512": 0.028931
+  },
+  {
+   "image": "IMG_00027.tif",
+   "kept": true,
+   "frac512": 0.00565,
+   "raw_frac512": 0.021656
+  },
+  {
+   "image": "IMG_00028.tif",
+   "kept": true,
+   "frac512": 0.008438,
+   "raw_frac512": 0.032906
+  },
+  {
+   "image": "IMG_00029.tif",
+   "kept": true,
+   "frac512": 0.005535,
+   "raw_frac512": 0.019558
+  },
+  {
+   "image": "IMG_00030.tif",
+   "kept": true,
+   "frac512": 0.003067,
+   "raw_frac512": 0.008934
+  },
+  {
+   "image": "IMG_00031.tif",
+   "kept": true,
+   "frac512": 0.003677,
+   "raw_frac512": 0.011955
+  },
+  {
+   "image": "IMG_00032.tif",
+   "kept": true,
+   "frac512": 0.008202,
+   "raw_frac512": 0.029327
+  },
+  {
+   "image": "IMG_00033.tif",
+   "kept": true,
+   "frac512": 0.00692,
+   "raw_frac512": 0.02496
+  },
+  {
+   "image": "IMG_00034.tif",
+   "kept": true,
+   "frac512": 0.00457,
+   "raw_frac512": 0.017082
+  },
+  {
+   "image": "IMG_00035.tif",
+   "kept": true,
+   "frac512": 0.00663,
+   "raw_frac512": 0.023586
+  },
+  {
+   "image": "IMG_00036.tif",
+   "kept": true,
+   "frac512": 0.003666,
+   "raw_frac512": 0.01656
+  },
+  {
+   "image": "IMG_00037.tif",
+   "kept": true,
+   "frac512": 0.001682,
+   "raw_frac512": 0.005745
+  },
+  {
+   "image": "IMG_00038.tif",
+   "kept": true,
+   "frac512": 0.003822,
+   "raw_frac512": 0.017582
+  },
+  {
+   "image": "IMG_00039.tif",
+   "kept": true,
+   "frac512": 0.00407,
+   "raw_frac512": 0.014614
+  },
+  {
+   "image": "IMG_00040.tif",
+   "kept": true,
+   "frac512": 0.002296,
+   "raw_frac512": 0.009674
+  },
+  {
+   "image": "IMG_00041.tif",
+   "kept": true,
+   "frac512": 0.002106,
+   "raw_frac512": 0.010437
+  },
+  {
+   "image": "IMG_00042.tif",
+   "kept": true,
+   "frac512": 0.009022,
+   "raw_frac512": 0.043449
+  },
+  {
+   "image": "IMG_00043.tif",
+   "kept": true,
+   "frac512": 0.007271,
+   "raw_frac512": 0.031231
+  },
+  {
+   "image": "IMG_00044.tif",
+   "kept": true,
+   "frac512": 0.009151,
+   "raw_frac512": 0.04137
+  },
+  {
+   "image": "IMG_00045.tif",
+   "kept": true,
+   "frac512": 0.004093,
+   "raw_frac512": 0.013737
+  },
+  {
+   "image": "IMG_00046.tif",
+   "kept": true,
+   "frac512": 0.005333,
+   "raw_frac512": 0.022266
+  },
+  {
+   "image": "IMG_00047.tif",
+   "kept": true,
+   "frac512": 0.003445,
+   "raw_frac512": 0.011978
+  },
+  {
+   "image": "IMG_00048.tif",
+   "kept": true,
+   "frac512": 0.005676,
+   "raw_frac512": 0.024387
+  },
+  {
+   "image": "IMG_00049.tif",
+   "kept": true,
+   "frac512": 0.002991,
+   "raw_frac512": 0.013664
+  },
+  {
+   "image": "IMG_00050.tif",
+   "kept": true,
+   "frac512": 0.005066,
+   "raw_frac512": 0.02367
+  },
+  {
+   "image": "IMG_00051.tif",
+   "kept": true,
+   "frac512": 0.002598,
+   "raw_frac512": 0.011002
+  },
+  {
+   "image": "IMG_00052.tif",
+   "kept": true,
+   "frac512": 0.002232,
+   "raw_frac512": 0.011425
+  },
+  {
+   "image": "IMG_00053.tif",
+   "kept": true,
+   "frac512": 0.003651,
+   "raw_frac512": 0.017838
+  },
+  {
+   "image": "IMG_00054.tif",
+   "kept": true,
+   "frac512": 0.002563,
+   "raw_frac512": 0.011402
+  },
+  {
+   "image": "IMG_00055.tif",
+   "kept": true,
+   "frac512": 0.004539,
+   "raw_frac512": 0.019581
+  },
+  {
+   "image": "IMG_00056.tif",
+   "kept": true,
+   "frac512": 0.004871,
+   "raw_frac512": 0.019989
+  },
+  {
+   "image": "IMG_00057.tif",
+   "kept": true,
+   "frac512": 0.004906,
+   "raw_frac512": 0.020321
+  },
+  {
+   "image": "IMG_00058.tif",
+   "kept": true,
+   "frac512": 0.004967,
+   "raw_frac512": 0.020218
+  },
+  {
+   "image": "IMG_00059.tif",
+   "kept": true,
+   "frac512": 0.004906,
+   "raw_frac512": 0.020039
+  },
+  {
+   "image": "IMG_00060.tif",
+   "kept": true,
+   "frac512": 0.004818,
+   "raw_frac512": 0.019299
+  },
+  {
+   "image": "IMG_00061.tif",
+   "kept": true,
+   "frac512": 0.003242,
+   "raw_frac512": 0.016338
+  },
+  {
+   "image": "IMG_00062.tif",
+   "kept": true,
+   "frac512": 0.003281,
+   "raw_frac512": 0.016548
+  },
+  {
+   "image": "IMG_00063.tif",
+   "kept": true,
+   "frac512": 0.003277,
+   "raw_frac512": 0.016514
+  },
+  {
+   "image": "IMG_00064.tif",
+   "kept": true,
+   "frac512": 0.003395,
+   "raw_frac512": 0.017033
+  },
+  {
+   "image": "IMG_00065.tif",
+   "kept": true,
+   "frac512": 0.003277,
+   "raw_frac512": 0.016258
+  },
+  {
+   "image": "IMG_00066.tif",
+   "kept": true,
+   "frac512": 0.003319,
+   "raw_frac512": 0.012657
+  },
+  {
+   "image": "IMG_00067.tif",
+   "kept": true,
+   "frac512": 0.003159,
+   "raw_frac512": 0.012348
+  },
+  {
+   "image": "IMG_00068.tif",
+   "kept": true,
+   "frac512": 0.003239,
+   "raw_frac512": 0.01239
+  },
+  {
+   "image": "IMG_00069.tif",
+   "kept": true,
+   "frac512": 0.003334,
+   "raw_frac512": 0.012756
+  },
+  {
+   "image": "IMG_00070.tif",
+   "kept": true,
+   "frac512": 0.003414,
+   "raw_frac512": 0.012882
+  },
+  {
+   "image": "IMG_00071.tif",
+   "kept": true,
+   "frac512": 0.002174,
+   "raw_frac512": 0.007435
+  },
+  {
+   "image": "IMG_00072.tif",
+   "kept": true,
+   "frac512": 0.002197,
+   "raw_frac512": 0.007347
+  },
+  {
+   "image": "IMG_00073.tif",
+   "kept": true,
+   "frac512": 0.001926,
+   "raw_frac512": 0.006481
+  },
+  {
+   "image": "IMG_00074.tif",
+   "kept": true,
+   "frac512": 0.002239,
+   "raw_frac512": 0.007431
+  },
+  {
+   "image": "IMG_00075.tif",
+   "kept": true,
+   "frac512": 0.002174,
+   "raw_frac512": 0.007267
+  },
+  {
+   "image": "IMG_00076.tif",
+   "kept": true,
+   "frac512": 0.004284,
+   "raw_frac512": 0.01506
+  },
+  {
+   "image": "IMG_00077.tif",
+   "kept": true,
+   "frac512": 0.004322,
+   "raw_frac512": 0.015118
+  },
+  {
+   "image": "IMG_00078.tif",
+   "kept": true,
+   "frac512": 0.004246,
+   "raw_frac512": 0.015053
+  },
+  {
+   "image": "IMG_00079.tif",
+   "kept": true,
+   "frac512": 0.004559,
+   "raw_frac512": 0.015827
+  },
+  {
+   "image": "IMG_00080.tif",
+   "kept": true,
+   "frac512": 0.004784,
+   "raw_frac512": 0.016636
+  },
+  {
+   "image": "IMG_00081.tif",
+   "kept": true,
+   "frac512": 0.005157,
+   "raw_frac512": 0.016968
+  },
+  {
+   "image": "IMG_00082.tif",
+   "kept": true,
+   "frac512": 0.005276,
+   "raw_frac512": 0.017021
+  },
+  {
+   "image": "IMG_00083.tif",
+   "kept": true,
+   "frac512": 0.005455,
+   "raw_frac512": 0.01746
+  },
+  {
+   "image": "IMG_00084.tif",
+   "kept": true,
+   "frac512": 0.005329,
+   "raw_frac512": 0.017395
+  },
+  {
+   "image": "IMG_00085.tif",
+   "kept": true,
+   "frac512": 0.005394,
+   "raw_frac512": 0.017624
+  },
+  {
+   "image": "IMG_00086.tif",
+   "kept": true,
+   "frac512": 0.001751,
+   "raw_frac512": 0.006905
+  },
+  {
+   "image": "IMG_00087.tif",
+   "kept": true,
+   "frac512": 0.001656,
+   "raw_frac512": 0.006878
+  },
+  {
+   "image": "IMG_00088.tif",
+   "kept": true,
+   "frac512": 0.001701,
+   "raw_frac512": 0.006477
+  },
+  {
+   "image": "IMG_00089.tif",
+   "kept": true,
+   "frac512": 0.001507,
+   "raw_frac512": 0.005981
+  },
+  {
+   "image": "IMG_00090.tif",
+   "kept": true,
+   "frac512": 0.001633,
+   "raw_frac512": 0.006428
+  },
+  {
+   "image": "IMG_00091.tif",
+   "kept": true,
+   "frac512": 0.004837,
+   "raw_frac512": 0.016827
+  },
+  {
+   "image": "IMG_00092.tif",
+   "kept": true,
+   "frac512": 0.004803,
+   "raw_frac512": 0.016853
+  },
+  {
+   "image": "IMG_00093.tif",
+   "kept": true,
+   "frac512": 0.004829,
+   "raw_frac512": 0.017036
+  },
+  {
+   "image": "IMG_00094.tif",
+   "kept": true,
+   "frac512": 0.004677,
+   "raw_frac512": 0.016163
+  },
+  {
+   "image": "IMG_00095.tif",
+   "kept": true,
+   "frac512": 0.004616,
+   "raw_frac512": 0.015976
+  },
+  {
+   "image": "IMG_00096.tif",
+   "kept": true,
+   "frac512": 0.002415,
+   "raw_frac512": 0.01078
+  },
+  {
+   "image": "IMG_00097.tif",
+   "kept": true,
+   "frac512": 0.002174,
+   "raw_frac512": 0.00975
+  },
+  {
+   "image": "IMG_00098.tif",
+   "kept": true,
+   "frac512": 0.002068,
+   "raw_frac512": 0.009125
+  },
+  {
+   "image": "IMG_00099.tif",
+   "kept": true,
+   "frac512": 0.001896,
+   "raw_frac512": 0.008343
+  },
+  {
+   "image": "IMG_00100.tif",
+   "kept": true,
+   "frac512": 0.00169,
+   "raw_frac512": 0.00766
+  },
+  {
+   "image": "IMG_00101.tif",
+   "kept": true,
+   "frac512": 0.00264,
+   "raw_frac512": 0.010986
+  },
+  {
+   "image": "IMG_00102.tif",
+   "kept": true,
+   "frac512": 0.002811,
+   "raw_frac512": 0.011833
+  },
+  {
+   "image": "IMG_00103.tif",
+   "kept": true,
+   "frac512": 0.002769,
+   "raw_frac512": 0.011272
+  },
+  {
+   "image": "IMG_00104.tif",
+   "kept": true,
+   "frac512": 0.002644,
+   "raw_frac512": 0.011002
+  },
+  {
+   "image": "IMG_00105.tif",
+   "kept": true,
+   "frac512": 0.00275,
+   "raw_frac512": 0.011551
+  },
+  {
+   "image": "IMG_00106.tif",
+   "kept": true,
+   "frac512": 0.004498,
+   "raw_frac512": 0.019161
+  },
+  {
+   "image": "IMG_00107.tif",
+   "kept": true,
+   "frac512": 0.004498,
+   "raw_frac512": 0.019073
+  },
+  {
+   "image": "IMG_00108.tif",
+   "kept": true,
+   "frac512": 0.00449,
+   "raw_frac512": 0.019188
+  },
+  {
+   "image": "IMG_00109.tif",
+   "kept": true,
+   "frac512": 0.004513,
+   "raw_frac512": 0.019287
+  },
+  {
+   "image": "IMG_00110.tif",
+   "kept": true,
+   "frac512": 0.004517,
+   "raw_frac512": 0.019257
+  },
+  {
+   "image": "IMG_00111.tif",
+   "kept": true,
+   "frac512": 0.002983,
+   "raw_frac512": 0.0145
+  },
+  {
+   "image": "IMG_00112.tif",
+   "kept": true,
+   "frac512": 0.003033,
+   "raw_frac512": 0.014801
+  },
+  {
+   "image": "IMG_00113.tif",
+   "kept": true,
+   "frac512": 0.003094,
+   "raw_frac512": 0.015141
+  },
+  {
+   "image": "IMG_00114.tif",
+   "kept": true,
+   "frac512": 0.002983,
+   "raw_frac512": 0.014721
+  },
+  {
+   "image": "IMG_00115.tif",
+   "kept": true,
+   "frac512": 0.002922,
+   "raw_frac512": 0.014362
+  },
+  {
+   "image": "IMG_00116.tif",
+   "kept": true,
+   "frac512": 0.005028,
+   "raw_frac512": 0.018501
+  },
+  {
+   "image": "IMG_00117.tif",
+   "kept": true,
+   "frac512": 0.004452,
+   "raw_frac512": 0.017323
+  },
+  {
+   "image": "IMG_00118.tif",
+   "kept": true,
+   "frac512": 0.003983,
+   "raw_frac512": 0.016636
+  },
+  {
+   "image": "IMG_00119.tif",
+   "kept": true,
+   "frac512": 0.002995,
+   "raw_frac512": 0.012779
+  },
+  {
+   "image": "IMG_00120.tif",
+   "kept": true,
+   "frac512": 0.004192,
+   "raw_frac512": 0.016319
+  },
+  {
+   "image": "IMG_00121.tif",
+   "kept": true,
+   "frac512": 0.005329,
+   "raw_frac512": 0.019482
+  },
+  {
+   "image": "IMG_00122.tif",
+   "kept": true,
+   "frac512": 0.005383,
+   "raw_frac512": 0.019356
+  },
+  {
+   "image": "IMG_00123.tif",
+   "kept": true,
+   "frac512": 0.005253,
+   "raw_frac512": 0.018677
+  },
+  {
+   "image": "IMG_00124.tif",
+   "kept": true,
+   "frac512": 0.00539,
+   "raw_frac512": 0.019382
+  },
+  {
+   "image": "IMG_00125.tif",
+   "kept": true,
+   "frac512": 0.00515,
+   "raw_frac512": 0.018196
+  },
+  {
+   "image": "IMG_00126.tif",
+   "kept": true,
+   "frac512": 0.003048,
+   "raw_frac512": 0.013325
+  },
+  {
+   "image": "IMG_00127.tif",
+   "kept": true,
+   "frac512": 0.003166,
+   "raw_frac512": 0.013893
+  },
+  {
+   "image": "IMG_00128.tif",
+   "kept": true,
+   "frac512": 0.00317,
+   "raw_frac512": 0.013721
+  },
+  {
+   "image": "IMG_00129.tif",
+   "kept": true,
+   "frac512": 0.003067,
+   "raw_frac512": 0.013336
+  },
+  {
+   "image": "IMG_00130.tif",
+   "kept": true,
+   "frac512": 0.003338,
+   "raw_frac512": 0.014439
+  },
+  {
+   "image": "IMG_00131.tif",
+   "kept": true,
+   "frac512": 0.004017,
+   "raw_frac512": 0.018085
+  },
+  {
+   "image": "IMG_00132.tif",
+   "kept": true,
+   "frac512": 0.003845,
+   "raw_frac512": 0.01717
+  },
+  {
+   "image": "IMG_00133.tif",
+   "kept": true,
+   "frac512": 0.003769,
+   "raw_frac512": 0.016972
+  },
+  {
+   "image": "IMG_00134.tif",
+   "kept": true,
+   "frac512": 0.003777,
+   "raw_frac512": 0.016899
+  },
+  {
+   "image": "IMG_00135.tif",
+   "kept": true,
+   "frac512": 0.003681,
+   "raw_frac512": 0.016457
+  },
+  {
+   "image": "IMG_00136.tif",
+   "kept": true,
+   "frac512": 0.004871,
+   "raw_frac512": 0.022614
+  },
+  {
+   "image": "IMG_00137.tif",
+   "kept": true,
+   "frac512": 0.004723,
+   "raw_frac512": 0.021545
+  },
+  {
+   "image": "IMG_00138.tif",
+   "kept": true,
+   "frac512": 0.0047,
+   "raw_frac512": 0.021992
+  },
+  {
+   "image": "IMG_00139.tif",
+   "kept": true,
+   "frac512": 0.004715,
+   "raw_frac512": 0.021584
+  },
+  {
+   "image": "IMG_00140.tif",
+   "kept": true,
+   "frac512": 0.00441,
+   "raw_frac512": 0.02047
+  },
+  {
+   "image": "IMG_00141.tif",
+   "kept": true,
+   "frac512": 0.008087,
+   "raw_frac512": 0.036457
+  },
+  {
+   "image": "IMG_00142.tif",
+   "kept": true,
+   "frac512": 0.007923,
+   "raw_frac512": 0.03566
+  },
+  {
+   "image": "IMG_00143.tif",
+   "kept": true,
+   "frac512": 0.007862,
+   "raw_frac512": 0.035122
+  },
+  {
+   "image": "IMG_00144.tif",
+   "kept": true,
+   "frac512": 0.007729,
+   "raw_frac512": 0.0341
+  },
+  {
+   "image": "IMG_00145.tif",
+   "kept": true,
+   "frac512": 0.007362,
+   "raw_frac512": 0.032524
+  },
+  {
+   "image": "IMG_00146.tif",
+   "kept": true,
+   "frac512": 0.002781,
+   "raw_frac512": 0.010273
+  },
+  {
+   "image": "IMG_00147.tif",
+   "kept": true,
+   "frac512": 0.003109,
+   "raw_frac512": 0.012173
+  },
+  {
+   "image": "IMG_00148.tif",
+   "kept": true,
+   "frac512": 0.002865,
+   "raw_frac512": 0.011044
+  },
+  {
+   "image": "IMG_00149.tif",
+   "kept": true,
+   "frac512": 0.002792,
+   "raw_frac512": 0.010799
+  },
+  {
+   "image": "IMG_00150.tif",
+   "kept": true,
+   "frac512": 0.003036,
+   "raw_frac512": 0.012093
+  },
+  {
+   "image": "IMG_00151.tif",
+   "kept": true,
+   "frac512": 0.003159,
+   "raw_frac512": 0.011665
+  },
+  {
+   "image": "IMG_00152.tif",
+   "kept": true,
+   "frac512": 0.003189,
+   "raw_frac512": 0.011765
+  },
+  {
+   "image": "IMG_00153.tif",
+   "kept": true,
+   "frac512": 0.003078,
+   "raw_frac512": 0.011562
+  },
+  {
+   "image": "IMG_00154.tif",
+   "kept": true,
+   "frac512": 0.003067,
+   "raw_frac512": 0.01152
+  },
+  {
+   "image": "IMG_00155.tif",
+   "kept": true,
+   "frac512": 0.003098,
+   "raw_frac512": 0.011642
+  },
+  {
+   "image": "IMG_00156.tif",
+   "kept": true,
+   "frac512": 0.001549,
+   "raw_frac512": 0.005848
+  },
+  {
+   "image": "IMG_00157.tif",
+   "kept": true,
+   "frac512": 0.001575,
+   "raw_frac512": 0.006092
+  },
+  {
+   "image": "IMG_00158.tif",
+   "kept": true,
+   "frac512": 0.001598,
+   "raw_frac512": 0.00613
+  },
+  {
+   "image": "IMG_00159.tif",
+   "kept": true,
+   "frac512": 0.001572,
+   "raw_frac512": 0.006027
+  },
+  {
+   "image": "IMG_00160.tif",
+   "kept": true,
+   "frac512": 0.00156,
+   "raw_frac512": 0.00597
+  },
+  {
+   "image": "IMG_00161.tif",
+   "kept": true,
+   "frac512": 0.004017,
+   "raw_frac512": 0.015793
+  },
+  {
+   "image": "IMG_00162.tif",
+   "kept": true,
+   "frac512": 0.003994,
+   "raw_frac512": 0.015617
+  },
+  {
+   "image": "IMG_00163.tif",
+   "kept": true,
+   "frac512": 0.004215,
+   "raw_frac512": 0.016094
+  },
+  {
+   "image": "IMG_00164.tif",
+   "kept": true,
+   "frac512": 0.004143,
+   "raw_frac512": 0.01572
+  },
+  {
+   "image": "IMG_00165.tif",
+   "kept": true,
+   "frac512": 0.004154,
+   "raw_frac512": 0.015709
+  },
+  {
+   "image": "IMG_00166.tif",
+   "kept": true,
+   "frac512": 0.002934,
+   "raw_frac512": 0.010273
+  },
+  {
+   "image": "IMG_00167.tif",
+   "kept": true,
+   "frac512": 0.003277,
+   "raw_frac512": 0.012203
+  },
+  {
+   "image": "IMG_00168.tif",
+   "kept": true,
+   "frac512": 0.003021,
+   "raw_frac512": 0.012272
+  },
+  {
+   "image": "IMG_00169.tif",
+   "kept": true,
+   "frac512": 0.00304,
+   "raw_frac512": 0.011593
+  },
+  {
+   "image": "IMG_00170.tif",
+   "kept": true,
+   "frac512": 0.003254,
+   "raw_frac512": 0.011566
+  },
+  {
+   "image": "IMG_00171.tif",
+   "kept": true,
+   "frac512": 0.005825,
+   "raw_frac512": 0.019886
+  },
+  {
+   "image": "IMG_00172.tif",
+   "kept": true,
+   "frac512": 0.005764,
+   "raw_frac512": 0.020008
+  },
+  {
+   "image": "IMG_00173.tif",
+   "kept": true,
+   "frac512": 0.005836,
+   "raw_frac512": 0.0205
+  },
+  {
+   "image": "IMG_00174.tif",
+   "kept": true,
+   "frac512": 0.005909,
+   "raw_frac512": 0.020981
+  },
+  {
+   "image": "IMG_00175.tif",
+   "kept": true,
+   "frac512": 0.005878,
+   "raw_frac512": 0.020786
+  },
+  {
+   "image": "IMG_00176.tif",
+   "kept": true,
+   "frac512": 0.001583,
+   "raw_frac512": 0.007061
+  },
+  {
+   "image": "IMG_00177.tif",
+   "kept": true,
+   "frac512": 0.001556,
+   "raw_frac512": 0.00695
+  },
+  {
+   "image": "IMG_00178.tif",
+   "kept": true,
+   "frac512": 0.001617,
+   "raw_frac512": 0.007118
+  },
+  {
+   "image": "IMG_00179.tif",
+   "kept": true,
+   "frac512": 0.001625,
+   "raw_frac512": 0.007286
+  },
+  {
+   "image": "IMG_00180.tif",
+   "kept": true,
+   "frac512": 0.001598,
+   "raw_frac512": 0.007172
+  },
+  {
+   "image": "IMG_00181.tif",
+   "kept": true,
+   "frac512": 0.001698,
+   "raw_frac512": 0.006947
+  },
+  {
+   "image": "IMG_00182.tif",
+   "kept": true,
+   "frac512": 0.001751,
+   "raw_frac512": 0.007084
+  },
+  {
+   "image": "IMG_00183.tif",
+   "kept": true,
+   "frac512": 0.001755,
+   "raw_frac512": 0.00705
+  },
+  {
+   "image": "IMG_00184.tif",
+   "kept": true,
+   "frac512": 0.001831,
+   "raw_frac512": 0.00742
+  },
+  {
+   "image": "IMG_00185.tif",
+   "kept": true,
+   "frac512": 0.001915,
+   "raw_frac512": 0.007931
+  },
+  {
+   "image": "IMG_00186.tif",
+   "kept": true,
+   "frac512": 0.006035,
+   "raw_frac512": 0.020733
+  },
+  {
+   "image": "IMG_00187.tif",
+   "kept": true,
+   "frac512": 0.006016,
+   "raw_frac512": 0.021072
+  },
+  {
+   "image": "IMG_00188.tif",
+   "kept": true,
+   "frac512": 0.006187,
+   "raw_frac512": 0.021324
+  },
+  {
+   "image": "IMG_00189.tif",
+   "kept": true,
+   "frac512": 0.006168,
+   "raw_frac512": 0.021343
+  },
+  {
+   "image": "IMG_00190.tif",
+   "kept": true,
+   "frac512": 0.006157,
+   "raw_frac512": 0.021255
+  },
+  {
+   "image": "IMG_00191.tif",
+   "kept": true,
+   "frac512": 0.006401,
+   "raw_frac512": 0.022472
+  },
+  {
+   "image": "IMG_00192.tif",
+   "kept": true,
+   "frac512": 0.006493,
+   "raw_frac512": 0.022808
+  },
+  {
+   "image": "IMG_00193.tif",
+   "kept": true,
+   "frac512": 0.00663,
+   "raw_frac512": 0.023426
+  },
+  {
+   "image": "IMG_00194.tif",
+   "kept": true,
+   "frac512": 0.006588,
+   "raw_frac512": 0.02322
+  },
+  {
+   "image": "IMG_00195.tif",
+   "kept": true,
+   "frac512": 0.006527,
+   "raw_frac512": 0.023129
+  },
+  {
+   "image": "IMG_00196.tif",
+   "kept": true,
+   "frac512": 0.004704,
+   "raw_frac512": 0.017952
+  },
+  {
+   "image": "IMG_00197.tif",
+   "kept": true,
+   "frac512": 0.002964,
+   "raw_frac512": 0.010334
+  },
+  {
+   "image": "IMG_00198.tif",
+   "kept": true,
+   "frac512": 0.004532,
+   "raw_frac512": 0.013943
+  },
+  {
+   "image": "IMG_00199.tif",
+   "kept": true,
+   "frac512": 0.002781,
+   "raw_frac512": 0.008652
+  },
+  {
+   "image": "IMG_00200.tif",
+   "kept": true,
+   "frac512": 0.00412,
+   "raw_frac512": 0.015881
+  },
+  {
+   "image": "IMG_00201.tif",
+   "kept": true,
+   "frac512": 0.009212,
+   "raw_frac512": 0.03046
+  },
+  {
+   "image": "IMG_00202.tif",
+   "kept": true,
+   "frac512": 0.006451,
+   "raw_frac512": 0.020309
+  },
+  {
+   "image": "IMG_00203.tif",
+   "kept": true,
+   "frac512": 0.007538,
+   "raw_frac512": 0.025379
+  },
+  {
+   "image": "IMG_00204.tif",
+   "kept": true,
+   "frac512": 0.003338,
+   "raw_frac512": 0.010109
+  },
+  {
+   "image": "IMG_00205.tif",
+   "kept": true,
+   "frac512": 0.005054,
+   "raw_frac512": 0.018211
+  },
+  {
+   "image": "IMG_00206.tif",
+   "kept": true,
+   "frac512": 0.003483,
+   "raw_frac512": 0.010929
+  },
+  {
+   "image": "IMG_00207.tif",
+   "kept": true,
+   "frac512": 0.005337,
+   "raw_frac512": 0.019375
+  },
+  {
+   "image": "IMG_00208.tif",
+   "kept": true,
+   "frac512": 0.00499,
+   "raw_frac512": 0.015682
+  },
+  {
+   "image": "IMG_00209.tif",
+   "kept": true,
+   "frac512": 0.001453,
+   "raw_frac512": 0.004326
+  },
+  {
+   "image": "IMG_00210.tif",
+   "kept": true,
+   "frac512": 0.002464,
+   "raw_frac512": 0.006912
+  },
+  {
+   "image": "IMG_00211.tif",
+   "kept": true,
+   "frac512": 0.004089,
+   "raw_frac512": 0.012737
+  },
+  {
+   "image": "IMG_00212.tif",
+   "kept": true,
+   "frac512": 0.002575,
+   "raw_frac512": 0.009315
+  },
+  {
+   "image": "IMG_00213.tif",
+   "kept": true,
+   "frac512": 0.003059,
+   "raw_frac512": 0.010128
+  },
+  {
+   "image": "IMG_00214.tif",
+   "kept": true,
+   "frac512": 0.004963,
+   "raw_frac512": 0.016338
+  },
+  {
+   "image": "IMG_00215.tif",
+   "kept": true,
+   "frac512": 0.003311,
+   "raw_frac512": 0.01273
+  },
+  {
+   "image": "IMG_00216.tif",
+   "kept": true,
+   "frac512": 0.003376,
+   "raw_frac512": 0.012779
+  },
+  {
+   "image": "IMG_00217.tif",
+   "kept": true,
+   "frac512": 0.004688,
+   "raw_frac512": 0.015244
+  },
+  {
+   "image": "IMG_00218.tif",
+   "kept": true,
+   "frac512": 0.004032,
+   "raw_frac512": 0.011959
+  },
+  {
+   "image": "IMG_00219.tif",
+   "kept": true,
+   "frac512": 0.003754,
+   "raw_frac512": 0.015232
+  },
+  {
+   "image": "IMG_00220.tif",
+   "kept": true,
+   "frac512": 0.007942,
+   "raw_frac512": 0.027184
+  },
+  {
+   "image": "IMG_00221.tif",
+   "kept": true,
+   "frac512": 0.007812,
+   "raw_frac512": 0.025585
+  },
+  {
+   "image": "IMG_00222.tif",
+   "kept": true,
+   "frac512": 0.006359,
+   "raw_frac512": 0.024296
+  },
+  {
+   "image": "IMG_00223.tif",
+   "kept": true,
+   "frac512": 0.002663,
+   "raw_frac512": 0.008656
+  },
+  {
+   "image": "IMG_00224.tif",
+   "kept": true,
+   "frac512": 0.00272,
+   "raw_frac512": 0.009003
+  },
+  {
+   "image": "IMG_00225.tif",
+   "kept": true,
+   "frac512": 0.006748,
+   "raw_frac512": 0.022762
+  },
+  {
+   "image": "IMG_00226.tif",
+   "kept": true,
+   "frac512": 0.003815,
+   "raw_frac512": 0.011299
+  },
+  {
+   "image": "IMG_00227.tif",
+   "kept": true,
+   "frac512": 0.003098,
+   "raw_frac512": 0.011074
+  },
+  {
+   "image": "IMG_00228.tif",
+   "kept": true,
+   "frac512": 0.006084,
+   "raw_frac512": 0.019371
+  },
+  {
+   "image": "IMG_00229.tif",
+   "kept": true,
+   "frac512": 0.003071,
+   "raw_frac512": 0.008896
+  },
+  {
+   "image": "IMG_00230.tif",
+   "kept": true,
+   "frac512": 0.003414,
+   "raw_frac512": 0.012936
+  },
+  {
+   "image": "IMG_00231.tif",
+   "kept": true,
+   "frac512": 0.005344,
+   "raw_frac512": 0.017487
+  },
+  {
+   "image": "IMG_00232.tif",
+   "kept": true,
+   "frac512": 0.00425,
+   "raw_frac512": 0.014175
+  },
+  {
+   "image": "IMG_00233.tif",
+   "kept": true,
+   "frac512": 0.0014,
+   "raw_frac512": 0.00423
+  },
+  {
+   "image": "IMG_00234.tif",
+   "kept": true,
+   "frac512": 0.002468,
+   "raw_frac512": 0.009251
+  },
+  {
+   "image": "IMG_00235.tif",
+   "kept": true,
+   "frac512": 0.003975,
+   "raw_frac512": 0.018082
+  },
+  {
+   "image": "IMG_00236.tif",
+   "kept": true,
+   "frac512": 0.003994,
+   "raw_frac512": 0.012482
+  },
+  {
+   "image": "IMG_00237.tif",
+   "kept": true,
+   "frac512": 0.003399,
+   "raw_frac512": 0.013744
+  },
+  {
+   "image": "IMG_00238.tif",
+   "kept": true,
+   "frac512": 0.005901,
+   "raw_frac512": 0.017612
+  },
+  {
+   "image": "IMG_00239.tif",
+   "kept": true,
+   "frac512": 0.004936,
+   "raw_frac512": 0.014957
+  },
+  {
+   "image": "IMG_00240.tif",
+   "kept": true,
+   "frac512": 0.003906,
+   "raw_frac512": 0.015579
+  },
+  {
+   "image": "IMG_00241.tif",
+   "kept": true,
+   "frac512": 0.00642,
+   "raw_frac512": 0.020699
+  },
+  {
+   "image": "IMG_00242.tif",
+   "kept": true,
+   "frac512": 0.002209,
+   "raw_frac512": 0.008514
+  },
+  {
+   "image": "IMG_00243.tif",
+   "kept": true,
+   "frac512": 0.002365,
+   "raw_frac512": 0.007812
+  },
+  {
+   "image": "IMG_00244.tif",
+   "kept": true,
+   "frac512": 0.006523,
+   "raw_frac512": 0.021255
+  },
+  {
+   "image": "IMG_00245.tif",
+   "kept": true,
+   "frac512": 0.0047,
+   "raw_frac512": 0.014645
+  },
+  {
+   "image": "IMG_00246.tif",
+   "kept": true,
+   "frac512": 0.004623,
+   "raw_frac512": 0.01569
+  },
+  {
+   "image": "IMG_00247.tif",
+   "kept": true,
+   "frac512": 0.004631,
+   "raw_frac512": 0.014904
+  },
+  {
+   "image": "IMG_00248.tif",
+   "kept": true,
+   "frac512": 0.003151,
+   "raw_frac512": 0.009857
+  },
+  {
+   "image": "IMG_00249.tif",
+   "kept": true,
+   "frac512": 0.00301,
+   "raw_frac512": 0.010632
+  },
+  {
+   "image": "IMG_00250.tif",
+   "kept": true,
+   "frac512": 0.00354,
+   "raw_frac512": 0.010227
+  },
+  {
+   "image": "IMG_00251.tif",
+   "kept": true,
+   "frac512": 0.002716,
+   "raw_frac512": 0.01062
+  },
+  {
+   "image": "IMG_00252.png",
+   "kept": true,
+   "frac512": 0.001049,
+   "raw_frac512": 0.005043
+  },
+  {
+   "image": "IMG_00253.png",
+   "kept": true,
+   "frac512": 0.001209,
+   "raw_frac512": 0.004311
+  },
+  {
+   "image": "IMG_00254.png",
+   "kept": true,
+   "frac512": 0.002132,
+   "raw_frac512": 0.009663
+  },
+  {
+   "image": "IMG_00255.png",
+   "kept": true,
+   "frac512": 0.003414,
+   "raw_frac512": 0.016853
+  },
+  {
+   "image": "IMG_00256.png",
+   "kept": true,
+   "frac512": 0.001572,
+   "raw_frac512": 0.007069
+  },
+  {
+   "image": "IMG_00257.png",
+   "kept": true,
+   "frac512": 0.002876,
+   "raw_frac512": 0.013664
+  },
+  {
+   "image": "IMG_00258.png",
+   "kept": true,
+   "frac512": 0.002728,
+   "raw_frac512": 0.015377
+  },
+  {
+   "image": "IMG_00259.png",
+   "kept": true,
+   "frac512": 0.000935,
+   "raw_frac512": 0.004223
+  },
+  {
+   "image": "IMG_00260.png",
+   "kept": true,
+   "frac512": 0.001904,
+   "raw_frac512": 0.008144
+  },
+  {
+   "image": "IMG_00261.png",
+   "kept": true,
+   "frac512": 0.00164,
+   "raw_frac512": 0.00647
+  },
+  {
+   "image": "IMG_00262.png",
+   "kept": true,
+   "frac512": 0.003033,
+   "raw_frac512": 0.012657
+  },
+  {
+   "image": "IMG_00263.png",
+   "kept": true,
+   "frac512": 0.002441,
+   "raw_frac512": 0.01067
+  },
+  {
+   "image": "IMG_00264.png",
+   "kept": true,
+   "frac512": 0.002129,
+   "raw_frac512": 0.012096
+  },
+  {
+   "image": "IMG_00265.png",
+   "kept": true,
+   "frac512": 0.002541,
+   "raw_frac512": 0.012226
+  },
+  {
+   "image": "IMG_00266.png",
+   "kept": true,
+   "frac512": 0.002586,
+   "raw_frac512": 0.011909
+  },
+  {
+   "image": "IMG_00267.png",
+   "kept": true,
+   "frac512": 0.003662,
+   "raw_frac512": 0.020271
+  },
+  {
+   "image": "IMG_00268.png",
+   "kept": true,
+   "frac512": 0.002335,
+   "raw_frac512": 0.009289
+  },
+  {
+   "image": "IMG_00269.png",
+   "kept": true,
+   "frac512": 0.003738,
+   "raw_frac512": 0.01664
+  },
+  {
+   "image": "IMG_00270.png",
+   "kept": true,
+   "frac512": 0.002537,
+   "raw_frac512": 0.012783
+  },
+  {
+   "image": "IMG_00271.png",
+   "kept": true,
+   "frac512": 0.001663,
+   "raw_frac512": 0.008732
+  },
+  {
+   "image": "IMG_00272.png",
+   "kept": true,
+   "frac512": 0.001316,
+   "raw_frac512": 0.005718
+  },
+  {
+   "image": "IMG_00273.png",
+   "kept": true,
+   "frac512": 0.002098,
+   "raw_frac512": 0.011307
+  },
+  {
+   "image": "IMG_00274.png",
+   "kept": true,
+   "frac512": 0.002144,
+   "raw_frac512": 0.010029
+  },
+  {
+   "image": "IMG_00275.png",
+   "kept": true,
+   "frac512": 0.000984,
+   "raw_frac512": 0.005054
+  },
+  {
+   "image": "IMG_00276.png",
+   "kept": true,
+   "frac512": 0.004021,
+   "raw_frac512": 0.015915
+  },
+  {
+   "image": "IMG_00277.png",
+   "kept": true,
+   "frac512": 0.002323,
+   "raw_frac512": 0.00869
+  },
+  {
+   "image": "IMG_00278.png",
+   "kept": true,
+   "frac512": 0.001629,
+   "raw_frac512": 0.007668
+  },
+  {
+   "image": "IMG_00279.png",
+   "kept": true,
+   "frac512": 0.002277,
+   "raw_frac512": 0.007835
+  },
+  {
+   "image": "IMG_00280.png",
+   "kept": true,
+   "frac512": 0.002075,
+   "raw_frac512": 0.008175
+  },
+  {
+   "image": "IMG_00281.png",
+   "kept": true,
+   "frac512": 0.001652,
+   "raw_frac512": 0.007851
+  },
+  {
+   "image": "IMG_00282.png",
+   "kept": true,
+   "frac512": 0.005161,
+   "raw_frac512": 0.022022
+  },
+  {
+   "image": "IMG_00283.png",
+   "kept": true,
+   "frac512": 0.002968,
+   "raw_frac512": 0.013142
+  },
+  {
+   "image": "IMG_00284.png",
+   "kept": true,
+   "frac512": 0.002316,
+   "raw_frac512": 0.010319
+  },
+  {
+   "image": "IMG_00285.png",
+   "kept": true,
+   "frac512": 0.002842,
+   "raw_frac512": 0.010529
+  },
+  {
+   "image": "IMG_00286.png",
+   "kept": true,
+   "frac512": 0.001175,
+   "raw_frac512": 0.004387
+  },
+  {
+   "image": "IMG_00287.png",
+   "kept": false,
+   "frac512": 0.000374,
+   "raw_frac512": 0.001698
+  },
+  {
+   "image": "IMG_00288.png",
+   "kept": true,
+   "frac512": 0.003025,
+   "raw_frac512": 0.016613
+  },
+  {
+   "image": "IMG_00289.png",
+   "kept": true,
+   "frac512": 0.001953,
+   "raw_frac512": 0.009094
+  },
+  {
+   "image": "IMG_00290.png",
+   "kept": true,
+   "frac512": 0.001503,
+   "raw_frac512": 0.00729
+  },
+  {
+   "image": "IMG_00291.png",
+   "kept": true,
+   "frac512": 0.001842,
+   "raw_frac512": 0.006989
+  },
+  {
+   "image": "IMG_00292.png",
+   "kept": true,
+   "frac512": 0.001503,
+   "raw_frac512": 0.006874
+  },
+  {
+   "image": "IMG_00293.png",
+   "kept": true,
+   "frac512": 0.002415,
+   "raw_frac512": 0.012238
+  },
+  {
+   "image": "IMG_00294.png",
+   "kept": true,
+   "frac512": 0.001846,
+   "raw_frac512": 0.0098
+  },
+  {
+   "image": "IMG_00295.png",
+   "kept": true,
+   "frac512": 0.001732,
+   "raw_frac512": 0.008106
+  },
+  {
+   "image": "IMG_00296.png",
+   "kept": true,
+   "frac512": 0.002666,
+   "raw_frac512": 0.011742
+  },
+  {
+   "image": "IMG_00297.png",
+   "kept": true,
+   "frac512": 0.001831,
+   "raw_frac512": 0.007004
+  },
+  {
+   "image": "IMG_00298.png",
+   "kept": true,
+   "frac512": 0.002003,
+   "raw_frac512": 0.010082
+  },
+  {
+   "image": "IMG_00299.png",
+   "kept": true,
+   "frac512": 0.001743,
+   "raw_frac512": 0.007545
+  },
+  {
+   "image": "IMG_00300.png",
+   "kept": true,
+   "frac512": 0.001663,
+   "raw_frac512": 0.006752
+  },
+  {
+   "image": "IMG_00301.png",
+   "kept": true,
+   "frac512": 0.002853,
+   "raw_frac512": 0.013962
+  },
+  {
+   "image": "IMG_00302.png",
+   "kept": true,
+   "frac512": 0.002903,
+   "raw_frac512": 0.011341
+  },
+  {
+   "image": "IMG_00303.png",
+   "kept": true,
+   "frac512": 0.002754,
+   "raw_frac512": 0.012207
+  },
+  {
+   "image": "IMG_00304.png",
+   "kept": true,
+   "frac512": 0.002007,
+   "raw_frac512": 0.009296
+  },
+  {
+   "image": "IMG_00305.png",
+   "kept": true,
+   "frac512": 0.001858,
+   "raw_frac512": 0.00824
+  },
+  {
+   "image": "IMG_00306.png",
+   "kept": true,
+   "frac512": 0.001762,
+   "raw_frac512": 0.008732
+  },
+  {
+   "image": "IMG_00307.png",
+   "kept": true,
+   "frac512": 0.001621,
+   "raw_frac512": 0.00666
+  },
+  {
+   "image": "IMG_00308.png",
+   "kept": true,
+   "frac512": 0.000866,
+   "raw_frac512": 0.003891
+  },
+  {
+   "image": "IMG_00309.png",
+   "kept": true,
+   "frac512": 0.00135,
+   "raw_frac512": 0.006172
+  }
+ ]
+}
