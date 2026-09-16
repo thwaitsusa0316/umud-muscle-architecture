@@ -1,0 +1,263 @@
+
+UMUD Challenge: Muscle Architecture in Ultrasound Data | Kaggle
+menu
+Skip to
+content
+Create
+search
+​
+explore
+Home
+emoji_events
+Competitions
+leaderboard
+Benchmarks
+smart_toy
+Game Arena
+code
+Data Hub
+expand_more
+format_list_bulleted
+More
+expand_more
+menu
+Skip to
+content
+search
+​
+Sign In
+Register
+Kaggle uses cookies from Google to deliver and enhance the quality of its services and to analyze traffic.
+Learn more
+OK, Got it.
+Paul Ritsche 
+ · Community Prediction Competition · 
+2 months to go
+Join Competition
+more_horiz
+UMUD Challenge: Muscle Architecture in Ultrasound Data
+Retrieve information of muscle thickness, pennation angle and fascicle from ultrasound (video) frames using fully automated approaches.
+UMUD Challenge: Muscle Architecture in Ultrasound Data
+Overview
+Data
+Code
+Models
+Discussion
+Leaderboard
+Rules
+Overview
+Challenge Abstract
+Muscle architecture parameters such as pennation angle (PA), fascicle length (FL), and muscle thickness (MT) are fundamental descriptors of skeletal muscle structure and function. These parameters are widely used in biomechanics, sports science, and clinical research to study muscle mechanics and adaptations to training.
+Ultrasound imaging provides a non-invasive method to assess muscle architecture in vivo. However, current analysis methods often rely on manual or semi-automated annotation of fascicles and aponeuroses, which is time-consuming and prone to inter-observer variability.
+Recent advances in computer vision and machine learning, particularly deep learning, have demonstrated strong potential for automated analysis of ultrasound images. Nevertheless, progress in this field is limited by the lack of standardized benchmark datasets and evaluation protocols.
+The UMUD Muscle Architecture in Ultrasound Data Challenge aims to establish an open benchmark for automated extraction of muscle architecture parameters from ultrasound images. Participants will develop algorithms to estimate pennation angle, fascicle length, and muscle thickness from ultrasound images and will be evaluated on a test dataset with expert-annotated reference measurements.
+The challenge provides a standardized dataset and evaluation framework to enable transparent comparison of algorithms and accelerate the development of reliable automated muscle architecture analysis tools.
+Keywords:
+ Ultrasound, Muscle Architecture, Pennation Angle, Fascicle length, Muscle thickness, Deep learning, Computer Vision, Biomechanics
+Start
+6 months ago
+Close
+2 months to go
+Description
+link
+keyboard_arrow_up
+The 
+UMUD
+ Muscle Architecture in Ultrasound Data Challenge
+ invites participants to develop algorithms that automatically estimate muscle architecture parameters from ultrasound images.
+Notes
+This is an update to the challenge description. Please take a look at 
+this discussion issue
+, as we noted some duplicate images in the provided training dataset. 
+⚠️ 
+IMPORTANT:
+ This does not affect your Leaderboard scores, but might overestimate your internal validation scores. The exact duplicate images are listed in the discussion issue. 
+This is an update to the description. We further refer you to 
+this discussion
+. Note that for ensemble approaches used in this challenge, the criteria used during the final evaluation is: can your final submission be (re-)run on a new dataset where no leaderboard exists?
+Goal of the Competition
+The goal of this competition is to build algorithms that can accurately estimate three key muscle architecture variables from ultrasound images:
+Pennation Angle (PA): angle between muscle fascicles and the aponeurosis (degrees)
+Fascicle Length (FL): length of muscle fascicles (millimetres)
+Muscle Thickness (MT): distance between superficial and deep aponeuroses (millimetres)
+Participants must predict these three values for each ultrasound image in the test dataset.
+Submissions will be ranked using the 
+UMUD Score
+, a composite metric that evaluates prediction accuracy across all three variables.
+Novelty of the Challenge
+The UMUD challenge represents one of the first open benchmarks for automated muscle architecture estimation from ultrasound images.
+Key novel aspects include:
+A public dataset with standardized architecture measurements
+Evaluation across three physiologically meaningful parameters
+A multi-metric evaluation framework capturing both accuracy and agreement with expert measurements
+Inclusion of both deep learning and classical image processing approaches
+The challenge aims to promote reproducibility and transparency in musculoskeletal ultrasound analysis
+Why This Challenge Matters
+Reliable automated analysis of muscle architecture would enable:
+Large-scale studies of muscle adaptation
+ in sports and health research
+Standardized measurements
+ across laboratories and clinical centers
+Faster analysis pipelines
+ for ultrasound imaging datasets
+Open benchmarking of algorithms
+ for musculoskeletal ultrasound analysis
+Prizes
+link
+keyboard_arrow_up
+Total Prizes Available: 3000 CHF
+1st Place
+ - 1500 CHF
+2nd Place
+ - 1000 CHF
+3rd Place
+ - 500 CHF
+All prizes will be awarded in CHF (Swiss Francs).
+Any costs associated with receiving the prize, including but not limited to bank transfer fees, currency conversion fees, intermediary bank charges, and applicable taxes, are the sole responsibility of the recipient.
+Evaluation
+link
+keyboard_arrow_up
+Submissions are evaluated using the 
+UMUD Score
+, which measures prediction error across all three architecture variables.
+The score is based on a 
+normalized mean absolute error (MAE)
+ across:
+Pennation Angle (PA)
+Fascicle Length (FL)
+Muscle Thickness (MT)
+Errors for each variable are normalized by predefined tolerance values to ensure comparable influence despite different units and scales. 
+Lower scores indicate better performance.
+Reproducibility, FAIRness, and Open-Source Eligibility Check
+The Kaggle leaderboard will be ranked using the official UMUD Score. However, to be eligible for the 
+final official top-3 positions
+, prize consideration, and inclusion as a formally ranked winning method, teams must additionally satisfy the following software-sharing and reproducibility requirements:
+Eligibility requirements for the top leaderboard entries
+After the competition deadline, the teams provisionally placed 1st, 2nd, and 3rd on the private leaderboard will be asked to provide a public code repository for their final submission. The repository must satisfy all of the following conditions:
+Open source
+The code must be released under an OSI-compatible open-source license and be publicly accessible. ⚠️ Code without a license will not be considered. 
+FAIR research software
+The repository must meet the FAIR software requirements, assessed using the FAIR Software Checklist (or equivalent FAIR software checker specified by the organizers). At minimum, the repository must be findable, accessible, and reusable through public hosting, clear licensing, documentation, and software metadata.
+Reproducible execution
+The method must be reproducible by the organizers from the provided repository using one of the following:
+a jupyter notebook 
+a python/matlab script
+an installable Python/Matlab package, or
+a complete installer
+⚠️ In case of single scripts, make sure that the environment requirements are described and the code is reusable and inter-operable (e.g., 
+requirements.txt
+, 
+environment.yml
+, or Docker configuration). 
+Submissions in other languages than python/matlab are welcome as well.
+Documentation
+The repository must include sufficient instructions to reproduce inference on the challenge data, including dependency specification, installation steps, and execution commands.
+Compliance review
+The organizers will review these requirements for the provisional top-3 entries after the leaderboard closes. If a team fails the FAIR, open-source, or reproducibility check, that team will become ineligible for the final winning positions.
+In that case, the next highest-ranked eligible team will move up. For example:
+if the provisional 3rd-place team fails compliance, the provisional 4th-place team becomes the final 3rd-place team;
+if the provisional 2nd-place team fails compliance, the provisional 3rd-place eligible team becomes final 2nd, and so on.
+Scope of the compliance check
+This FAIR/open-source/reproducibility review is applied to the top three provisional leaderboard entries only. The numerical Kaggle leaderboard score itself is unchanged.
+Authors will be notified with a decision three weeks after challenge deadline.
+What Participants Need to Do
+link
+keyboard_arrow_up
+Participants in the UMUD Muscle Architecture in Ultrasound Data Challenge are asked to develop an algorithm that can automatically estimate muscle architecture parameters from ultrasound images.
+⚠️ Classic computer vision as well as deep learning based approaches are welcome.
+Task Overview
+For each ultrasound image in the dataset, participants must predict the following parameters:
+Pennation Angle (PA)
+The angle between the muscle fascicle and the deep aponeurosis, measured in degrees (yellow).
+Fascicle Length (FL)
+The length of the muscle fascicle between the superficial and deep aponeuroses, measured in millimetres (green).
+Muscle Thickness (MT)
+The perpendicular distance between the superficial and deep aponeuroses, measured in millimetres (pink).
+Participants may use any algorithmic approach to estimate these parameters. This includes, but is not limited to:
+deep learning methods
+classical image processing pipelines
+hybrid approaches combining both techniques
+The algorithm should be able to extract the relevant structural information from the ultrasound image and produce accurate numerical estimates for PA, FL, and MT. ⚠️ The figure above illustrates typical manual annotation, but does not restrict any developed algorithm to the same output.
+Input Data
+The input to the algorithm is a single ultrasound image showing a region of skeletal muscle. Nonetheless, the test images include parts from video sequences (5 images in a row). This can be used to evaluate the temporal stability of the developed algorithm.
+Each image contains visible structural features such as: superficial aponeurosis, deep aponeurosis, muscle fascicle fragments.
+These structures form the basis for estimating the architecture parameters.
+Expected Output
+For each image in the test dataset, the algorithm must output predicted values for the three architecture parameters.
+The required submission format is a 
+CSV file
+ with the following columns:
+image_id
+pa_deg
+fl_mm
+mt_mm
+image_00001
+15.2
+78.5
+19.1
+image_00002
+13.7
+81.3
+18.4
+Where:
+image_id corresponds to the identifier of the ultrasound image
+pa_deg is the predicted pennation angle in degrees
+fl_mm is the predicted fascicle length in millimetres
+mt_mm is the predicted muscle thickness in millimetres
+Each image in the test set must appear exactly once in the submission file.
+Training Constraints
+Participants are free to design their algorithms using any approach that complies with the competition rules.
+Allowed resources include: the provided training data, publicly available datasets (i.e., those indexed in 
+UMUD
+, publicly available pretrained models. 
+If additional data or pretrained models are used, they must be clearly documented in the final method description.
+Submission Process
+Participants generate predictions for the test dataset and submit them through the Kaggle competition interface. Multiple submissions are allowed during the competition period. The submission with the best leaderboard score determines the participant's provisional ranking. 
+Contact / Organizers
+link
+keyboard_arrow_up
+Please use the discussion section for any inquiries related to challenge.
+Organizers
+Paul Ritsche (paul.ritsche@unibas.ch), University of Basel
+Gerardo Romeney, University of Basel
+Oliver Faude, University of Basel
+This challenge is supported by Swissuniversities 
+Dispute Resolution
+link
+keyboard_arrow_up
+In case of any disputes, discrepancies, or uncertainties regarding the competition rules, evaluation, or results, participants are encouraged to contact the organizers within the specified timeframe.
+The organizers will review each case and make a final decision based on the competition rules and available evidence.
+For general conduct, fairness, and acceptable practices, participants are expected to follow the Kaggle Community Guidelines:
+https://www.kaggle.com/community-guidelines
+Citation
+link
+keyboard_arrow_up
+Paul Ritsche, Gerardo Romney & Oliver Faude. UMUD Challenge: Muscle Architecture in Ultrasound Data. https://www.kaggle.com/competitions/umud-challenge-muscle-architecture-in-ultrasound-data, 2026. Kaggle.
+Cite
+Competition Host
+Paul Ritsche
+Prizes & Awards
+$3,000
+Does not award Points or Medals
+Participation
+998 Entrants
+265 Participants
+253 Teams
+6,453 Submissions
+Tags
+Image
+Medicine
+Beginner
+Intermediate
+Advanced
+Custom Metric
+Table of Contents
+collapse_all
+Overview
+Description
+Prizes
+Evaluation
+What Participants Need to Do
+Contact / Organizers
+Dispute Resolution
+Citation
