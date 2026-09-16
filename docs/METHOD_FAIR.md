@@ -1,6 +1,6 @@
 # Method description — UMUD Challenge entry (public 0.56382, submission 56194131)
 
-**Status:** DRAFT v1, 2026-09-16T17:16Z, written under PLAN v36 for Rules s2.8 / s2.5.b
+**Status:** DRAFT v1.1, 2026-09-16T23:55Z (v1 17:16Z), written under PLAN v36 for Rules s2.8 / s2.5.b
 ("training code, inference code, and a description of the required computational
 environment"; "a detailed description of methodology, where one must be able to
 reproduce the approach") and the Overview's "Reproducibility, FAIRness, and Open-Source
@@ -169,3 +169,20 @@ before it was submitted (`maibo_tests/*.json`, referenced from `ledger.jsonl`).
 - Level anchors and fallbacks come from leaderboard probes (section 3), so the method is
   tied to this test set's public medians.
 - The OSF benchmark's usage policy is unresolved (A6); it touched no shipped value.
+
+## 9. Publication gap (audit 2026-09-16T23:55Z, blocks s2.8 as written)
+
+Checked this tick with `git fetch origin` and `git ls-tree -r origin/master` against the
+paths named in sections 3-5. The public repository head is `76753bd` (2026-09-03); local
+`master` is **46 commits ahead** and nothing has been pushed since. Consequences for a
+reader following section 4 from the public link today:
+
+| gap | files | clause | fix (one action, branch A of gate 6) |
+|---|---|---|---|
+| Scripts named in the pipeline are not on the public head | `scripts/scale_v2.py`, `scripts/scale_v3.py`, `scripts/l6o_flip_audit.py`, `scripts/l6t_fascicle_evidence.py` (exist locally, unpushed) | s2.5.b "link to a code repository with complete and detailed instructions" | `git push origin master` after the kill-gate decision (46 commits; nothing target-restricted is tracked: `data/`, `models/`, `outputs/`, `checkpoints/` are gitignored) |
+| Report CSVs cited as evidence are not public | 11 files under `reports/` (`scale_v3d2.json`, `l6o_flip_audit.csv`, `l6ob_*_level.csv`, `l6r_run_median.csv`, `l6t_fascicle_evidence.csv`, `l7c_fl_clamp.csv`, `l7r2_run_median_pafl_clamped.csv`, `l8a_step_*.csv`, `pipeline_a1_scalev3d2_flip_rows.csv`) | s2.8 reproducibility (the reader cannot check the per-image scale lookup or the flip set) | same push; they are tracked locally |
+| The shipped CSVs are gitignored (`outputs/`), so the two sha256s in section 1 cannot be checked from the repo | `outputs/sub_L8a_compose_fl075.csv`, `outputs/sub_L1_probed_median.csv` and the 10 intermediate `outputs/sub_*.csv` named in section 4 | s2.8 (winner must deliver the Submission and the code that generated it) | add a `submission/` directory (or a release asset) carrying the two finals and the 10 intermediates with a `SHA256SUMS` file; 12 files, ~15 KB each; not competition data, so redistributable |
+| Data and weights are fetched, not shipped | `data/raw/*`, `data/external/`, `models/*.h5` | s2.4 (no redistribution of Competition Data) | correct as designed; section 4 step 0 names the fetch scripts. Verify `scripts/download_data.py` still resolves the v2 test-set URL at close. |
+
+sha256 re-check this tick: both hashes in section 1 match the local files
+(`shasum -a 256`, 2026-09-16T23:53Z). Repository URL returns HTTP 200.
