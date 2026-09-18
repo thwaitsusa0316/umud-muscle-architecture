@@ -1,3 +1,5 @@
+> **Target Kaggle:** [https://www.kaggle.com/competitions/ultrasound-muscle-segmentation](https://www.kaggle.com/competitions/ultrasound-muscle-segmentation) *(Click to open or copy URL)*
+
 # UMUD Challenge: Muscle Architecture in Ultrasound Data — BRIEF (P0)
 
 Written 2026-09-03 by pilot (tick 1). Every line carries its source. Re-run P0 only when rules or scope change.
