@@ -1,0 +1,10 @@
+{
+  "n_measured": 297,
+  "n_mt_at_median": 11,
+  "fl_median": 76.90405280456363,
+  "fl_min": 37.03511239135966,
+  "fl_max": 137.6345163790623,
+  "n_over_max": 0,
+  "source": "outputs/sub_L8a_compose_fl075.csv",
+  "out": "outputs/sub_L9c_fl_closure_isolate.csv"
+}

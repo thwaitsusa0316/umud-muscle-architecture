@@ -1,0 +1,171 @@
+{
+  "refreshed_utc": "2026-09-22T03:30:34.458573+00:00",
+  "source": "kaggle kernels list --competition ... --sort-by dateRun (CLI) + live leaderboard read",
+  "items": [
+    {
+      "kind": "notebook",
+      "ref": "nagatakengo/study",
+      "title": "study",
+      "author": "nk",
+      "lastRun": "2026-09-20 05:55:54.150000",
+      "votes": 4
+    },
+    {
+      "kind": "notebook",
+      "ref": "chaitanyajamble/umud-challenge-7",
+      "title": "UMUD - Challenge 7/",
+      "author": "Chaitanya Jamble",
+      "lastRun": "2026-09-14 16:39:36.930000",
+      "votes": 3
+    },
+    {
+      "kind": "notebook",
+      "ref": "amirtanha/muscle",
+      "title": "Muscle",
+      "author": "Pj Sh",
+      "lastRun": "2026-09-14 09:25:13.617000",
+      "votes": 1
+    },
+    {
+      "kind": "notebook",
+      "ref": "chaitanyajamble/umud-challenge-1",
+      "title": "UMUD Challenge 1",
+      "author": "Chaitanya Jamble",
+      "lastRun": "2026-09-13 09:30:20.777000",
+      "votes": 4
+    },
+    {
+      "kind": "notebook",
+      "ref": "lamhuy8904/variational-ultrasound-kinematics-ensemble",
+      "title": "Variational Ultrasound Kinematics Ensemble",
+      "author": "L\u00e2m Huy",
+      "lastRun": "2026-09-12 14:47:47.287000",
+      "votes": 22
+    },
+    {
+      "kind": "notebook",
+      "ref": "lamhuy8904/umud-ultrasound-fascia-biomechanics-eda",
+      "title": "UMUD Ultrasound Fascia Biomechanics EDA",
+      "author": "L\u00e2m Huy",
+      "lastRun": "2026-09-09 03:39:39.927000",
+      "votes": 0
+    },
+    {
+      "kind": "notebook",
+      "ref": "honghanhhh/umud-eda",
+      "title": "UMUD EDA",
+      "author": "Hanh Tran",
+      "lastRun": "2026-09-05 17:54:09.543000",
+      "votes": 3
+    },
+    {
+      "kind": "notebook",
+      "ref": "dreaddevelopment/vera-seg-centerline-mt-correction-lb-0-45134",
+      "title": "Vera - Seg-Centerline MT Correction (LB 0.45134)",
+      "author": "Dread Development",
+      "lastRun": "2026-09-02 13:18:12.550000",
+      "votes": 22
+    },
+    {
+      "kind": "notebook",
+      "ref": "sardorrazikov/umud-fork-dir1-dltrack",
+      "title": "umud fork dir1 dltrack",
+      "author": "Sardor Razikov",
+      "lastRun": "2026-08-24 07:48:34.413000",
+      "votes": 0
+    },
+    {
+      "kind": "notebook",
+      "ref": "xiaoleilian/umud-eda-for-starter",
+      "title": "UMUD EDA for Starter",
+      "author": "Xiaolei Lian",
+      "lastRun": "2026-08-23 10:43:32.640000",
+      "votes": 0
+    },
+    {
+      "kind": "notebook",
+      "ref": "xiaoleilian/umud-hardcore-eda",
+      "title": "UMUD Hardcore EDA",
+      "author": "Xiaolei Lian",
+      "lastRun": "2026-08-19 13:26:45.750000",
+      "votes": 1
+    },
+    {
+      "kind": "notebook",
+      "ref": "harmainmughal11/umud-challenge-dltrack",
+      "title": "UMUD Challenge_DLTrack",
+      "author": "Harmain Mughal",
+      "lastRun": "2026-08-08 16:23:34.957000",
+      "votes": 6
+    },
+    {
+      "kind": "notebook",
+      "ref": "bnzn261029/umud-dir2-unet-geometry",
+      "title": "UMUD Dir2 UNet Geometry",
+      "author": "bsenst",
+      "lastRun": "2026-08-06 13:51:08.207000",
+      "votes": 0
+    },
+    {
+      "kind": "notebook",
+      "ref": "bnzn261029/umud-dir1-dltrack-calibrated",
+      "title": "UMUD Dir1 DLTrack Calibrated",
+      "author": "bsenst",
+      "lastRun": "2026-08-06 13:37:23.833000",
+      "votes": 0
+    },
+    {
+      "kind": "notebook",
+      "ref": "bnzn261029/umud-dir3-end2end-regression",
+      "title": "UMUD Dir3 End2End Regression",
+      "author": "bsenst",
+      "lastRun": "2026-08-06 12:40:50.017000",
+      "votes": 1
+    },
+    {
+      "kind": "notebook",
+      "ref": "realtalhacelik/muscle-ai-decoding-ultrasound",
+      "title": "Muscle AI: Decoding Ultrasound \ud83e\uddec",
+      "author": "Talha Celik",
+      "lastRun": "2026-08-05 14:13:52.377000",
+      "votes": 18
+    },
+    {
+      "kind": "notebook",
+      "ref": "phuongncn/lb-0-76704-no-train-anatomy-calibrated-dltrack",
+      "title": "[LB 0.76704] No-Train Anatomy-Calibrated DLTrack",
+      "author": "Fususu",
+      "lastRun": "2026-08-05 08:10:15.407000",
+      "votes": 12
+    },
+    {
+      "kind": "notebook",
+      "ref": "avikdas567/u-net-segmentation-for-muscle-architecture-umud",
+      "title": "U-Net Segmentation for Muscle Architecture | UMUD",
+      "author": "Avik Das",
+      "lastRun": "2026-04-12 14:38:01.633000",
+      "votes": 15
+    },
+    {
+      "kind": "notebook",
+      "ref": "stpeteishii/umud-fasc-mask-unet",
+      "title": "UMUD Fasc Mask UNET",
+      "author": "stpete_ishii",
+      "lastRun": "2026-04-11 17:17:55.403000",
+      "votes": 1
+    },
+    {
+      "kind": "notebook",
+      "ref": "stpeteishii/umud-apo-mask-unet",
+      "title": "UMUD Apo Mask UNET",
+      "author": "stpete_ishii",
+      "lastRun": "2026-04-11 00:20:29.713000",
+      "votes": 5
+    },
+    {
+      "kind": "leaderboard_fact",
+      "read_utc": "2026-09-22T03:14:49Z",
+      "note": "22 teams at exactly 0.45134 = the public hard-coded-CSV notebook score; 72 teams <= 0.45134; top3 0.28263/0.29358/0.31898 unchanged since 2026-09-14; ours 0.56382 rank 98/288"
+    }
+  ]
+}

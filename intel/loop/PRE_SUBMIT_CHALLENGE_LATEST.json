@@ -1,0 +1,32 @@
+{
+  "schema": "pre_submit_challenge/v1",
+  "checked_at": "2026-09-22T03:30:34.599536+00:00",
+  "workspace": "/Users/smt2/data/competitions/kaggle/umud-muscle",
+  "verdict": "PASS",
+  "reasons": [],
+  "challenges": [],
+  "data_freshness": {
+    "data_files": 8589,
+    "newest_data_age_hours": 145.83498920294974
+  },
+  "leaderboard_files": [
+    {
+      "path": "/Users/smt2/data/competitions/kaggle/umud-muscle/reports/leaderboard_2026-09-22T03-14-49Z.csv",
+      "age_hours": 0.2532124630610148
+    },
+    {
+      "path": "/Users/smt2/data/competitions/kaggle/umud-muscle/intel/loop/leaderboard.csv",
+      "age_hours": 3.413041432698568e-05
+    }
+  ],
+  "discussion_intel_items": 4,
+  "candidate": {
+    "path": "outputs/sub_L9c_fl_closure_isolate.csv",
+    "bytes": 11824,
+    "age_hours": 0.1039304436577691
+  },
+  "required": true,
+  "next_actions": [
+    "submission_governor.reserve allowed with this receipt"
+  ]
+}

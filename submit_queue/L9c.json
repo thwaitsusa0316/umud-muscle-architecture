@@ -1,0 +1,30 @@
+{
+  "id": "L9c",
+  "artifact": "outputs/sub_L9c_fl_closure_isolate.csv",
+  "sha256": "9bad5604f448589cec23da500523b7c7d1b69351b2e5ad3de46697b0ad61179d",
+  "generator": "scripts/make_fl_closure.py --source outputs/sub_L8a_compose_fl075.csv --out outputs/sub_L9c_fl_closure_isolate.csv --report reports/l9c_closure.json",
+  "maibo_test": {
+    "passed": true,
+    "engine": "codex",
+    "sha256": "9bad5604f448589cec23da500523b7c7d1b69351b2e5ad3de46697b0ad61179d",
+    "record": "maibo_tests/35979b0f03f05f1b.json",
+    "generator_record": "maibo_tests/90da4b297ba244b3.json",
+    "note": "artifact r1 PASS codex with /tmp/l9c_artifact_verify.sh exit 0: 309 rows, pa_deg 16.4200 and mt_mm 20.7000 on every row, fl_mm = mt/sin(pa) of the source on the 297 measured-PA rows (max abs err < 6e-5), 81.5000 on the 12 others, 0 rows > 150 mm, id order identical to the L9i isolation file. Generator sha c4971641 r1 PASS codex with row-by-row verify."
+  },
+  "justification": {
+    "plan_version": 38,
+    "purpose": "probe",
+    "rung": "L9c",
+    "why_now": "PLAN v38 (2026-09-22T03:40Z): Stephen's 2026-09-21T21:36Z competition_flow LIGHTS_OUT mandate (wake everything, full loop for rewards; forbid_telemetry_only) lifted the read-only default B on human gate 6; branch C was pre-registered in v35/v37 as the one remaining 1-slot, 0-GPU FL route. 0/5 slots used on 2026-09-22, week 0/35; queue otherwise empty; last own submission 2026-09-13T13:41Z (205 h). Kill gate <=0.45134 by 2026-10-12 needs -0.1125 from 0.56382 (rank 98/288 at 03:14:49Z); FL_term 0.28585 is 78 % of the attributable residual, so FL is the only column where a single probe can still move the kill-gate arithmetic.",
+    "expected_benefit": "Reads whether the geometric closure fl = mt/sin(pa) (independent of the fascicle detector's FL endpoint estimate) carries more FL skill on the test set than the detector FL: s_FL_closure vs the L9i-fl isolation 0.83845 on byte-identical PA/MT constants, an exact paired delta. If it fires, v39 composes the closure FL (or an alpha blend) onto the 0.56382 pipeline: a 0.005 gain on the isolation is the same gain on the composed score.",
+    "expected_score_delta": "public 0.80 to 0.90 (label-free prior slightly against: closure median 76.9 mm vs probed 81.5 and detector 80.6; closure inherits MT and PA error); informational delta vs 0.56382 is +0.24..+0.34 by construction (isolation)",
+    "falsifier": "public not < 0.83345 (L9i-fl 0.83845 minus the 0.005 noise floor) -> the closure is retired, FL stays the detector's; the improve loop moves to option D (PA isolation with the public file's PA column, falsifier not < 0.95687). Fires -> v39 paired composition read, falsifier not < 0.55882.",
+    "mechanism": ".venv/bin/kaggle competitions submit -c umud-challenge-muscle-architecture-in-ultrasound-data -f outputs/sub_L9c_fl_closure_isolate.csv -m 'L9c FL geometric-closure isolation (branch C, PLAN v38): fl_mm = mt/sin(pa) from the 0.56382 composed best on the 297 measured-PA rows, pa_deg 16.42 and mt_mm 20.7 on all rows; falsifier not < 0.83345 vs L9i-fl 0.83845'"
+  },
+  "status": "submitted",
+  "created_utc": "2026-09-22T03:41:00Z",
+  "hold_until_utc": null,
+  "hold_reason": null,
+  "submitted_utc": "2026-09-22T03:32:32Z",
+  "submission_id": "56451697"
+}
